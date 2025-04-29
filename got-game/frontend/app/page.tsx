@@ -25,21 +25,21 @@ export default function Home() {
       </div>
 
       {/* Foreground Content */}
-      <div className="relative z-10 flex flex-col items-center gap-8">
-        {/* GOT GAME Logo */}
+      <div className="relative z-10 flex flex-col items-center gap-6">
+        {/* Smaller GOT GAME Logo */}
         <Image
-          src="/images/gotgamelogo.png" 
+          src="/images/gotgamelogo.png"
           alt="Got Game Logo"
-          width={500}
-          height={200}
-          className="w-full h-auto animate-pulse"
+          width={300} // smaller than 500
+          height={120} // smaller than 200
+          className="w-auto h-auto animate-pulse"
           priority
         />
 
         {/* Start Button */}
         <Button
           onClick={handleStart}
-          className="mt-8 px-12 py-4 text-2xl font-bold bg-[#A757E7] hover:bg-[#8E47D1] rounded-full shadow-lg transition-all duration-300"
+          className="mt-6 px-10 py-3 text-xl font-bold bg-[#A757E7] hover:bg-[#8E47D1] rounded-full shadow-md transition-all duration-300"
         >
           START
         </Button>
