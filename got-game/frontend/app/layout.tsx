@@ -1,26 +1,25 @@
 import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import type {Metadata} from "next"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
+import { Inter } from "next/font/google"
+import { ThemeProvider } from "../components/theme-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const metadata: Metadata = {
-  title: "GOT GAME - Live Quiz Game",
-  description: "A live, multi-round elimination quiz game",
-    generator: 'v0.dev'
+export const metadata = {
+  title: "GOT GAME",
+  description: "Live trivia with luck and style!",
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="dark">
           {children}
         </ThemeProvider>
       </body>
