@@ -12,7 +12,6 @@ export default function WaitingPool() {
   const [playersInPool, setPlayersInPool] = useState(5000)
 
   useEffect(() => {
-    // Get player name from localStorage
     const storedName = localStorage.getItem("playerName")
     if (!storedName) {
       router.push("/")
@@ -20,12 +19,10 @@ export default function WaitingPool() {
     }
     setPlayerName(storedName)
 
-    // Simulate countdown
     const timer = setInterval(() => {
-      setWaitTime((prev) => {
+      setWaitTime(prev => {
         if (prev <= 1) {
           clearInterval(timer)
-          // Simulate being selected for the next lucky draw
           router.push("/lucky-draw")
           return 0
         }
@@ -33,9 +30,8 @@ export default function WaitingPool() {
       })
     }, 1000)
 
-    // Simulate fluctuating player count in pool
-    const playerInterval = setInterval(() => {
-      setPlayersInPool((prev) => {
+    const fluctuation = setInterval(() => {
+      setPlayersInPool(prev => {
         const change = Math.floor(Math.random() * 200) - 100
         return Math.max(1000, prev + change)
       })
@@ -43,14 +39,14 @@ export default function WaitingPool() {
 
     return () => {
       clearInterval(timer)
-      clearInterval(playerInterval)
+      clearInterval(fluctuation)
     }
   }, [router])
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-black relative overflow-hidden">
+    <main className="relative min-h-screen bg-black flex flex-col items-center justify-center p-4 overflow-hidden text-white">
       {/* Stars background */}
-      {Array.from({ length: 50 }).map((_, i) => (
+      {Array.from({ length: 40 }).map((_, i) => (
         <div
           key={i}
           className="star"
@@ -62,56 +58,52 @@ export default function WaitingPool() {
         />
       ))}
 
-      <div className="w-full max-w-md flex flex-col items-center gap-8 z-10">
-        <div className="relative w-full max-w-xs mb-4">
-          <Image
-            src="/images/logo.png"
-            alt="GOT GAME Logo"
-            width={500}
-            height={200}
-            priority
-            className="w-full h-auto"
-          />
+      <div className="w-full max-w-md z-10 flex flex-col items-center gap-8">
+        {/* Logo */}
+        <Image
+          src="/images/logo.png"
+          alt="GOT GAME Logo"
+          width={500}
+          height={200}
+          className="w-full h-auto"
+          priority
+        />
+
+        <div className="text-center">
+          <h1 className="text-3xl font-bold glow-text mb-2">WAITING POOL</h1>
+          <p className="text-purple-300 text-lg mb-2">Hang tight, {playerName}!</p>
+          <p className="text-white text-sm">You might be selected in the next lucky draw to rejoin the game.</p>
         </div>
 
-        <div className="text-center mb-4">
-          <h1 className="text-3xl font-bold text-white glow-text mb-2">WAITING POOL</h1>
-          <p className="text-purple-300 text-lg mb-4">Hang tight, {playerName}!</p>
-          <p className="text-white">
-            You're in the waiting pool. Stay tuned for the next lucky draw where you might get a chance to rejoin the
-            game!
-          </p>
-        </div>
-
-        <div className="w-full bg-gray-900/50 rounded-lg p-6 glow-border mb-4">
-          <div className="flex justify-between items-center mb-6">
+        <div className="w-full bg-gray-900/60 rounded-lg p-6 glow-border">
+          <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-2">
               <Users className="h-5 w-5 text-purple-400" />
-              <span className="text-white">
-                In pool: <span className="text-purple-400 font-bold">{playersInPool.toLocaleString()}</span>
+              <span className="text-sm text-white">
+                In pool: <strong className="text-purple-300">{playersInPool.toLocaleString()}</strong>
               </span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-5 w-5 text-purple-400" />
-              <span className="text-white">
-                Next draw: <span className="text-purple-400 font-bold">{waitTime}s</span>
+              <span className="text-sm text-white">
+                Next draw in: <strong className="text-purple-300">{waitTime}s</strong>
               </span>
             </div>
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-4">
-            <div className="w-24 h-24 rounded-full bg-purple-900/50 flex items-center justify-center animate-pulse-slow">
-              <Star className="h-12 w-12 text-purple-300" />
+          <div className="flex flex-col items-center mt-4">
+            <div className="w-20 h-20 rounded-full bg-purple-800/40 flex items-center justify-center animate-pulse">
+              <Star className="h-10 w-10 text-purple-300" />
             </div>
-            <p className="text-center text-white">
-              The next lucky draw is coming up soon. Players will be randomly selected to rejoin the game!
+            <p className="text-sm text-white mt-3 text-center">
+              Players are randomly selected to rejoin the game. Stay ready!
             </p>
           </div>
         </div>
 
-        <div className="text-center text-purple-300 mt-4">
-          <p>No one is ever eliminated from GOT GAME!</p>
-          <p className="text-sm mt-2">You'll get another chance in the next lucky draw.</p>
+        <div className="text-center text-sm text-purple-300 mt-4">
+          <p>No one is ever eliminated from <strong>GOT GAME</strong>!</p>
+          <p className="mt-1">You’ll get another chance soon.</p>
         </div>
       </div>
     </main>
