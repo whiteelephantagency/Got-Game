@@ -16,7 +16,7 @@ export default function Lobby() {
     e.preventDefault()
     if (!playerName.trim()) return
     localStorage.setItem('playerName', playerName)
-    router.push('/video/1') // Redirect to video screen instead of game
+    router.push('/game/1') // Redirect to video screen instead of game
   }
 
   return (
