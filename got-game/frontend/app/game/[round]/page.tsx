@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Clock, Users, CheckCircle, XCircle } from "lucide-react"
@@ -13,76 +13,68 @@ const questions = [
     question: "Which planet is known as the Red Planet?",
     options: ["Venus", "Mars", "Jupiter", "Saturn"],
     correctAnswer: "Mars",
-    videoUrl: "https://example.com/video1.mp4", // Placeholder
   },
   {
     id: 2,
     question: "What is the capital of Japan?",
     options: ["Beijing", "Seoul", "Tokyo", "Bangkok"],
     correctAnswer: "Tokyo",
-    videoUrl: "https://example.com/video2.mp4", // Placeholder
   },
   {
     id: 3,
     question: "Who painted the Mona Lisa?",
     options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
     correctAnswer: "Leonardo da Vinci",
-    videoUrl: "https://example.com/video3.mp4", // Placeholder
   },
   {
     id: 4,
     question: "What is the largest ocean on Earth?",
     options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
     correctAnswer: "Pacific Ocean",
-    videoUrl: "https://example.com/video4.mp4", // Placeholder
   },
   {
     id: 5,
     question: "Which element has the chemical symbol 'O'?",
     options: ["Gold", "Oxygen", "Osmium", "Oganesson"],
     correctAnswer: "Oxygen",
-    videoUrl: "https://example.com/video5.mp4", // Placeholder
   },
   {
     id: 6,
     question: "What is the largest mammal in the world?",
     options: ["African Elephant", "Blue Whale", "Giraffe", "Polar Bear"],
     correctAnswer: "Blue Whale",
-    videoUrl: "https://example.com/video6.mp4", // Placeholder
   },
   {
     id: 7,
     question: "Which country is home to the kangaroo?",
     options: ["New Zealand", "South Africa", "Australia", "Brazil"],
     correctAnswer: "Australia",
-    videoUrl: "https://example.com/video7.mp4", // Placeholder
   },
   {
     id: 8,
     question: "What is the hardest natural substance on Earth?",
     options: ["Gold", "Iron", "Diamond", "Platinum"],
     correctAnswer: "Diamond",
-    videoUrl: "https://example.com/video8.mp4", // Placeholder
   },
   {
     id: 9,
     question: "Which planet has the most moons?",
     options: ["Jupiter", "Saturn", "Uranus", "Neptune"],
     correctAnswer: "Saturn",
-    videoUrl: "https://example.com/video9.mp4", // Placeholder
   },
   {
     id: 10,
     question: "What is the smallest prime number?",
     options: ["0", "1", "2", "3"],
     correctAnswer: "2",
-    videoUrl: "https://example.com/video10.mp4", // Placeholder
   },
 ]
 
-export default function GameRound({ params }: { params: { round: string } }) {
-  const roundNumber = Number.parseInt(params.round)
+export default function GameRound() {
   const router = useRouter()
+  const params = useParams()
+  const roundParam = params?.round
+  const roundNumber = Number.parseInt(Array.isArray(roundParam) ? roundParam[0] : roundParam || "1")
 
   const [timeLeft, setTimeLeft] = useState(15)
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
@@ -95,21 +87,16 @@ export default function GameRound({ params }: { params: { round: string } }) {
   const currentQuestion = questions[roundNumber - 1]
 
   useEffect(() => {
-    // Check if we have a valid round
-    if (isNaN(roundNumber) || roundNumber < 1 || roundNumber > 10) {
+    if (isNaN(roundNumber) || roundNumber < 1 || roundNumber > questions.length) {
       router.push("/")
       return
     }
 
-    // Simulate video playing for 5 seconds
     if (showVideo) {
-      const videoTimer = setTimeout(() => {
-        setShowVideo(false)
-      }, 5000)
+      const videoTimer = setTimeout(() => setShowVideo(false), 5000)
       return () => clearTimeout(videoTimer)
     }
 
-    // Start countdown timer when video ends
     if (!showVideo && !isAnswered) {
       const timer = setInterval(() => {
         setTimeLeft((prev) => {
@@ -124,9 +111,8 @@ export default function GameRound({ params }: { params: { round: string } }) {
 
       return () => clearInterval(timer)
     }
-  }, [roundNumber, router, showVideo, isAnswered])
+  }, [roundNumber, showVideo, isAnswered, router])
 
-  // Simulate decreasing player count and spots
   useEffect(() => {
     if (!showVideo && !isAnswered) {
       const interval = setInterval(() => {
@@ -140,7 +126,6 @@ export default function GameRound({ params }: { params: { round: string } }) {
 
   const handleAnswerSelect = (answer: string) => {
     if (isAnswered) return
-
     setSelectedAnswer(answer)
     setIsAnswered(true)
 
@@ -149,20 +134,16 @@ export default function GameRound({ params }: { params: { round: string } }) {
 
     setTimeout(() => {
       if (correct) {
-        // Check if there are spots left
         if (remainingSpots > 0) {
-          // Move to next round or win screen
           if (roundNumber < 10) {
-            router.push(`/game/${roundNumber + 1}`)
+            router.push(`/video/${roundNumber + 1}`)
           } else {
             router.push("/win")
           }
         } else {
-          // No spots left, go to waiting pool
           router.push("/waiting-pool")
         }
       } else {
-        // Wrong answer, go to lucky draw
         router.push("/lucky-draw")
       }
     }, 2000)
@@ -171,25 +152,21 @@ export default function GameRound({ params }: { params: { round: string } }) {
   const handleTimeout = () => {
     setIsAnswered(true)
     setIsCorrect(false)
-
-    setTimeout(() => {
-      router.push("/lucky-draw")
-    }, 2000)
+    setTimeout(() => router.push("/lucky-draw"), 2000)
   }
 
   if (showVideo) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-black">
-        <div className="w-full max-w-2xl">
-          <div className="mb-4 flex justify-between items-center">
-            <div className="text-purple-400 font-bold">Round {roundNumber}/10</div>
-            <div className="text-white">Loading video...</div>
+      <div className="flex min-h-screen items-center justify-center bg-black p-4">
+        <div className="w-full max-w-4xl">
+          <div className="mb-4 flex justify-between text-white">
+            <span className="text-purple-400 font-bold">Round {roundNumber}/10</span>
+            <span>Loading video...</span>
           </div>
-
-          <div className="aspect-video bg-gray-900 rounded-lg flex items-center justify-center glow-border">
+          <div className="aspect-video bg-gray-900 rounded-lg flex items-center justify-center border-4 border-purple-600">
             <div className="text-center">
-              <div className="text-2xl text-white mb-2">Video Playing</div>
-              <div className="text-purple-400">Pay attention to the details...</div>
+              <p className="text-white text-xl mb-2">Video Playing</p>
+              <p className="text-purple-400">Pay attention to the details...</p>
             </div>
           </div>
         </div>
@@ -198,8 +175,7 @@ export default function GameRound({ params }: { params: { round: string } }) {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-black relative overflow-hidden">
-      {/* Stars background */}
+    <main className="flex min-h-screen flex-col items-center justify-center bg-black p-4 relative overflow-hidden">
       {Array.from({ length: 30 }).map((_, i) => (
         <div
           key={i}
@@ -227,9 +203,8 @@ export default function GameRound({ params }: { params: { round: string } }) {
           </div>
         </div>
 
-        <div className="w-full bg-gray-900/70 rounded-lg p-6 glow-border mb-4">
-          <h2 className="text-2xl font-bold text-white mb-6 text-center glow-text">{currentQuestion.question}</h2>
-
+        <div className="w-full bg-gray-900/70 rounded-lg p-6 mb-4">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">{currentQuestion.question}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             {currentQuestion.options.map((option) => (
               <Button
@@ -239,20 +214,20 @@ export default function GameRound({ params }: { params: { round: string } }) {
                 className={`h-16 text-lg font-medium transition-all duration-300 ${
                   selectedAnswer === option
                     ? isCorrect
-                      ? "bg-green-600 hover:bg-green-700"
-                      : "bg-red-600 hover:bg-red-700"
-                    : isAnswered && option === currentQuestion.correctAnswer
                       ? "bg-green-600"
-                      : "bg-purple-600 hover:bg-purple-700"
-                } ${selectedAnswer === option ? "glow-box" : ""}`}
+                      : "bg-red-600"
+                    : isAnswered && option === currentQuestion.correctAnswer
+                    ? "bg-green-600"
+                    : "bg-purple-600 hover:bg-purple-700"
+                }`}
               >
                 {option}
                 {isAnswered &&
                   option === selectedAnswer &&
                   (isCorrect ? <CheckCircle className="ml-2 h-5 w-5" /> : <XCircle className="ml-2 h-5 w-5" />)}
-                {isAnswered && option === currentQuestion.correctAnswer && option !== selectedAnswer && (
-                  <CheckCircle className="ml-2 h-5 w-5" />
-                )}
+                {isAnswered &&
+                  option === currentQuestion.correctAnswer &&
+                  option !== selectedAnswer && <CheckCircle className="ml-2 h-5 w-5" />}
               </Button>
             ))}
           </div>
@@ -262,9 +237,7 @@ export default function GameRound({ params }: { params: { round: string } }) {
               <span className="text-purple-300">Remaining spots</span>
               <span className="text-white font-bold">{remainingSpots.toLocaleString()}</span>
             </div>
-            <Progress value={(remainingSpots / 10000) * 100} className="h-2 bg-gray-800">
-              <div className="h-full bg-purple-600 rounded-full" />
-            </Progress>
+            <Progress value={(remainingSpots / 10000) * 100} className="h-2 bg-gray-800" />
           </div>
         </div>
 
