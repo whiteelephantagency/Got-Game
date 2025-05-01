@@ -12,34 +12,12 @@ export default function Lobby() {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!playerName.trim()) return;
-
-    setLoading(true);
-    setError('');
-
-    try {
-      const res = await fetch('http://localhost:5000/api/names', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: playerName }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to save name');
-      }
-
-      localStorage.setItem('playerName', playerName);
-      router.push('/game/1');
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!playerName.trim()) return
+    localStorage.setItem('playerName', playerName)
+    router.push('/video/1') // Redirect to video screen instead of game
+  }
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center text-white overflow-hidden">

@@ -1,0 +1,73 @@
+export const questions = [
+    {
+      id: 1,
+      question: "Which planet is known as the Red Planet?",
+      options: ["Venus", "Mars", "Jupiter", "Saturn"],
+      correctAnswer: "Mars",
+      videoUrl: "https://example.com/video1.mp4",
+    },
+    {
+      id: 2,
+      question: "What is the capital of Japan?",
+      options: ["Beijing", "Seoul", "Tokyo", "Bangkok"],
+      correctAnswer: "Tokyo",
+      videoUrl: "https://example.com/video2.mp4",
+    },
+    {
+      id: 3,
+      question: "Who painted the Mona Lisa?",
+      options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
+      correctAnswer: "Leonardo da Vinci",
+      videoUrl: "https://example.com/video3.mp4",
+    },
+    {
+      id: 4,
+      question: "What is the largest ocean on Earth?",
+      options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+      correctAnswer: "Pacific Ocean",
+      videoUrl: "https://example.com/video4.mp4",
+    },
+    {
+      id: 5,
+      question: "Which element has the chemical symbol 'O'?",
+      options: ["Gold", "Oxygen", "Osmium", "Oganesson"],
+      correctAnswer: "Oxygen",
+      videoUrl: "https://example.com/video5.mp4",
+    },
+    {
+      id: 6,
+      question: "What is the largest mammal in the world?",
+      options: ["African Elephant", "Blue Whale", "Giraffe", "Polar Bear"],
+      correctAnswer: "Blue Whale",
+      videoUrl: "https://example.com/video6.mp4",
+    },
+    {
+      id: 7,
+      question: "Which country is home to the kangaroo?",
+      options: ["New Zealand", "South Africa", "Australia", "Brazil"],
+      correctAnswer: "Australia",
+      videoUrl: "https://example.com/video7.mp4",
+    },
+    {
+      id: 8,
+      question: "What is the hardest natural substance on Earth?",
+      options: ["Gold", "Iron", "Diamond", "Platinum"],
+      correctAnswer: "Diamond",
+      videoUrl: "https://example.com/video8.mp4",
+    },
+    {
+      id: 9,
+      question: "Which planet has the most moons?",
+      options: ["Jupiter", "Saturn", "Uranus", "Neptune"],
+      correctAnswer: "Saturn",
+      videoUrl: "https://example.com/video9.mp4",
+    },
+    {
+      id: 10,
+      question: "What is the smallest prime number?",
+      options: ["0", "1", "2", "3"],
+      correctAnswer: "2",
+      videoUrl: "https://example.com/video10.mp4",
+    },
+  ]
+  

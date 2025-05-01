@@ -1,278 +1,97 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
-import { Clock, Users, CheckCircle, XCircle } from "lucide-react"
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
-// Sample questions for the game
-const questions = [
-  {
-    id: 1,
-    question: "Which planet is known as the Red Planet?",
-    options: ["Venus", "Mars", "Jupiter", "Saturn"],
-    correctAnswer: "Mars",
-    videoUrl: "https://example.com/video1.mp4", // Placeholder
-  },
-  {
-    id: 2,
-    question: "What is the capital of Japan?",
-    options: ["Beijing", "Seoul", "Tokyo", "Bangkok"],
-    correctAnswer: "Tokyo",
-    videoUrl: "https://example.com/video2.mp4", // Placeholder
-  },
-  {
-    id: 3,
-    question: "Who painted the Mona Lisa?",
-    options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
-    correctAnswer: "Leonardo da Vinci",
-    videoUrl: "https://example.com/video3.mp4", // Placeholder
-  },
-  {
-    id: 4,
-    question: "What is the largest ocean on Earth?",
-    options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
-    correctAnswer: "Pacific Ocean",
-    videoUrl: "https://example.com/video4.mp4", // Placeholder
-  },
-  {
-    id: 5,
-    question: "Which element has the chemical symbol 'O'?",
-    options: ["Gold", "Oxygen", "Osmium", "Oganesson"],
-    correctAnswer: "Oxygen",
-    videoUrl: "https://example.com/video5.mp4", // Placeholder
-  },
-  {
-    id: 6,
-    question: "What is the largest mammal in the world?",
-    options: ["African Elephant", "Blue Whale", "Giraffe", "Polar Bear"],
-    correctAnswer: "Blue Whale",
-    videoUrl: "https://example.com/video6.mp4", // Placeholder
-  },
-  {
-    id: 7,
-    question: "Which country is home to the kangaroo?",
-    options: ["New Zealand", "South Africa", "Australia", "Brazil"],
-    correctAnswer: "Australia",
-    videoUrl: "https://example.com/video7.mp4", // Placeholder
-  },
-  {
-    id: 8,
-    question: "What is the hardest natural substance on Earth?",
-    options: ["Gold", "Iron", "Diamond", "Platinum"],
-    correctAnswer: "Diamond",
-    videoUrl: "https://example.com/video8.mp4", // Placeholder
-  },
-  {
-    id: 9,
-    question: "Which planet has the most moons?",
-    options: ["Jupiter", "Saturn", "Uranus", "Neptune"],
-    correctAnswer: "Saturn",
-    videoUrl: "https://example.com/video9.mp4", // Placeholder
-  },
-  {
-    id: 10,
-    question: "What is the smallest prime number?",
-    options: ["0", "1", "2", "3"],
-    correctAnswer: "2",
-    videoUrl: "https://example.com/video10.mp4", // Placeholder
-  },
-]
-
-export default function GameRound({ params }: { params: { round: string } }) {
-  const roundNumber = Number.parseInt(params.round)
+export default function Lobby() {
+  const [playerName, setPlayerName] = useState('')
   const router = useRouter()
 
-  const [timeLeft, setTimeLeft] = useState(15)
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
-  const [isAnswered, setIsAnswered] = useState(false)
-  const [isCorrect, setIsCorrect] = useState(false)
-  const [playerCount, setPlayerCount] = useState(10000)
-  const [remainingSpots, setRemainingSpots] = useState(5000)
-  const [showVideo, setShowVideo] = useState(true)
-
-  const currentQuestion = questions[roundNumber - 1]
-
-  useEffect(() => {
-    // Check if we have a valid round
-    if (isNaN(roundNumber) || roundNumber < 1 || roundNumber > 10) {
-      router.push("/")
-      return
-    }
-
-    // Simulate video playing for 5 seconds
-    if (showVideo) {
-      const videoTimer = setTimeout(() => {
-        setShowVideo(false)
-      }, 5000)
-      return () => clearTimeout(videoTimer)
-    }
-
-    // Start countdown timer when video ends
-    if (!showVideo && !isAnswered) {
-      const timer = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer)
-            handleTimeout()
-            return 0
-          }
-          return prev - 1
-        })
-      }, 1000)
-
-      return () => clearInterval(timer)
-    }
-  }, [roundNumber, router, showVideo, isAnswered])
-
-  // Simulate decreasing player count and spots
-  useEffect(() => {
-    if (!showVideo && !isAnswered) {
-      const interval = setInterval(() => {
-        setPlayerCount((prev) => Math.max(prev - Math.floor(Math.random() * 50), remainingSpots))
-        setRemainingSpots((prev) => Math.max(prev - Math.floor(Math.random() * 30), roundNumber === 10 ? 1 : 1000))
-      }, 1000)
-
-      return () => clearInterval(interval)
-    }
-  }, [showVideo, isAnswered, roundNumber, remainingSpots])
-
-  const handleAnswerSelect = (answer: string) => {
-    if (isAnswered) return
-
-    setSelectedAnswer(answer)
-    setIsAnswered(true)
-
-    const correct = answer === currentQuestion.correctAnswer
-    setIsCorrect(correct)
-
-    setTimeout(() => {
-      if (correct) {
-        // Check if there are spots left
-        if (remainingSpots > 0) {
-          // Move to next round or win screen
-          if (roundNumber < 10) {
-            router.push(`/game/${roundNumber + 1}`)
-          } else {
-            router.push("/win")
-          }
-        } else {
-          // No spots left, go to waiting pool
-          router.push("/waiting-pool")
-        }
-      } else {
-        // Wrong answer, go to lucky draw
-        router.push("/lucky-draw")
-      }
-    }, 2000)
-  }
-
-  const handleTimeout = () => {
-    setIsAnswered(true)
-    setIsCorrect(false)
-
-    setTimeout(() => {
-      router.push("/lucky-draw")
-    }, 2000)
-  }
-
-  if (showVideo) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-black">
-        <div className="w-full max-w-2xl">
-          <div className="mb-4 flex justify-between items-center">
-            <div className="text-purple-400 font-bold">Round {roundNumber}/10</div>
-            <div className="text-white">Loading video...</div>
-          </div>
-
-          <div className="aspect-video bg-gray-900 rounded-lg flex items-center justify-center glow-border">
-            <div className="text-center">
-              <div className="text-2xl text-white mb-2">Video Playing</div>
-              <div className="text-purple-400">Pay attention to the details...</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!playerName.trim()) return
+    localStorage.setItem('playerName', playerName)
+    router.push('/video/1') // Redirect to video screen instead of game
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-black relative overflow-hidden">
-      {/* Stars background */}
-      {Array.from({ length: 30 }).map((_, i) => (
-        <div
-          key={i}
-          className="star"
-          style={{
-            top: `${Math.random() * 100}%`,
-            left: `${Math.random() * 100}%`,
-            animationDelay: `${Math.random() * 2}s`,
-          }}
+    <main className="relative min-h-screen flex flex-col items-center justify-center text-white overflow-hidden">
+      {/* Background */}
+      <Image
+        src="/images/lobby-background.jpg"
+        alt="Lobby Background"
+        fill
+        className="object-cover z-0"
+        priority
+      />
+
+      {/* Top Logo */}
+      <div className="absolute top-10 z-10">
+        <Image
+          src="/images/gg-icon.png"
+          alt="GG Logo"
+          width={60}
+          height={60}
         />
-      ))}
+      </div>
 
-      <div className="w-full max-w-2xl z-10">
-        <div className="mb-4 flex justify-between items-center">
-          <div className="text-purple-400 font-bold text-lg">Round {roundNumber}/10</div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <Users className="h-4 w-4 text-purple-400" />
-              <span className="text-white text-sm">{playerCount.toLocaleString()}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Clock className="h-4 w-4 text-purple-400" />
-              <span className="text-white text-sm">{timeLeft}s</span>
-            </div>
+      {/* Center Content */}
+      <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-md px-4">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-4">
+          <span className="flex items-center gap-2">
+            <Image
+              src="/images/Chevron Down.png"
+              alt="Arrow"
+              width={18}
+              height={18}
+            />
+            ENTER NAME
+          </span>
+        </h1>
+
+        <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-4">
+          <Input
+            type="text"
+            placeholder="PLAYER 1"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+            maxLength={20}
+            required
+            className="rounded-[12px] py-3 px-6 text-center text-xl font-bold text-[#A757E7] bg-white/80 placeholder:text-gray-400 
+              shadow-[inset_4px_4px_8px_rgba(0,0,0,0.2),inset_-4px_-4px_8px_rgba(255,255,255,0.5)] 
+              border-[3px] border-[#d0c7ff] outline-none focus:ring-2 focus:ring-[#A757E7] transition"
+          />
+
+          {playerName.trim() && (
+            <Button
+              type="submit"
+              className="text-lg mt-2 font-extrabold bg-white text-purple-700 py-2 px-6 rounded-full hover:scale-105 transition"
+            >
+              PLAY NOW
+            </Button>
+          )}
+        </form>
+      </div>
+
+      {/* Footer Controls */}
+      <div className="absolute bottom-6 w-full px-8 flex justify-between text-xs font-bold text-white items-center z-10">
+        <div className="flex gap-6 items-center">
+          <div className="flex items-center gap-1">
+            <Image src="/images/Chevron Down.png" alt="Arrow" width={10} height={10} />
+            <span>RULES</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Image src="/images/Chevron Down.png" alt="Arrow" width={10} height={10} />
+            <span>FAQ</span>
           </div>
         </div>
-
-        <div className="w-full bg-gray-900/70 rounded-lg p-6 glow-border mb-4">
-          <h2 className="text-2xl font-bold text-white mb-6 text-center glow-text">{currentQuestion.question}</h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            {currentQuestion.options.map((option) => (
-              <Button
-                key={option}
-                onClick={() => handleAnswerSelect(option)}
-                disabled={isAnswered}
-                className={`h-16 text-lg font-medium transition-all duration-300 ${
-                  selectedAnswer === option
-                    ? isCorrect
-                      ? "bg-green-600 hover:bg-green-700"
-                      : "bg-red-600 hover:bg-red-700"
-                    : isAnswered && option === currentQuestion.correctAnswer
-                      ? "bg-green-600"
-                      : "bg-purple-600 hover:bg-purple-700"
-                } ${selectedAnswer === option ? "glow-box" : ""}`}
-              >
-                {option}
-                {isAnswered &&
-                  option === selectedAnswer &&
-                  (isCorrect ? <CheckCircle className="ml-2 h-5 w-5" /> : <XCircle className="ml-2 h-5 w-5" />)}
-                {isAnswered && option === currentQuestion.correctAnswer && option !== selectedAnswer && (
-                  <CheckCircle className="ml-2 h-5 w-5" />
-                )}
-              </Button>
-            ))}
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-purple-300">Remaining spots</span>
-              <span className="text-white font-bold">{remainingSpots.toLocaleString()}</span>
-            </div>
-            <Progress value={(remainingSpots / 10000) * 100} className="h-2 bg-gray-800">
-              <div className="h-full bg-purple-600 rounded-full" />
-            </Progress>
-          </div>
+        <div className="flex items-center gap-2">
+          <span>BG MUSIC</span>
+          <span className="text-white/80">ON / OFF</span>
         </div>
-
-        {isAnswered && (
-          <div className={`text-center text-lg font-bold ${isCorrect ? "text-green-400" : "text-red-400"}`}>
-            {isCorrect ? "Correct! Moving to next round..." : "Wrong answer! Going to Lucky Draw..."}
-          </div>
-        )}
       </div>
     </main>
   )
