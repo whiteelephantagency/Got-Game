@@ -1,21 +1,45 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 export default function Lobby() {
-  const [playerName, setPlayerName] = useState('')
-  const router = useRouter()
+  const [playerName, setPlayerName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!playerName.trim()) return
-    localStorage.setItem('playerName', playerName)
-    router.push('/game/1')
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!playerName.trim()) return;
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const res = await fetch('http://localhost:5000/api/names', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: playerName }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to save name');
+      }
+
+      localStorage.setItem('playerName', playerName);
+      router.push('/game/1');
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center text-white overflow-hidden">
@@ -30,24 +54,14 @@ export default function Lobby() {
 
       {/* Top Logo */}
       <div className="absolute top-10 z-10">
-        <Image
-          src="/images/gg-icon.png"
-          alt="GG Logo"
-          width={60}
-          height={60}
-        />
+        <Image src="/images/gg-icon.png" alt="GG Logo" width={60} height={60} />
       </div>
 
       {/* Center Content */}
       <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-md px-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-4">
           <span className="flex items-center gap-2">
-            <Image
-              src="/images/Chevron Down.png"
-              alt="Arrow"
-              width={18}
-              height={18}
-            />
+            <Image src="/images/Chevron Down.png" alt="Arrow" width={18} height={18} />
             ENTER NAME
           </span>
         </h1>
@@ -65,18 +79,21 @@ export default function Lobby() {
               border-[3px] border-[#d0c7ff] outline-none focus:ring-2 focus:ring-[#A757E7] transition"
           />
 
+          {error && <p className="text-red-500 font-semibold">{error}</p>}
+
           {playerName.trim() && (
             <Button
               type="submit"
+              disabled={loading}
               className="text-lg mt-2 font-extrabold bg-white text-purple-700 py-2 px-6 rounded-full hover:scale-105 transition"
             >
-              PLAY NOW
+              {loading ? 'Saving...' : 'PLAY NOW'}
             </Button>
           )}
         </form>
       </div>
 
-      {/* Footer Controls with Arrow Images */}
+      {/* Footer Controls */}
       <div className="absolute bottom-6 w-full px-8 flex justify-between text-xs font-bold text-white items-center z-10">
         <div className="flex gap-6 items-center">
           <div className="flex items-center gap-1">
@@ -94,5 +111,5 @@ export default function Lobby() {
         </div>
       </div>
     </main>
-  )
+  );
 }
