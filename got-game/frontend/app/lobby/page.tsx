@@ -14,7 +14,7 @@ export default function Lobby() {
     e.preventDefault()
     if (!playerName.trim()) return
     localStorage.setItem('playerName', playerName)
-    router.push('/game/1')
+    router.push('/video/1') // Redirect to video screen instead of game
   }
 
   return (
@@ -76,7 +76,7 @@ export default function Lobby() {
         </form>
       </div>
 
-      {/* Footer Controls with Arrow Images */}
+      {/* Footer Controls */}
       <div className="absolute bottom-6 w-full px-8 flex justify-between text-xs font-bold text-white items-center z-10">
         <div className="flex gap-6 items-center">
           <div className="flex items-center gap-1">
