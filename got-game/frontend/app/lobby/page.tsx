@@ -12,6 +12,12 @@ export default function Lobby() {
   const [error, setError] = useState('');
   const router = useRouter();
 
+  const [videoStarted, setVideoStarted] = useState(false);
+  const [inputEnabled, setInputEnabled] = useState(false);
+  const [videoEnded, setVideoEnded] = useState(false);
+
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!playerName.trim()) return;
@@ -48,9 +54,27 @@ export default function Lobby() {
         src="/images/lobby-background.jpg"
         alt="Lobby Background"
         fill
-        className="object-cover z-0"
+        className={`object-cover z-0 transition duration-500 ${videoStarted && !inputEnabled ? 'blur-md' : ''}`}
         priority
       />
+    
+    {!videoEnded && (
+      <div className="absolute top-20 z-10 w-full flex justify-center">
+        <video
+          src="/videos/alex-intro.mp4"
+          autoPlay
+          playsInline
+          className="w-full max-w-xl rounded-xl shadow-xl"
+          onPlay={() => {
+            setVideoStarted(true);
+            setTimeout(() => setInputEnabled(true), 15000); // enable input at 15s
+          }}
+          onEnded={() => setVideoEnded(true)}
+        />
+      </div>
+    )}
+
+
 
       {/* Top Logo */}
       <div className="absolute top-10 z-10">
@@ -58,7 +82,7 @@ export default function Lobby() {
       </div>
 
       {/* Center Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-md px-4">
+      <div className="relative z-20 mt-[320px] flex flex-col items-center justify-center w-full max-w-md px-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-4">
           <span className="flex items-center gap-2">
             <Image src="/images/Chevron Down.png" alt="Arrow" width={18} height={18} />
@@ -67,17 +91,20 @@ export default function Lobby() {
         </h1>
 
         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-4">
-          <Input
-            type="text"
-            placeholder="PLAYER 1"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-            maxLength={20}
-            required
-            className="rounded-[12px] py-3 px-6 text-center text-xl font-bold text-[#A757E7] bg-white/80 placeholder:text-gray-400 
-              shadow-[inset_4px_4px_8px_rgba(0,0,0,0.2),inset_-4px_-4px_8px_rgba(255,255,255,0.5)] 
-              border-[3px] border-[#d0c7ff] outline-none focus:ring-2 focus:ring-[#A757E7] transition"
-          />
+        <Input
+          type="text"
+          placeholder="PLAYER 1"
+          value={playerName}
+          onChange={(e) => setPlayerName(e.target.value)}
+          maxLength={20}
+          required
+          disabled={!inputEnabled}
+          className={`rounded-[12px] py-3 px-6 text-center text-xl font-bold text-[#A757E7] bg-white/80 placeholder:text-gray-400 
+            shadow-[inset_4px_4px_8px_rgba(0,0,0,0.2),inset_-4px_-4px_8px_rgba(255,255,255,0.5)] 
+            border-[3px] border-[#d0c7ff] outline-none focus:ring-2 focus:ring-[#A757E7] transition 
+            ${!inputEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+        />
+
 
           {error && <p className="text-red-500 font-semibold">{error}</p>}
 
