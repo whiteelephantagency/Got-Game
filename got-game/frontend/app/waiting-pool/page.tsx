@@ -11,6 +11,7 @@ export default function WaitingPool() {
   const [waitTime, setWaitTime] = useState(30)
   const [playersInPool, setPlayersInPool] = useState(5000)
 
+  // Handle player name and setup
   useEffect(() => {
     const storedName = localStorage.getItem("playerName")
     if (!storedName) {
@@ -19,17 +20,6 @@ export default function WaitingPool() {
     }
     setPlayerName(storedName)
 
-    const timer = setInterval(() => {
-      setWaitTime(prev => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          router.push("/lucky-draw")
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
-
     const fluctuation = setInterval(() => {
       setPlayersInPool(prev => {
         const change = Math.floor(Math.random() * 200) - 100
@@ -37,11 +27,22 @@ export default function WaitingPool() {
       })
     }, 2000)
 
-    return () => {
-      clearInterval(timer)
-      clearInterval(fluctuation)
-    }
+    return () => clearInterval(fluctuation)
   }, [router])
+
+  // Countdown and navigation separated
+  useEffect(() => {
+    if (waitTime <= 0) {
+      router.push("/lucky-draw")
+      return
+    }
+
+    const timer = setTimeout(() => {
+      setWaitTime(prev => prev - 1)
+    }, 1000)
+
+    return () => clearTimeout(timer)
+  }, [waitTime, router])
 
   return (
     <main className="relative min-h-screen bg-black flex flex-col items-center justify-center p-4 overflow-hidden text-white">
