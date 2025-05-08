@@ -1,73 +1,62 @@
 export const questions = [
-    {
+  {
       id: 1,
-      question: "Which planet is known as the Red Planet?",
-      options: ["Venus", "Mars", "Jupiter", "Saturn"],
-      correctAnswer: "Mars",
-      videoUrl: "https://example.com/video1.mp4",
-    },
-    {
+      question: "Which 70’s rock band performed the original version of this song?",
+      options: ["The Who", "Chicago", "Journey", "The Eagles"],
+      correctAnswer: "Journey",
+      videoUrl: "/video/question-1.mp4",
+      introUrl: "/video/alex-intro-1.mp4",
+      reactionUrl: "/video/alex-react-1.mp4",
+      statsCommentUrl: "/video/alex-comment-1.mp4",
+      sortingUrl: "/video/alex-sorting-1.mp4",
+      congratsUrl: "/video/alex-congrats-1.mp4"
+  },
+  {
       id: 2,
-      question: "What is the capital of Japan?",
-      options: ["Beijing", "Seoul", "Tokyo", "Bangkok"],
-      correctAnswer: "Tokyo",
-      videoUrl: "https://example.com/video2.mp4",
-    },
-    {
+      question: "Where was Shin Lim, AGT Season 13 Winner, born?",
+      options: ["Vancouver, British Columbia", "Acton, Massachusetts", "Seoul, South Korea", "Singapore"],
+      correctAnswer: "Vancouver, British Columbia",
+      videoUrl: "/video/question-2.mp4",
+      introUrl: "/video/alex-intro-2.mp4",
+      reactionUrl: "/video/alex-react-2.mp4",
+      statsCommentUrl: "/video/alex-comment-2.mp4",
+      sortingUrl: "/video/alex-sorting-2.mp4",
+      congratsUrl: "/video/alex-congrats-2.mp4"
+  },
+  {
       id: 3,
       question: "Who painted the Mona Lisa?",
       options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
       correctAnswer: "Leonardo da Vinci",
-      videoUrl: "https://example.com/video3.mp4",
-    },
-    {
+      videoUrl: "/video/question-3.mp4",
+      introUrl: "/video/alex-intro-3.mp4",
+      reactionUrl: "/video/alex-react-3.mp4",
+      statsCommentUrl: "/video/alex-comment-3.mp4",
+      sortingUrl: "/video/alex-sorting-3.mp4",
+      congratsUrl: "/video/alex-congrats-3.mp4"
+  },
+  {
       id: 4,
       question: "What is the largest ocean on Earth?",
       options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
       correctAnswer: "Pacific Ocean",
-      videoUrl: "https://example.com/video4.mp4",
-    },
-    {
+      videoUrl: "/video/question-4.mp4",
+      introUrl: "/video/alex-intro-4.mp4",
+      reactionUrl: "/video/alex-react-4.mp4",
+      statsCommentUrl: "/video/alex-comment-4.mp4",
+      sortingUrl: "/video/alex-sorting-4.mp4",
+      congratsUrl: "/video/alex-congrats-4.mp4"
+  },
+  {
       id: 5,
       question: "Which element has the chemical symbol 'O'?",
       options: ["Gold", "Oxygen", "Osmium", "Oganesson"],
       correctAnswer: "Oxygen",
-      videoUrl: "https://example.com/video5.mp4",
-    },
-    {
-      id: 6,
-      question: "What is the largest mammal in the world?",
-      options: ["African Elephant", "Blue Whale", "Giraffe", "Polar Bear"],
-      correctAnswer: "Blue Whale",
-      videoUrl: "https://example.com/video6.mp4",
-    },
-    {
-      id: 7,
-      question: "Which country is home to the kangaroo?",
-      options: ["New Zealand", "South Africa", "Australia", "Brazil"],
-      correctAnswer: "Australia",
-      videoUrl: "https://example.com/video7.mp4",
-    },
-    {
-      id: 8,
-      question: "What is the hardest natural substance on Earth?",
-      options: ["Gold", "Iron", "Diamond", "Platinum"],
-      correctAnswer: "Diamond",
-      videoUrl: "https://example.com/video8.mp4",
-    },
-    {
-      id: 9,
-      question: "Which planet has the most moons?",
-      options: ["Jupiter", "Saturn", "Uranus", "Neptune"],
-      correctAnswer: "Saturn",
-      videoUrl: "https://example.com/video9.mp4",
-    },
-    {
-      id: 10,
-      question: "What is the smallest prime number?",
-      options: ["0", "1", "2", "3"],
-      correctAnswer: "2",
-      videoUrl: "https://example.com/video10.mp4",
-    },
-  ]
-  
+      videoUrl: "/video/question-5.mp4",
+      introUrl: "/video/alex-intro-5.mp4",
+      reactionUrl: "/video/alex-react-5.mp4",
+      statsCommentUrl: "/video/alex-comment-5.mp4",
+      sortingUrl: "/video/alex-sorting-5.mp4",
+      congratsUrl: "/video/alex-congrats-5.mp4"
+  },
+];

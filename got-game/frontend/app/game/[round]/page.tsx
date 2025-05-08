@@ -1,74 +1,39 @@
-// app/game/[round]/page.tsx
 "use client"
 
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import AlexQuestions from "@/components/ui/AlexQuestions"
+import { questions } from "@/lib/questions"
+import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Clock, Users, CheckCircle, XCircle } from "lucide-react"
 import StatMap from "@/components/ui/StatMap"
 import ChatBot from "@/components/ui/ChatBot"
-
-// Sample questions for the game
-const questions = [
-  {
-    id: 1,
-    question: "Which planet is known as the Red Planet?",
-    options: ["Venus", "Mars", "Jupiter", "Saturn"],
-    correctAnswer: "Mars",
-    videoUrl: "/video/question-1.mp4",
-    introUrl: "/video/host-alex-question-1.mp4",
-  },
-  {
-    id: 2,
-    question: "What is the capital of Japan?",
-    options: ["Beijing", "Seoul", "Tokyo", "Bangkok"],
-    correctAnswer: "Tokyo",
-    videoUrl: "/video/question-2.mp4",
-    introUrl: "/video/host-alex-question-2.mp4",
-  },
-  {
-    id: 3,
-    question: "Who painted the Mona Lisa?",
-    options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
-    correctAnswer: "Leonardo da Vinci",
-    videoUrl: "/video/question-3.mp4",
-    introUrl: "/video/host-alex-question-3.mp4",
-  },
-  {
-    id: 4,
-    question: "What is the largest ocean on Earth?",
-    options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
-    correctAnswer: "Pacific Ocean",
-    videoUrl: "/video/question-4.mp4",
-    introUrl: "/video/host-alex-question-4.mp4",
-  },
-  {
-    id: 5,
-    question: "Which element has the chemical symbol 'O'?",
-    options: ["Gold", "Oxygen", "Osmium", "Oganesson"],
-    correctAnswer: "Oxygen",
-    videoUrl: "/video/question-5.mp4",
-    introUrl: "/video/host-alex-question-5.mp4",
-  },
-]
 
 export default function GameRound() {
   const params = useParams()
   const router = useRouter()
   const roundParam = params?.round
   const roundNumber = Number(roundParam)
+  const currentQuestion = questions[roundNumber - 1]
 
   const [showIntro, setShowIntro] = useState(true)
   const [isAnswered, setIsAnswered] = useState(false)
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
-  const [timeLeft, setTimeLeft] = useState(15)
   const [isCorrect, setIsCorrect] = useState(false)
   const [playerCount, setPlayerCount] = useState(2000)
   const [prize, setPrize] = useState(10000)
+  const [showReactionVideo, setShowReactionVideo] = useState(false)
 
-  const currentQuestion = questions[roundNumber - 1]
+  // Video sources for different stages
+  const videoSources = [
+    currentQuestion.introUrl,
+    currentQuestion.reactionUrl,
+    currentQuestion.statsCommentUrl,
+    currentQuestion.sortingUrl,
+    currentQuestion.congratsUrl,
+  ]
+
+  const [stage, setStage] = useState(0)
 
   // Redirect if the round number is invalid
   useEffect(() => {
@@ -83,6 +48,20 @@ export default function GameRound() {
     setShowIntro(false)
   }
 
+  // Handle next video stage
+  const handleNextStage = () => {
+    if (stage < videoSources.length - 1) {
+      setStage(stage + 1)
+    } else {
+      setShowReactionVideo(false)
+      if (isCorrect) {
+        router.push(`/stats/${roundNumber}`)
+      } else {
+        router.push("/stats/[round]")
+      }
+    }
+  }
+
   // Handle answer selection
   const handleAnswerSelect = (answer: string) => {
     if (isAnswered) return
@@ -92,23 +71,25 @@ export default function GameRound() {
     const correct = answer === currentQuestion.correctAnswer
     setIsCorrect(correct)
 
+    // Show reaction video after selecting an answer
     setTimeout(() => {
-      if (correct) {
-        // Move to next round or win screen
-        if (roundNumber < questions.length) {
-          router.push(`/game/${roundNumber + 1}`)
-        } else {
-          router.push("/win")
-        }
-      } else {
-        router.push("/lucky-draw")
-      }
-    }, 2000)
+      setShowReactionVideo(true)
+      setStage(1) // Start from the reaction video
+    }, 1000)
   }
 
   // Show the intro video
   if (showIntro) {
-    return <AlexQuestions round={roundNumber} onEnded={handleIntroEnded} />
+    return (
+      <AlexVideoPlayer src={currentQuestion.introUrl} onEnded={handleIntroEnded} autoPlay />
+    )
+  }
+
+  // Show the reaction video if needed
+  if (showReactionVideo) {
+    return (
+      <AlexVideoPlayer src={videoSources[stage]} onEnded={handleNextStage} autoPlay />
+    )
   }
 
   // Main question screen
@@ -122,7 +103,7 @@ export default function GameRound() {
       />
 
       {/* Stat Map */}
-      <StatMap playerCount={playerCount} prize={prize} timeLeft={timeLeft} />
+      <StatMap playerCount={playerCount} prize={prize} timeLeft={15} />
 
       {/* Chat Bot */}
       <ChatBot />
@@ -139,7 +120,7 @@ export default function GameRound() {
               onClick={() => handleAnswerSelect(option)}
               disabled={isAnswered}
               className={`h-20 text-xl font-medium transition-all duration-300 shadow-lg rounded-2xl ${
-selectedAnswer === option
+                selectedAnswer === option
                   ? isCorrect
                     ? "bg-green-600 hover:bg-green-700"
                     : "bg-red-600 hover:bg-red-700"

@@ -61,7 +61,7 @@ export default function Lobby() {
     {!videoEnded && (
       <div className="absolute top-20 z-10 w-full flex justify-center">
         <video
-          src="/videos/alex-intro.mp4"
+          src="/video/alex(Welcome).mp4"
           autoPlay
           playsInline
           className="w-full max-w-xl rounded-xl shadow-xl"
