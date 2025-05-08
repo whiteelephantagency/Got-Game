@@ -1,43 +1,43 @@
 'use client';
-
+ 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-
+ 
 export default function Lobby() {
   const [playerName, setPlayerName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
-
+ 
   const [videoStarted, setVideoStarted] = useState(false);
   const [inputEnabled, setInputEnabled] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
-
-
-
+ 
+ 
+ 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!playerName.trim()) return;
-
+ 
     setLoading(true);
     setError('');
-
+ 
     try {
-      const res = await fetch('http://localhost:5000/api/names', {
+      const res = await fetch('http://localhost:5001/api/names', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: playerName }),
       });
-
+ 
       const data = await res.json();
-
+ 
       if (!res.ok) {
         throw new Error(data.error || 'Failed to save name');
       }
-
+ 
       localStorage.setItem('playerName', playerName);
       router.push('/game/1');
     } catch (err: any) {
@@ -46,10 +46,10 @@ export default function Lobby() {
       setLoading(false);
     }
   };
-
+ 
   return (
-    <main className="relative min-h-screen flex flex-col text-white overflow-hidden">
-      {/* Background Image */}
+    <main className="relative min-h-screen flex flex-col items-center justify-center text-white overflow-hidden">
+      {/* Background */}
       <Image
         src="/images/lobby-background.jpg"
         alt="Lobby Background"
@@ -57,7 +57,7 @@ export default function Lobby() {
         className={`object-cover z-0 transition duration-500 ${videoStarted && !inputEnabled ? 'blur-md' : ''}`}
         priority
       />
-    
+   
     {!videoEnded && (
       <div className="absolute top-20 z-10 w-full flex justify-center">
         <video
@@ -73,14 +73,14 @@ export default function Lobby() {
         />
       </div>
     )}
-
-
-
+ 
+ 
+ 
       {/* Top Logo */}
       <div className="absolute top-10 z-10">
         <Image src="/images/gg-icon.png" alt="GG Logo" width={60} height={60} />
       </div>
-
+ 
       {/* Center Content */}
       <div className="relative z-20 mt-[320px] flex flex-col items-center justify-center w-full max-w-md px-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-4">
@@ -89,7 +89,7 @@ export default function Lobby() {
             ENTER NAME
           </span>
         </h1>
-
+ 
         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-4">
         <Input
           type="text"
@@ -99,15 +99,15 @@ export default function Lobby() {
           maxLength={20}
           required
           disabled={!inputEnabled}
-          className={`rounded-[12px] py-3 px-6 text-center text-xl font-bold text-[#A757E7] bg-white/80 placeholder:text-gray-400 
-            shadow-[inset_4px_4px_8px_rgba(0,0,0,0.2),inset_-4px_-4px_8px_rgba(255,255,255,0.5)] 
-            border-[3px] border-[#d0c7ff] outline-none focus:ring-2 focus:ring-[#A757E7] transition 
+          className={`rounded-[12px] py-3 px-6 text-center text-xl font-bold text-[#A757E7] bg-white/80 placeholder:text-gray-400
+            shadow-[inset_4px_4px_8px_rgba(0,0,0,0.2),inset_-4px_-4px_8px_rgba(255,255,255,0.5)]
+            border-[3px] border-[#d0c7ff] outline-none focus:ring-2 focus:ring-[#A757E7] transition
             ${!inputEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         />
-
-
+ 
+ 
           {error && <p className="text-red-500 font-semibold">{error}</p>}
-
+ 
           {playerName.trim() && (
             <Button
               type="submit"
@@ -119,7 +119,7 @@ export default function Lobby() {
           )}
         </form>
       </div>
-
+ 
       {/* Footer Controls */}
       <div className="absolute bottom-6 w-full px-8 flex justify-between text-xs font-bold text-white items-center z-10">
         <div className="flex gap-6 items-center">
@@ -140,3 +140,5 @@ export default function Lobby() {
     </main>
   );
 }
+ 
+ 
