@@ -1,4 +1,3 @@
-// app/stats/[round]/page.tsx
 "use client"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect } from "react"
@@ -6,30 +5,45 @@ import { useEffect } from "react"
 export default function StatMapPage() {
   const params = useParams()
   const router = useRouter()
-  const round = params?.round
+  const round = Number(params?.round || 1)
 
-  // Optional: auto-redirect to next screen after 5 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.push(`/game/${Number(round) + 1}`) // Or "/lucky-draw" if it's the last round
-    }, 5000)
+      router.push(`/reaction/${round}`) // Go to next video after stat map
+    }, 4000)
 
     return () => clearTimeout(timer)
   }, [router, round])
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-black text-white px-4">
-      <h1 className="text-4xl font-bold mb-4">📊 Stats for Round {round}</h1>
-      <p className="text-xl mb-6 text-center">Here’s how players answered:</p>
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-red-900 to-purple-800 text-white relative px-4">
+      {/* Game Logo */}
+      <h1 className="text-4xl md:text-6xl font-bold mb-8">📊 Stats for Round {round}</h1>
 
-      <div className="bg-purple-700 rounded-lg p-6 w-full max-w-md space-y-3 shadow-lg">
-        <p>🅰️ Answer A — 45%</p>
-        <p>🅱️ Answer B — 30%</p>
-        <p>🇨 Answer C — 15%</p>
-        <p>🇩 Answer D — 10%</p>
+      {/* Block Grid */}
+      <div className="grid grid-cols-12 gap-2 max-w-5xl">
+        {Array.from({ length: 72 }).map((_, i) => (
+          <div
+            key={i}
+            className="w-6 h-6 md:w-10 md:h-10 bg-lime-400 rounded-md shadow-lg animate-pulse"
+            style={{
+              opacity: Math.random() > 0.3 ? 1 : 0.2,
+              transition: "opacity 0.3s ease-in-out",
+            }}
+          />
+        ))}
       </div>
 
-      <p className="mt-6 text-sm opacity-70">Loading next round...</p>
+      {/* Rules / FAQ / Music toggles (optional) */}
+      <div className="absolute bottom-6 w-full flex justify-between px-10 text-sm text-white/80 font-semibold">
+        <div>
+          <button className="mr-4">▼ RULES</button>
+          <button>▼ FAQ</button>
+        </div>
+        <div>
+          BG MUSIC <button className="ml-2">ON / OFF</button>
+        </div>
+      </div>
     </main>
   )
 }
