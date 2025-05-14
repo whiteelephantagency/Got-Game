@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer";
 import { useRouter } from "next/navigation";
+import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer";
+import StatMapTransition from "@/components/ui/StatMapTransition"; // ← Add this import
 import { questions } from "@/lib/questions";
 
 interface AlexQuestionsProps {
@@ -14,7 +15,9 @@ export default function AlexQuestions({ round, onEnded }: AlexQuestionsProps) {
   const router = useRouter();
   const currentQuestion = questions[round - 1];
 
-  const [stage, setStage] = useState<"intro" | "stats" | "comment" | "sorting" | "congrats">("intro");
+  const [stage, setStage] = useState<
+    "intro" | "stats" | "statMapTransition" | "comment" | "sorting" | "congrats"
+  >("intro");
 
   useEffect(() => {
     if (!currentQuestion) {
@@ -27,14 +30,16 @@ export default function AlexQuestions({ round, onEnded }: AlexQuestionsProps) {
     if (stage === "intro") {
       setStage("stats");
     } else if (stage === "stats") {
-      // ✅ Redirect to the stat map page after "Let's see the stats!" video
+      // 🔁 Show transition video instead of navigating right away
+      setStage("statMapTransition");
+    } else if (stage === "statMapTransition") {
       router.push(`/stats/${round}`);
     } else if (stage === "comment") {
       setStage("sorting");
     } else if (stage === "sorting") {
       setStage("congrats");
     } else if (stage === "congrats") {
-      onEnded(); // Final callback
+      onEnded();
     }
   };
 
@@ -46,11 +51,13 @@ export default function AlexQuestions({ round, onEnded }: AlexQuestionsProps) {
     congrats: currentQuestion.congratsUrl || `/video/alex-congrats-${round}.mp4`,
   };
 
-  const currentVideo = videoSources[stage];
+  const currentVideo = videoSources[stage as keyof typeof videoSources];
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-      {currentVideo ? (
+      {stage === "statMapTransition" ? (
+        <StatMapTransition onEnd={handleNextStage} />
+      ) : currentVideo ? (
         <AlexVideoPlayer
           src={currentVideo}
           onEnded={handleNextStage}

@@ -9,7 +9,7 @@ export default function WaitingPool() {
   const router = useRouter()
   const [playerName, setPlayerName] = useState("")
   const [waitTime, setWaitTime] = useState(30)
-  const [playersInPool, setPlayersInPool] = useState(5000)
+  const [playersInPool, setPlayersInPool] = useState(5001)
 
   // Handle player name and setup
   useEffect(() => {
