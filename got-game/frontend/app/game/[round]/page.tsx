@@ -10,7 +10,7 @@ import { Clock, Users, CheckCircle, XCircle } from "lucide-react"
 import { questions as question } from "@/lib/questions"
 import StatMap from "@/components/ui/StatMap"
 import ChatBot from "@/components/ui/ChatBot"
-import StatMapTransition from "@/components/ui/StatMapTransition" // ← NEW
+import StatMapTransition from "@/components/ui/StatMapTransition"
 
 export default function GameRound() {
   const params = useParams()
@@ -21,7 +21,7 @@ export default function GameRound() {
   const [showIntro, setShowIntro] = useState(true)
   const [isAnswered, setIsAnswered] = useState(false)
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
-  const [showStatVideo, setShowStatVideo] = useState(false) // ← NEW
+  const [showStatVideo, setShowStatVideo] = useState(false)
   const [timeLeft, setTimeLeft] = useState(15)
   const [isCorrect, setIsCorrect] = useState(false)
   const [playerCount, setPlayerCount] = useState(2000)
@@ -79,7 +79,6 @@ export default function GameRound() {
     const correct = answer === currentQuestion.correctAnswer
     setIsCorrect(correct)
 
-    // Show stat map video after short delay
     setTimeout(() => {
       setShowStatVideo(true)
     }, 1000)
@@ -98,7 +97,6 @@ export default function GameRound() {
     }, 1000)
   }
 
-  // 👀 If showing stat video, show nothing else
   if (showStatVideo) {
     return <StatMapTransition onEnd={handleStatVideoEnd} />
   }
@@ -106,11 +104,13 @@ export default function GameRound() {
   if (showIntro) {
     return (
       <main className="relative min-h-screen flex flex-col items-center justify-center bg-black overflow-hidden">
-        <div className="absolute top-4 left-4 z-30 text-white space-y-2 font-bold text-sm md:text-base">
-          <div>▶ PLAYERS {liveCount.toLocaleString()}</div>
-          <div>▶ PRIZE 10,000$</div>
-          <div>▶ TIMER 00:{String(timeLeft).padStart(2, "0")}</div>
-        </div>
+        {roundNumber === 1 && (
+          <div className="absolute top-4 left-4 z-30 text-white space-y-2 font-bold text-sm md:text-base">
+            <div>▶ PLAYERS {liveCount.toLocaleString()}</div>
+            <div>▶ PRIZE 10,000$</div>
+            <div>▶ TIMER 00:{String(timeLeft).padStart(2, "0")}</div>
+          </div>
+        )}
 
         <div className="absolute top-4 right-4 z-20">
           <button className="relative bg-purple-800 p-2 rounded-full hover:bg-purple-700 shadow-md">

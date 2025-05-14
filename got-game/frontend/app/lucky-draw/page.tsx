@@ -87,7 +87,7 @@ export default function LuckyDraw() {
   const handleContinue = () => {
     if (isSelected) {
       // Selected in lucky draw, continue to next round
-      router.push("/game/2") // Assuming this is after round 1
+      router.push("/lucky-selected") // Assuming this is after round 1
     } else {
       // Not selected, go to waiting pool
       router.push("/waiting-pool")
