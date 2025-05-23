@@ -1,14 +1,14 @@
 "use client"
- 
+
 import { FC, useEffect } from "react"
- 
+
 interface AlexVideoPlayerProps {
   src: string
   onEnded: () => void
   autoPlay?: boolean
   delay?: number // optional delay before triggering onEnded
 }
- 
+
 const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
   src,
   onEnded,
@@ -21,9 +21,9 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
       return () => clearTimeout(timeout)
     }
   }, [delay, onEnded])
- 
+
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+    <div className="relative w-full max-w-4xl aspect-video z-10 rounded-xl overflow-hidden shadow-2xl">
       <video
         src={src}
         autoPlay={autoPlay}
@@ -31,10 +31,10 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
         onEnded={() => {
           if (delay === 0) onEnded()
         }}
-        className="relative z-10 w-[90vw] max-w-[720px] rounded-2xl shadow-2xl"
+        className="w-full h-full object-cover"
       />
     </div>
   )
 }
- 
+
 export default AlexVideoPlayer

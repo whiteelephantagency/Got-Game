@@ -1,38 +1,47 @@
-// /app/lucky-selected/page.tsx
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
+import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer"
 import Image from "next/image"
 
-export default function LuckySelectedVideoPage() {
+export default function LuckySelected() {
   const router = useRouter()
-  const [ended, setEnded] = useState(false)
+  const searchParams = useSearchParams()
+  const roundParam = searchParams.get("round")
+  const nextRound = roundParam ? Number(roundParam) + 1 : 2
 
-  useEffect(() => {
-    if (ended) {
-      router.push("/game/2") // or dynamically decide the next round
+  const [stage, setStage] = useState<"selected" | "hard">("selected")
+
+  const handleVideoEnd = () => {
+    if (stage === "selected") {
+      setStage("hard")
+    } else {
+      router.push(`/game/${nextRound}`)
     }
-  }, [ended, router])
+  }
+
+  const videoMap = {
+    selected: "/video/youve-been-selected.mp4",
+    hard: "/video/alex-warning.mp4",
+  }
 
   return (
-    <main className="relative min-h-screen flex items-center justify-center bg-black overflow-hidden">
-      {/* Background */}
+    <main className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Image */}
       <Image
         src="/images/lobby-background.jpg"
-        alt="Purple Grid Background"
+        alt="Background"
         fill
-        className="object-cover opacity-90 z-0"
-        priority
+        className="object-cover z-0"
       />
 
-      {/* You've Been Selected Video */}
-      <div className="relative z-10 w-full max-w-3xl rounded-xl overflow-hidden shadow-xl">
-        <video
-          src="/video/youve-been-selected.mp4"
+      {/* Video Player */}
+      <div className="relative z-10 w-[90vw] max-w-[720px]">
+        <AlexVideoPlayer
+          src={videoMap[stage]}
+          onEnded={handleVideoEnd}
           autoPlay
-          onEnded={() => setEnded(true)}
-          className="w-full h-auto"
         />
       </div>
     </main>

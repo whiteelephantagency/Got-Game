@@ -1,70 +1,44 @@
-// components/ui/ChatBot.tsx
 "use client"
 
-import { useState } from "react"
-import { MessageSquare } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 
-export default function ChatBot() {
+const SAMPLE_COMMENTS = [
+  "Let's go! 🔥",
+  "OMG I got it right! 😍",
+  "Trick question 😭",
+  "I'm ready for round 2 💪",
+  "NOOO I tapped the wrong one 😭",
+  "Who else picked B?",
+  "That was too easy."
+]
+
+export default function HQChatBot() {
   const [messages, setMessages] = useState<string[]>([])
-  const [input, setInput] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
+  const chatRef = useRef<HTMLDivElement>(null)
 
-  const handleSend = () => {
-    if (input.trim()) {
-      setMessages((prev) => [...prev, input])
-      setInput("")
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMessages((prev) => {
+        const next = [...prev, SAMPLE_COMMENTS[Math.floor(Math.random() * SAMPLE_COMMENTS.length)]]
+        return next.slice(-20) // limit to last 20 messages
+      })
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight
     }
-  }
-
-  const toggleChat = () => {
-    setIsOpen(!isOpen)
-  }
+  }, [messages])
 
   return (
-    <div className="fixed bottom-6 right-6 z-20">
-      {/* Chat Icon */}
-      {!isOpen && (
-        <button
-          onClick={toggleChat}
-          className="bg-purple-600 p-4 rounded-full shadow-lg text-white hover:bg-purple-700 transition-all"
-        >
-          <MessageSquare className="w-6 h-6" />
-        </button>
-      )}
-
-      {/* Chat Box */}
-      {isOpen && (
-        <div className="bg-purple-900 p-4 rounded-lg shadow-lg w-64">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-white text-lg font-bold">ChatBot</h3>
-            <button onClick={toggleChat} className="text-white font-bold text-lg">
-              ✕
-            </button>
-          </div>
-
-          <div className="overflow-y-auto max-h-40 bg-gray-800 p-2 rounded-lg mb-2">
-            {messages.map((msg, idx) => (
-              <div key={idx} className="text-white text-sm mb-1">
-                {msg}
-              </div>
-            ))}
-          </div>
-
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message..."
-            className="w-full p-2 rounded-lg bg-gray-700 text-white mb-2"
-          />
-          <button
-            onClick={handleSend}
-            className="w-full bg-purple-600 p-2 rounded-lg text-white font-bold"
-          >
-            Send
-          </button>
+    <div className="h-64 w-full bg-black/60 text-white p-2 rounded-lg shadow-inner overflow-y-auto text-sm" ref={chatRef}>
+      {messages.map((msg, idx) => (
+        <div key={idx} className="mb-1 animate-fadeIn">
+          <span className="text-purple-300">Player{1000 + idx}:</span> {msg}
         </div>
-      )}
+      ))}
     </div>
   )
 }

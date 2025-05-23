@@ -90,7 +90,7 @@ export default function LuckyDraw() {
       router.push("/lucky-selected") // Assuming this is after round 1
     } else {
       // Not selected, go to waiting pool
-      router.push("/waiting-pool")
+      router.push("/lucky-selected")
     }
   }
 
