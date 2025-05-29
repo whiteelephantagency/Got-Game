@@ -40,7 +40,8 @@ export default function RoundOnePage() {
         setStatProgress(filled);
         if (filled >= 1000) {
           clearInterval(interval);
-          setStage("finalStatsEnd");
+          // Instead of setting to finalStatsEnd, go directly to alexVideoPart5
+          setStage("alexVideoPart5");
         }
       }, 10);
     }
@@ -52,7 +53,6 @@ export default function RoundOnePage() {
     else if (stage === "answerReaction") setStage("roundStats");
     else if (stage === "roundStatsEnd") setStage("alexVideoPart4");
     else if (stage === "alexVideoPart4") setStage("finalStats");
-    else if (stage === "finalStatsEnd") setStage("alexVideoPart5");
     else if (stage === "alexVideoPart5") router.push("/game/2");
   };
 
@@ -100,24 +100,33 @@ export default function RoundOnePage() {
         <div className="relative z-10 w-full max-w-4xl">
           <div className="border border-purple-500 rounded-xl p-4 bg-[#1c0f32]/30">
             <div className="w-full h-96 rounded-lg overflow-hidden">
-              <AlexVideoPlayer
-                src={
-                  stage === "intro"
-                    ? "/video/alex-intro-1.mp4"
-                    : stage === "answerReaction"
-                    ? "/video/alex-question1-part2.mp3"
-                    : stage === "roundStatsEnd"
-                    ? "/video/alex-question1-part3.mp3"
-                    : stage === "alexVideoPart4"
-                    ? "/video/alex-sorting-1.mp4"
-                    : stage === "alexVideoPart5"
-                    ? "/video/alex-congrats-1.mp4"
-                    : "/video/alex-congrats-1.mp4"
-                }
-                onEnded={handleVideoEnd}
-                autoPlay
-                key={stage}
-              />
+              {(stage === "intro" || 
+                stage === "answerReaction" || 
+                stage === "roundStatsEnd" || 
+                stage === "alexVideoPart4" || 
+                stage === "alexVideoPart5") && (
+                <AlexVideoPlayer
+                  src={
+                    stage === "intro"
+                      ? "/video/alex-intro-1.mp4"
+                      : stage === "answerReaction"
+                      ? "/video/alex-question1-part2.mp3"
+                      : stage === "roundStatsEnd"
+                      ? "/video/alex-question1-part3.mp3"
+                      : stage === "alexVideoPart4"
+                      ? "/video/alex-video-part4.mp4"
+                      : "/video/alex-video-part5.mp4"
+                  }
+                  onEnded={handleVideoEnd}
+                  autoPlay
+                  key={stage}
+                />
+              )}
+              
+              {/* Debug info - remove this after testing */}
+              <div className="absolute top-2 left-2 bg-black/50 text-white text-xs p-2 rounded">
+                Current stage: {stage}
+              </div>
             </div>
           </div>
         </div>
