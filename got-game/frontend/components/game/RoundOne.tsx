@@ -48,13 +48,12 @@ export default function RoundOnePage() {
   }, [stage]);
 
   const handleVideoEnd = () => {
-    console.log("Video ended, current stage:", stage);
     if (stage === "intro") setStage("question");
     else if (stage === "answerReaction") setStage("roundStats");
-    else if (stage === "roundStatsEnd") setStage("finalStats");
-    else if (stage === "finalStatsEnd") setStage("sorting");
-    else if (stage === "sorting") setStage("wrap");
-    else if (stage === "wrap") router.push("/game/2");
+    else if (stage === "roundStatsEnd") setStage("alexVideoPart4");
+    else if (stage === "alexVideoPart4") setStage("finalStats");
+    else if (stage === "finalStatsEnd") setStage("alexVideoPart5");
+    else if (stage === "alexVideoPart5") router.push("/game/2");
   };
 
   const handleAnswer = (option: string) => {
@@ -74,13 +73,19 @@ export default function RoundOnePage() {
               total={1470}
               safe={1000}
               progress={statProgress}
-              label={stage === "roundStats" ? "1470" : "1000"}
+              label={stage === "roundStats" ? "Filling 1470 correct answers" : "Moving 1000 to safe spots, 470 to lucky pool"}
               showFinalSplit={stage === "finalStats"}
             />
           ) : (
             <div className="p-4 text-center">
               <h3 className="text-lg font-bold">GAME STATS</h3>
-              <p className="text-sm text-purple-200">Waiting for stats...</p>
+              <p className="text-sm text-purple-200">
+                {stage === "question" ? "Waiting for answers..." : 
+                 stage === "answerReaction" ? "Calculating results..." :
+                 stage === "alexVideoPart4" ? "1470 CORRECT answers - Only 1000 spots available" :
+                 stage === "alexVideoPart5" ? "1000 safe, 470 to lucky pool" :
+                 "Waiting for stats..."}
+              </p>
             </div>
           )}
         </div>
@@ -103,20 +108,16 @@ export default function RoundOnePage() {
                     ? "/video/alex-question1-part2.mp3"
                     : stage === "roundStatsEnd"
                     ? "/video/alex-question1-part3.mp3"
-                    : stage === "sorting"
+                    : stage === "alexVideoPart4"
                     ? "/video/alex-sorting-1.mp4"
-                    : stage === "wrap"
+                    : stage === "alexVideoPart5"
                     ? "/video/alex-congrats-1.mp4"
-                    : "/video/standby.mp4"
+                    : "/video/alex-congrats-1.mp4"
                 }
                 onEnded={handleVideoEnd}
                 autoPlay
-                key={`${stage}-${Date.now()}`}
+                key={stage}
               />
-              {/* Debug info for video stages */}
-              <div className="absolute top-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
-                Stage: {stage}
-              </div>
             </div>
           </div>
         </div>
