@@ -64,7 +64,8 @@ export default function Round2Page() {
         setStatProgress(filled);
         if (filled >= 80) {
           clearInterval(interval);
-          setStage("correctStatsEnd");
+          // Go directly to alexVideoPart4 instead of correctStatsEnd
+          setStage("alexVideoPart4");
         }
       }, 15);
     } else if (stage === "openSlotsStats") {
@@ -75,7 +76,8 @@ export default function Round2Page() {
         setStatProgress(filled);
         if (filled >= 20) {
           clearInterval(interval);
-          setStage("openSlotsEnd");
+          // Go to alexVideoPart5 after stats complete
+          setStage("alexVideoPart5");
         }
       }, 25);
     }
@@ -89,9 +91,7 @@ export default function Round2Page() {
     }
     else if (stage === "answerReaction") setStage("incorrectStats");
     else if (stage === "incorrectStatsEnd") setStage("correctStats");
-    else if (stage === "correctStatsEnd") setStage("alexVideoPart4");
     else if (stage === "alexVideoPart4") setStage("openSlotsStats");
-    else if (stage === "openSlotsEnd") setStage("alexVideoPart5");
     else if (stage === "alexVideoPart5") router.push("/lucky-draw?round=2");
   };
 
@@ -142,7 +142,7 @@ export default function Round2Page() {
                 {stage === "question" ? `Timer: ${timer}s` : 
                  stage === "answerReaction" ? "You got it wrong! Moving to LUCKY POOL..." :
                  stage === "alexVideoPart4" ? "80 correct answers - 20 spots open" :
-                 stage === "alexVideoPart5" ? "Ready for Lucky Draw!" :
+                 stage === "alexVideoPart5" ? "Preparing for Lucky Draw..." :
                  "Round 2 in progress..."}
               </p>
             </div>
@@ -159,24 +159,33 @@ export default function Round2Page() {
         <div className="relative z-10 w-full max-w-4xl">
           <div className="border border-purple-500 rounded-xl p-4 bg-[#1c0f32]/30">
             <div className="w-full h-96 rounded-lg overflow-hidden">
-              <AlexVideoPlayer
-                src={
-                  stage === "intro"
-                    ? "/video/round2-video1.mp4"
-                    : stage === "answerReaction"
-                    ? "/video/alex-question2-part2.mp3"
-                    : stage === "incorrectStatsEnd"
-                    ? "/video/alex-question2-part3.mp3"
-                    : stage === "alexVideoPart4"
-                    ? "/video/round2-video4.mp4"
-                    : stage === "alexVideoPart5"
-                    ? "/video/round2-video5.mp4"
-                    : "/video/standby.mp4"
-                }
-                onEnded={handleVideoEnd}
-                autoPlay
-                key={stage}
-              />
+              {(stage === "intro" || 
+                stage === "answerReaction" || 
+                stage === "incorrectStatsEnd" || 
+                stage === "alexVideoPart4" || 
+                stage === "alexVideoPart5") && (
+                <AlexVideoPlayer
+                  src={
+                    stage === "intro"
+                      ? "/video/round2-video1.mp4"
+                      : stage === "answerReaction"
+                      ? "/video/alex-question2-part2.mp3"
+                      : stage === "incorrectStatsEnd"
+                      ? "/video/alex-question2-part3.mp3"
+                      : stage === "alexVideoPart4"
+                      ? "/video/round2-video4.mp4"
+                      : "/video/round2-video5.mp4"
+                  }
+                  onEnded={handleVideoEnd}
+                  autoPlay
+                  key={stage}
+                />
+              )}
+              
+              {/* Debug info */}
+              <div className="absolute top-2 left-2 bg-black/50 text-white text-xs p-2 rounded">
+                Current stage: {stage}
+              </div>
             </div>
           </div>
         </div>

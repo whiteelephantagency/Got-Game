@@ -58,7 +58,8 @@ export default function Round3Page() {
         setStatProgress(filled);
         if (filled >= 3) { // Only 3 people got it correct
           clearInterval(interval);
-          setStage("roundStatsEnd");
+          // Go directly to alexVideoPart3 instead of roundStatsEnd
+          setStage("alexVideoPart3");
         }
       }, 200);
     }
@@ -101,10 +102,7 @@ export default function Round3Page() {
       setTimerActive(true);
     }
     else if (stage === "answerReaction") setStage("roundStats");
-    else if (stage === "roundStatsEnd") setStage("alexVideoPart3");
-    else if (stage === "alexVideoPart3") setStage("luckyDraw");
-    else if (stage === "luckyDrawEnd") setStage("alexVideoPart5");
-    else if (stage === "alexVideoPart5") router.push("/game/4"); // Next round or end
+    else if (stage === "alexVideoPart3") router.push("/lucky-draw?round=3&comeback=true");
   };
 
   // Auto-start timer when question appears
@@ -127,19 +125,6 @@ export default function Round3Page() {
               label="Only 3 correct - 7 spots open for Lucky Draw"
               showFinalSplit={true}
             />
-          ) : stage === "luckyDraw" ? (
-            <div className="p-4 text-center">
-              <h3 className="text-lg font-bold text-yellow-400">🎲 LUCKY DRAW</h3>
-              <p className="text-sm text-purple-200 mb-2">Drawing names...</p>
-              <div className="text-lg font-bold text-white">
-                {currentDrawnName && `${drawnNames.length}. ${currentDrawnName}`}
-              </div>
-              {isPlayerDrawn && (
-                <p className="text-green-400 text-sm mt-2 font-bold">
-                  🎉 YOU'RE BACK IN THE GAME!
-                </p>
-              )}
-            </div>
           ) : (
             <div className="p-4 text-center">
               <h3 className="text-lg font-bold">GAME STATS</h3>
@@ -147,8 +132,6 @@ export default function Round3Page() {
                 {stage === "question" ? `⏰ Timer: ${timer}s` : 
                  stage === "answerReaction" ? "Waiting in Lucky Pool..." :
                  stage === "alexVideoPart3" ? "Preparing Lucky Draw..." :
-                 stage === "luckyDrawEnd" ? "Lucky Draw Complete!" :
-                 stage === "alexVideoPart5" ? "Advancing to next round!" :
                  "Round 3 - Lucky Pool Round"}
               </p>
             </div>
@@ -165,24 +148,27 @@ export default function Round3Page() {
         <div className="relative z-10 w-full max-w-4xl">
           <div className="border border-purple-500 rounded-xl p-4 bg-[#1c0f32]/30">
             <div className="w-full h-96 rounded-lg overflow-hidden">
-              <AlexVideoPlayer
-                src={
-                  stage === "intro"
-                    ? "/video/round3-video1.mp4"
-                    : stage === "answerReaction"
-                    ? "/video/alex-question3-part2.mp3"
-                    : stage === "alexVideoPart3"
-                    ? "/video/round3-video3.mp4"
-                    : stage === "luckyDraw" && drawnNames.length === 3
-                    ? "/video/alex-question3-part4.mp3" // Background audio during lucky draw
-                    : stage === "alexVideoPart5"
-                    ? "/video/round3-video5.mp4"
-                    : "/video/standby.mp4"
-                }
-                onEnded={handleVideoEnd}
-                autoPlay
-                key={stage}
-              />
+              {(stage === "intro" || 
+                stage === "answerReaction" || 
+                stage === "alexVideoPart3") && (
+                <AlexVideoPlayer
+                  src={
+                    stage === "intro"
+                      ? "/video/round3-video1.mp4"
+                      : stage === "answerReaction"
+                      ? "/video/alex-question3-part2.mp3"
+                      : "/video/round3-video3.mp4"
+                  }
+                  onEnded={handleVideoEnd}
+                  autoPlay
+                  key={stage}
+                />
+              )}
+              
+              {/* Debug info */}
+              <div className="absolute top-2 left-2 bg-black/50 text-white text-xs p-2 rounded">
+                Current stage: {stage}
+              </div>
             </div>
           </div>
         </div>
@@ -217,43 +203,6 @@ export default function Round3Page() {
               <div className="mt-4 text-center text-red-300 text-sm">
                 🔒 You're in the Lucky Pool - Cannot participate in this question
               </div>
-            </div>
-          </div>
-        )}
-
-        {/* Lucky Draw Display */}
-        {stage === "luckyDraw" && (
-          <div className="mt-6 w-full max-w-4xl">
-            <div className="border border-yellow-500 rounded-xl p-6 bg-yellow-900/20">
-              <h2 className="text-yellow-400 text-2xl font-bold mb-4 text-center">
-                🎲 LUCKY DRAW IN PROGRESS
-              </h2>
-              <p className="text-white text-lg mb-6 text-center">
-                Drawing 7 names from the Lucky Pool...
-              </p>
-              
-              <div className="grid grid-cols-1 gap-2 max-w-md mx-auto">
-                {drawnNames.map((name, idx) => (
-                  <div 
-                    key={idx} 
-                    className={`p-3 rounded-lg text-center font-bold
-                      ${name === "PLAYER" 
-                        ? "bg-green-600 text-white animate-pulse" 
-                        : "bg-purple-600 text-white"
-                      }`}
-                  >
-                    {idx + 1}. {name}
-                    {name === "PLAYER" && " 🎉"}
-                  </div>
-                ))}
-              </div>
-              
-              {drawnNames.length < 7 && (
-                <div className="text-center mt-4">
-                  <div className="animate-spin inline-block w-6 h-6 border-2 border-yellow-400 border-t-transparent rounded-full"></div>
-                  <p className="text-yellow-300 mt-2">Drawing name {drawnNames.length + 1}...</p>
-                </div>
-              )}
             </div>
           </div>
         )}
