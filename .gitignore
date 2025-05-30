@@ -7,3 +7,5 @@ got-game/backend/server/node_modules/sift/sift.csp.min.js
 got-game/backend/server/routes/name.js
 got-game/backend/server/server.js
 got-game/backend/server/node_modules/@types/webidl-conversions/README.md
+yarn.lock
+pnpm-lock.yaml
