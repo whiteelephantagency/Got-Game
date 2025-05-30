@@ -26,7 +26,7 @@ export default function Lobby() {
     setError('');
  
     try {
-      const res = await fetch('http://localhost:5001/api/names', {
+      const res = await fetch('http://localhost:5000/api/names', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: playerName }),
@@ -78,7 +78,7 @@ export default function Lobby() {
  
       {/* Top Logo */}
       <div className="absolute top-10 z-10">
-        <Image src="/images/gg-icon.png" alt="GG Logo" width={60} height={60} />
+      <Image src="/images/Gotgamelogo.png" alt="GG Logo" width={90} height={90} />
       </div>
  
       {/* Center Content */}
