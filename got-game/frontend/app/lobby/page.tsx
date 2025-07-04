@@ -16,17 +16,38 @@ export default function Lobby() {
   const [inputEnabled, setInputEnabled] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
  
- 
- 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!playerName.trim()) return;
- 
+    if (!playerName.trim()) {
+      setError('Please enter a valid name');
+      return;
+    }
+
     setLoading(true);
     setError('');
  
     try {
-      const res = await fetch('http://localhost:5000/api/names', {
+      // Save player name to localStorage
+      localStorage.setItem('playerName', playerName.trim());
+      
+      // Small delay for better UX (simulates processing)
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Navigate to game
+      router.push('/game/1');
+    } catch (err: any) {
+      setError('Failed to save player name. Please try again.');
+      console.error('Error saving player name:', err);
+    } finally {
+      setLoading(false);
+    }
+
+    /* 
+    TODO: Future server integration
+    When backend is deployed and accessible, uncomment and update this section:
+    
+    try {
+      const res = await fetch('YOUR_DEPLOYED_SERVER_URL/api/names', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: playerName }),
@@ -45,6 +66,7 @@ export default function Lobby() {
     } finally {
       setLoading(false);
     }
+    */
   };
  
   return (
@@ -58,23 +80,21 @@ export default function Lobby() {
         priority
       />
    
-    {!videoEnded && (
-      <div className="absolute top-40 z-10 w-full flex justify-center">
-        <video
-          src="/video/alex(Welcome).mp4"
-          autoPlay
-          playsInline
-          className="w-full max-w-xl rounded-xl shadow-xl"
-          onPlay={() => {
-            setVideoStarted(true);
-            setTimeout(() => setInputEnabled(true), 15000); // enable input at 15s
-          }}
-          onEnded={() => setVideoEnded(true)}
-        />
-      </div>
-    )}
- 
- 
+      {!videoEnded && (
+        <div className="absolute top-40 z-10 w-full flex justify-center">
+          <video
+            src="/video/alex(Welcome).mp4"
+            autoPlay
+            playsInline
+            className="w-full max-w-xl rounded-xl shadow-xl"
+            onPlay={() => {
+              setVideoStarted(true);
+              setTimeout(() => setInputEnabled(true), 15000); // enable input at 15s
+            }}
+            onEnded={() => setVideoEnded(true)}
+          />
+        </div>
+      )}
  
       {/* Top Logo - Made Much Bigger */}
       <div className="absolute top-8 z-10 flex justify-center w-full">
@@ -101,30 +121,29 @@ export default function Lobby() {
         </h1>
  
         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-4">
-        <Input
-          type="text"
-          placeholder="PLAYER 1"
-          value={playerName}
-          onChange={(e) => setPlayerName(e.target.value)}
-          maxLength={20}
-          required
-          disabled={!inputEnabled}
-          className={`rounded-[12px] py-3 px-6 text-center text-xl font-bold text-[#A757E7] bg-white/80 placeholder:text-gray-400
-            shadow-[inset_4px_4px_8px_rgba(0,0,0,0.2),inset_-4px_-4px_8px_rgba(255,255,255,0.5)]
-            border-[3px] border-[#d0c7ff] outline-none focus:ring-2 focus:ring-[#A757E7] transition
-            ${!inputEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-        />
- 
+          <Input
+            type="text"
+            placeholder="PLAYER 1"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+            maxLength={20}
+            required
+            disabled={!inputEnabled}
+            className={`rounded-[12px] py-3 px-6 text-center text-xl font-bold text-[#A757E7] bg-white/80 placeholder:text-gray-400
+              shadow-[inset_4px_4px_8px_rgba(0,0,0,0.2),inset_-4px_-4px_8px_rgba(255,255,255,0.5)]
+              border-[3px] border-[#d0c7ff] outline-none focus:ring-2 focus:ring-[#A757E7] transition
+              ${!inputEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          />
  
           {error && <p className="text-red-500 font-semibold">{error}</p>}
  
           {playerName.trim() && (
             <Button
               type="submit"
-              disabled={loading}
-              className="text-lg mt-2 font-extrabold bg-white text-purple-700 py-2 px-6 rounded-full hover:scale-105 transition"
+              disabled={loading || !inputEnabled}
+              className="text-lg mt-2 font-extrabold bg-white text-purple-700 py-2 px-6 rounded-full hover:scale-105 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Saving...' : 'PLAY NOW'}
+              {loading ? 'Starting Game...' : 'PLAY NOW'}
             </Button>
           )}
         </form>
