@@ -9,6 +9,8 @@ interface AlexVideoPlayerProps {
   delay?: number // optional delay before triggering onEnded
   className?: string // Allow custom styling from parent
   showControls?: boolean // Option to show video controls
+  hideControls?: boolean // Option to hide controls completely
+  showAudioIndicator?: boolean // Option to show/hide audio indicator
 }
 
 const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
@@ -18,6 +20,8 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
   delay = 0,
   className = "",
   showControls = false,
+  hideControls = false,
+  showAudioIndicator = true,
 }) => {
   useEffect(() => {
     if (delay > 0) {
@@ -50,12 +54,14 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
             ))}
           </div>
           
-          {/* Audio icon and text */}
-          <div className="relative z-10 text-center">
-            <div className="text-6xl mb-4 animate-pulse">🎤</div>
-            <div className="text-white text-xl font-bold mb-2">Alex Speaking</div>
-            <div className="text-purple-300 text-sm">Audio Only</div>
-          </div>
+          {/* Audio icon and text - only show if showAudioIndicator is true */}
+          {showAudioIndicator && (
+            <div className="relative z-10 text-center">
+              <div className="text-6xl mb-4 animate-pulse">🎤</div>
+              <div className="text-white text-xl font-bold mb-2">Alex Speaking</div>
+              <div className="text-purple-300 text-sm">Audio Only</div>
+            </div>
+          )}
           
           {/* Actual audio element (hidden) */}
           <audio
@@ -64,8 +70,8 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
             onEnded={() => {
               if (delay === 0) onEnded()
             }}
-            controls={showControls}
-            className="absolute bottom-4 left-4 right-4 opacity-50"
+            controls={!hideControls && showControls}
+            className={`absolute bottom-4 left-4 right-4 ${hideControls ? 'hidden' : 'opacity-50'}`}
           />
         </div>
       ) : (
@@ -74,7 +80,7 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
           src={src}
           autoPlay={autoPlay}
           playsInline
-          controls={showControls}
+          controls={!hideControls && showControls}
           onEnded={() => {
             if (delay === 0) onEnded()
           }}

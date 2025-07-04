@@ -15,15 +15,29 @@ const QUESTION_2 = {
   wrongAnswers: ["Acton, Massachusetts", "Seoul, South Korea", "Singapore"]
 };
 
+// Random names for lucky draw
+const RANDOM_NAMES = [
+  "Alex Johnson", "Maria Garcia", "David Chen", "Sarah Wilson", "Mike Rodriguez",
+  "Emily Davis", "Chris Lee", "Ashley Brown", "Jason Kim", "Jessica Martinez",
+  "Ryan Thompson", "Amanda White", "Kevin Liu", "Rachel Green", "Tom Anderson",
+  "Lisa Zhang", "Mark Taylor", "Nicole Wang", "Steve Clark", "Jennifer Adams"
+];
+
 export default function Round2Page() {
   const router = useRouter();
   const [stage, setStage] = useState("intro");
   const [selected, setSelected] = useState<string | null>(null);
   const [lockOptions, setLockOptions] = useState(false);
   const [statProgress, setStatProgress] = useState(0);
+  const [showFullScreenStats, setShowFullScreenStats] = useState(false);
+  const [showLuckyDraw, setShowLuckyDraw] = useState(false);
+  const [currentVideoKey, setCurrentVideoKey] = useState(0);
   const [timer, setTimer] = useState(10);
   const [timerActive, setTimerActive] = useState(false);
   const [playerName, setPlayerName] = useState("Player");
+  const [questionFlash, setQuestionFlash] = useState(false);
+  const [drawnNames, setDrawnNames] = useState<string[]>([]);
+  const [currentDrawnName, setCurrentDrawnName] = useState("");
 
   // Get player name from localStorage
   useEffect(() => {
@@ -52,59 +66,112 @@ export default function Round2Page() {
   // Stats animation effects
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (stage === "incorrectStats") {
-      let filled = 0;
-      interval = setInterval(() => {
-        filled++;
-        setStatProgress(filled);
-        if (filled >= 800) {
-          clearInterval(interval);
-          setStage("incorrectStatsEnd");
-        }
-      }, 5);
-    } else if (stage === "correctStats") {
+    if (stage === "roundStats") {
+      setShowFullScreenStats(true);
+      
       let filled = 0;
       interval = setInterval(() => {
         filled++;
         setStatProgress(filled);
         if (filled >= 80) {
           clearInterval(interval);
-          setStage("alexVideoPart4");
+          setTimeout(() => {
+            setShowFullScreenStats(false);
+            setStage("roundStatsCommentary");
+          }, 4000); // Keep on screen much longer - 4 seconds to read
         }
-      }, 15);
+      }, 50); // Much slower animation - 50ms intervals instead of 15ms
     } else if (stage === "openSlotsStats") {
+      setShowFullScreenStats(true);
+      
       let filled = 0;
       interval = setInterval(() => {
         filled++;
         setStatProgress(filled);
         if (filled >= 20) {
           clearInterval(interval);
-          setStage("alexVideoPart5");
+          setTimeout(() => {
+            setShowFullScreenStats(false);
+            setStage("alexVideoPart5");
+          }, 3000); // Also longer display time
         }
-      }, 25);
+      }, 100); // Slower animation for open slots too
+    }
+    return () => clearInterval(interval);
+  }, [stage]);
+
+  // Lucky Draw animation
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (stage === "luckyDraw") {
+      setShowLuckyDraw(true);
+      const shuffledNames = [...RANDOM_NAMES].sort(() => Math.random() - 0.5);
+      let nameIndex = 0;
+      let drawCount = 0;
+      
+      interval = setInterval(() => {
+        if (drawCount < 20) {
+          const name = shuffledNames[nameIndex % shuffledNames.length];
+          setCurrentDrawnName(name);
+          setDrawnNames(prev => [...prev, name]);
+          nameIndex++;
+          drawCount++;
+        } else {
+          clearInterval(interval);
+          setTimeout(() => {
+            setShowLuckyDraw(false);
+            setStage("alexVideoPart6");
+          }, 2000);
+        }
+      }, 500);
     }
     return () => clearInterval(interval);
   }, [stage]);
 
   const handleVideoEnd = () => {
     if (stage === "intro") {
+      setCurrentVideoKey(prev => prev + 1);
       setStage("question");
       setTimerActive(true);
     }
-    else if (stage === "answerReaction") setStage("incorrectStats");
-    else if (stage === "incorrectStatsEnd") setStage("correctStats");
-    else if (stage === "alexVideoPart4") setStage("openSlotsStats");
-    else if (stage === "alexVideoPart5") router.push("/lucky-draw?round=2");
+    else if (stage === "answerReaction") {
+      setCurrentVideoKey(prev => prev + 1);
+      setStage("roundStats");
+    }
+    else if (stage === "roundStatsCommentary") {
+      setShowFullScreenStats(false);
+      setCurrentVideoKey(prev => prev + 1);
+      setStage("alexVideoPart4");
+    }
+    else if (stage === "alexVideoPart4") {
+      setCurrentVideoKey(prev => prev + 1);
+      setStage("openSlotsStats");
+    }
+    else if (stage === "alexVideoPart5") {
+      setCurrentVideoKey(prev => prev + 1);
+      setStage("luckyDraw");
+    }
+    else if (stage === "alexVideoPart6") {
+      // End of Round 2 - continue to Round 3
+      router.push("/game/3");
+    }
   };
 
   const handleAnswer = (option: string) => {
-    if (lockOptions) return;
+    if (lockOptions || timer === 0) return;
     
     if (QUESTION_2.wrongAnswers.includes(option)) {
       setSelected(option);
       setLockOptions(true);
       setTimerActive(false);
-      setTimeout(() => setStage("answerReaction"), 500);
+      setQuestionFlash(true);
+      
+      // Flash effect
+      setTimeout(() => setQuestionFlash(false), 200);
+      setTimeout(() => setQuestionFlash(true), 400);
+      setTimeout(() => setQuestionFlash(false), 600);
+      
+      setTimeout(() => setStage("answerReaction"), 1000);
     }
   };
 
@@ -115,207 +182,305 @@ export default function Round2Page() {
     }
   }, [stage]);
 
-  // Determine if we should show question (affects layout)
-  const showQuestion = stage === "question";
-  
-  // Determine if this is an audio-only stage
-  const isAudioStage = stage === "answerReaction" || stage === "incorrectStatsEnd";
-
   return (
-    <main className="min-h-screen bg-black text-white relative overflow-hidden">
-      {/* 3D Starfield Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="stars-container">
-          {[...Array(200)].map((_, i) => (
-            <div
-              key={i}
-              className="star"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${3 + Math.random() * 2}s`
-              }}
-            />
-          ))}
-        </div>
-      </div>
-
-      <style jsx>{`
-        .stars-container {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          perspective: 1000px;
-        }
-        .star {
-          position: absolute;
-          width: 2px;
-          height: 2px;
-          background: white;
-          border-radius: 50%;
-          animation: twinkle linear infinite;
-        }
-        .star:nth-child(4n) {
-          background: #60a5fa;
-          box-shadow: 0 0 6px #60a5fa;
-        }
-        .star:nth-child(4n+1) {
-          background: #34d399;
-          box-shadow: 0 0 6px #34d399;
-        }
-        .star:nth-child(4n+2) {
-          background: #f472b6;
-          box-shadow: 0 0 6px #f472b6;
-        }
-        @keyframes twinkle {
-          0%, 100% { opacity: 0; transform: scale(0.5); }
-          50% { opacity: 1; transform: scale(1.2); }
-        }
-      `}</style>
-
-      {/* Enhanced Top Game Header */}
-      <div className="w-full bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 p-6 shadow-2xl backdrop-blur-sm border-b border-cyan-400/30 relative z-10">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center space-x-8">
-            {/* GOT GAME Logo */}
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center font-bold text-black text-xl shadow-lg">
-                G
-              </div>
-              <div className="text-2xl font-bold text-white tracking-wider">GOT GAME</div>
-            </div>
-            <div className="h-8 w-px bg-white/30"></div>
-            <h1 className="text-3xl font-bold text-white">🎯 ROUND 2</h1>
-            <div className="text-cyan-100 text-lg font-medium">
-              {stage === "question" ? `⏰ Answer the Question! (${timer}s)` : 
-               stage === "answerReaction" ? `❌ Wrong Answer - ${playerName} to Lucky Pool!` :
-               stage === "incorrectStats" ? "📊 Moving Incorrect to Lucky Pool" :
-               stage === "correctStats" ? "✅ Showing Correct Answers" :
-               stage === "openSlotsStats" ? "🎲 Open Slots Available" :
-               "🧠 The Knowledge Challenge"}
+    <main className="min-h-screen bg-black bg-[url('/images/lobby-background.jpg')] bg-cover bg-center bg-no-repeat bg-fixed text-white relative">
+      
+      {/* Full Screen Stats Overlay */}
+      {showFullScreenStats && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-lg"></div>
+          
+          <div className="relative z-10 bg-gradient-to-br from-purple-900/95 to-blue-900/95 rounded-3xl border border-purple-400/50 shadow-2xl p-12 max-w-6xl mx-4 animate-in zoom-in-95 duration-500">
+            <div className="text-center space-y-8">
+              <h2 className="text-5xl font-bold text-white mb-8">
+                {stage === "roundStats" ? "🎯 ROUND 2 RESULTS" : "📊 OPEN SLOTS"}
+              </h2>
+              
+              {stage === "roundStats" && (
+                <div className="space-y-8">
+                  <div className="grid grid-cols-3 gap-8 items-center">
+                    <div className="text-center">
+                      <div className="w-24 h-24 mx-auto bg-blue-500 rounded-full flex items-center justify-center mb-4">
+                        <span className="text-3xl font-bold">👥</span>
+                      </div>
+                      <div className="text-2xl font-bold text-blue-400">1,000</div>
+                      <div className="text-sm text-gray-300">Total Players</div>
+                    </div>
+                    
+                    <div className="text-center">
+                      <div className="text-4xl text-purple-400">→</div>
+                      <div className="text-sm text-purple-300 mt-2">Answered Correctly</div>
+                    </div>
+                    
+                    <div className="text-center">
+                      <div className="w-24 h-24 mx-auto bg-green-500 rounded-full flex items-center justify-center mb-4">
+                        <span className="text-3xl font-bold">✅</span>
+                      </div>
+                      <div className="text-3xl font-bold text-green-400">
+                        {statProgress.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-gray-300">Correct Answers</div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gray-800 rounded-full h-8 overflow-hidden">
+                    <div 
+                      className="bg-gradient-to-r from-green-500 to-emerald-400 h-full transition-all duration-300 rounded-full flex items-center justify-end pr-4"
+                      style={{ width: `${(statProgress / 80) * 100}%` }}
+                    >
+                      <span className="text-white font-bold text-sm">
+                        {statProgress >= 80 ? "Complete!" : `${Math.round((statProgress / 80) * 100)}%`}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {statProgress >= 80 && (
+                    <div className="space-y-6 animate-in fade-in duration-1000">
+                      <div className="text-2xl text-green-400 font-bold">
+                        🎉 Only 80 Players Got It Right!
+                      </div>
+                      <div className="text-lg text-red-300">
+                        You got it wrong... but don't give up hope!
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {stage === "openSlotsStats" && (
+                <div className="space-y-8">
+                  <div className="grid grid-cols-3 gap-8 items-center">
+                    <div className="text-center">
+                      <div className="w-24 h-24 mx-auto bg-orange-500 rounded-full flex items-center justify-center mb-4">
+                        <span className="text-3xl font-bold">🎯</span>
+                      </div>
+                      <div className="text-2xl font-bold text-orange-400">100</div>
+                      <div className="text-sm text-gray-300">Target Players</div>
+                    </div>
+                    
+                    <div className="text-center">
+                      <div className="text-4xl text-purple-400">-</div>
+                      <div className="text-sm text-purple-300 mt-2">Open Slots</div>
+                    </div>
+                    
+                    <div className="text-center">
+                      <div className="w-24 h-24 mx-auto bg-yellow-500 rounded-full flex items-center justify-center mb-4">
+                        <span className="text-3xl font-bold">🎲</span>
+                      </div>
+                      <div className="text-3xl font-bold text-yellow-400">
+                        {statProgress.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-gray-300">Available Spots</div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gray-800 rounded-full h-8 overflow-hidden">
+                    <div 
+                      className="bg-gradient-to-r from-yellow-500 to-orange-400 h-full transition-all duration-300 rounded-full flex items-center justify-end pr-4"
+                      style={{ width: `${(statProgress / 20) * 100}%` }}
+                    >
+                      <span className="text-white font-bold text-sm">
+                        {statProgress >= 20 ? "Complete!" : `${Math.round((statProgress / 20) * 100)}%`}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {statProgress >= 20 && (
+                    <div className="space-y-6 animate-in fade-in duration-1000">
+                      <div className="text-2xl text-yellow-400 font-bold">
+                        🎲 20 Spots Available for Lucky Draw!
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
-          <div className="flex items-center space-x-6 text-lg font-semibold">
-            <div className="bg-black/40 px-4 py-2 rounded-xl backdrop-blur-sm border border-white/20">
-              👥 PLAYERS: 1,000
+        </div>
+      )}
+
+      {/* Lucky Draw Overlay */}
+      {showLuckyDraw && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/70 backdrop-blur-lg"></div>
+          
+          <div className="relative z-10 bg-gradient-to-br from-yellow-900/95 to-orange-900/95 rounded-3xl border border-yellow-400/50 shadow-2xl p-12 max-w-6xl mx-4 animate-in zoom-in-95 duration-500">
+            <div className="text-center space-y-8">
+              <h2 className="text-5xl font-bold text-white mb-8">
+                🎲 LUCKY DRAW
+              </h2>
+              
+              <div className="space-y-6">
+                <div className="text-3xl font-bold text-yellow-400">
+                  Drawing 20 Lucky Winners...
+                </div>
+                
+                <div className="bg-black/30 rounded-2xl p-6 min-h-[200px] flex items-center justify-center">
+                  <div className="text-4xl font-bold text-white animate-pulse">
+                    {currentDrawnName || "Starting Draw..."}
+                  </div>
+                </div>
+                
+                <div className="text-xl text-yellow-300">
+                  {drawnNames.length} / 20 Names Drawn
+                </div>
+                
+                {drawnNames.length >= 20 && (
+                  <div className="text-2xl text-red-400 font-bold animate-pulse">
+                    Sorry {playerName}, you weren't selected...
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="bg-black/40 px-4 py-2 rounded-xl backdrop-blur-sm border border-white/20">
-              🎯 TARGET: 100
+          </div>
+        </div>
+      )}
+      
+      {/* Top Game Header */}
+      <div className="w-full bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 p-4 shadow-lg">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center space-x-6">
+            <h1 className="text-2xl font-bold text-white">ROUND 2</h1>
+            <div className="text-purple-100">
+              {stage === "question" ? `Answer the Question! (${timer}s)` : 
+               stage === "answerReaction" ? "Calculating Results..." :
+               stage === "roundStats" ? "Showing Statistics" :
+               stage === "roundStatsCommentary" ? "Analyzing Results" :
+               stage === "openSlotsStats" ? "Open Slots Available" :
+               stage === "luckyDraw" ? "Lucky Draw in Progress" :
+               "The Knowledge Challenge"}
             </div>
-            <div className="bg-cyan-500/30 px-4 py-2 rounded-xl text-cyan-200 backdrop-blur-sm border border-cyan-400/40">
-              🔥 ROUND 2
-            </div>
+          </div>
+          <div className="flex items-center space-x-4 text-sm">
+            <div className="bg-black/30 px-3 py-1 rounded">PLAYERS: 1,000</div>
+            <div className="bg-black/30 px-3 py-1 rounded">TARGET: 100</div>
+            <div className="bg-purple-500/20 px-3 py-1 rounded text-purple-300">ROUND 2</div>
           </div>
         </div>
       </div>
 
       {/* Main Game Area */}
-      <div className="max-w-7xl mx-auto p-6 relative z-10">
-        <div className={`grid ${showQuestion ? 'grid-cols-10' : 'grid-cols-12'} gap-6 h-[calc(100vh-140px)]`}>
+      <div className="max-w-7xl mx-auto p-6">
+        <div className="grid grid-cols-12 gap-6 min-h-[calc(100vh-120px)]">
           
           {/* Left Column - Main Content */}
-          <div className={`${showQuestion ? 'col-span-6' : 'col-span-8'} space-y-6`}>
-            
-            {/* Alex Video Section */}
-            <div className="bg-gradient-to-br from-gray-900/80 to-black/80 rounded-2xl border border-blue-500/50 overflow-hidden shadow-2xl backdrop-blur-sm">
-              <div className="bg-gradient-to-r from-blue-600/30 to-cyan-600/30 px-6 py-3 border-b border-blue-500/30 backdrop-blur-sm">
-                <h2 className="text-xl font-bold text-white">🎤 Alex - Your Host</h2>
+          <div className="col-span-8 flex flex-col space-y-6">
+
+            {/* Alex Video Section - Fixed height container */}
+            <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl flex-1 flex flex-col">
+              <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 px-4 py-2 border-b border-purple-500/30">
+                <h2 className="text-lg font-semibold text-white">Alex - Your Host</h2>
               </div>
-              <div className="p-6">
-                <div className={`w-full ${showQuestion ? 'h-64' : 'h-96'} rounded-xl overflow-hidden bg-black transition-all duration-500`}>
+              <div className="p-4 flex-1 flex flex-col">
+                <div className="w-full rounded-xl overflow-hidden bg-black flex-1 min-h-0">
                   {(stage === "intro" || 
                     stage === "answerReaction" || 
-                    stage === "incorrectStatsEnd" || 
+                    stage === "roundStatsCommentary" ||
                     stage === "alexVideoPart4" || 
-                    stage === "alexVideoPart5") && (
+                    stage === "alexVideoPart5" ||
+                    stage === "alexVideoPart6") && (
                     <AlexVideoPlayer
                       src={
                         stage === "intro"
                           ? "/video/round2-video1.mp4"
                           : stage === "answerReaction"
                           ? "/video/alex-question2-part2.mp3"
-                          : stage === "incorrectStatsEnd"
+                          : stage === "roundStatsCommentary"
                           ? "/video/alex-question2-part3.mp3"
                           : stage === "alexVideoPart4"
                           ? "/video/round2-video4.mp4"
-                          : "/video/round2-video5.mp4"
+                          : stage === "alexVideoPart5"
+                          ? "/video/round2-video5.mp4"
+                          : "/video/alex-question2-part6.mp3"
                       }
                       onEnded={handleVideoEnd}
                       autoPlay
-                      key={stage}
+                      key={`video-${stage}-${currentVideoKey}`}
+                      className="w-full h-full object-cover"
+                      hideControls={true}
+                      showAudioIndicator={false}
                     />
+                  )}
+                  
+                  {/* Show placeholder during non-video stages */}
+                  {stage === "question" && (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-900/20 to-blue-900/20">
+                      <div className="text-center space-y-4">
+                        <div className="text-3xl">🧠</div>
+                        <div className="text-xl font-semibold text-purple-300">
+                          Answer the Question!
+                        </div>
+                        <div className="text-sm text-gray-400">
+                          Time is ticking: {timer}s
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Show placeholder during stats stages */}
+                  {(stage === "roundStats" || stage === "openSlotsStats" || stage === "luckyDraw") && (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-900/20 to-blue-900/20">
+                      <div className="text-center space-y-4">
+                        <div className="text-3xl">
+                          {stage === "roundStats" ? "🎯" : stage === "openSlotsStats" ? "🎲" : "🍀"}
+                        </div>
+                        <div className="text-xl font-semibold text-purple-300">
+                          {stage === "roundStats" ? "Calculating Results..." : 
+                           stage === "openSlotsStats" ? "Counting Open Slots..." :
+                           "Lucky Draw in Progress..."}
+                        </div>
+                        <div className="text-sm text-gray-400">
+                          Check the full screen for detailed results!
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
             </div>
 
-            {/* Full-Screen Stats During Audio */}
-            {isAudioStage && (
-              <div className="bg-gradient-to-br from-purple-900/80 to-blue-900/80 rounded-2xl border border-purple-500/50 shadow-2xl backdrop-blur-sm p-8">
-                <div className="text-center space-y-6">
-                  <h2 className="text-4xl font-bold text-white">📊 GAME STATS</h2>
-                  <div className="text-6xl font-bold text-purple-400">
-                    {stage === "answerReaction" ? "❌" : "📈"}
-                  </div>
-                  <div className="text-2xl text-white">
-                    {stage === "answerReaction" ? 
-                      `${playerName} got it wrong! Going to Lucky Pool...` :
-                      "Processing incorrect answers..."}
-                  </div>
-                  <div className="w-full bg-gray-700 rounded-full h-4">
-                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-4 rounded-full animate-pulse" style={{width: '60%'}}></div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Question Section */}
+            {/* Question Section - Only shown when stage is "question" */}
             {stage === "question" && (
-              <div className="bg-gradient-to-br from-blue-900/80 to-cyan-900/80 rounded-2xl border border-blue-400/50 shadow-2xl backdrop-blur-sm">
-                <div className="bg-gradient-to-r from-blue-500/40 to-cyan-500/40 px-6 py-4 border-b border-blue-400/30 flex justify-between items-center backdrop-blur-sm">
-                  <h2 className="text-2xl font-bold text-white">❓ QUESTION 2</h2>
-                  <div className="text-red-400 text-2xl font-bold flex items-center animate-pulse">
+              <div className={`bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-2xl border border-purple-400/50 shadow-xl transition-all duration-200 ${
+                questionFlash ? 'bg-red-500/50 border-red-500' : ''
+              }`}>
+                <div className="bg-gradient-to-r from-purple-500/30 to-blue-500/30 px-6 py-4 border-b border-purple-400/30 flex justify-between items-center">
+                  <h2 className="text-2xl font-bold text-white">QUESTION 2</h2>
+                  <div className="text-red-400 text-xl font-bold flex items-center">
                     ⏰ {timer}s
                   </div>
                 </div>
                 <div className="p-6">
-                  <p className="text-xl text-white mb-6 leading-relaxed font-medium">{QUESTION_2.question}</p>
-                  <div className="grid grid-cols-1 gap-4">
+                  <p className="text-xl text-white mb-6 leading-relaxed">{QUESTION_2.question}</p>
+                  <div className="grid grid-cols-2 gap-4">
                     {QUESTION_2.options.map((opt, idx) => (
                       <Button
                         key={opt}
-                        className={`h-16 text-lg font-semibold transition-all duration-500 rounded-xl px-6 flex justify-between items-center transform hover:scale-105
+                        className={`h-16 text-lg font-semibold transition-all duration-300 rounded-xl px-6 flex justify-between items-center
                           ${
                             selected === opt
                               ? QUESTION_2.wrongAnswers.includes(opt)
-                                ? "bg-red-600 shadow-xl shadow-red-500/50 ring-4 ring-red-400 scale-105"
-                                : "bg-green-600 shadow-xl shadow-green-500/50 ring-4 ring-green-400 scale-105"
+                                ? "bg-red-600 shadow-lg shadow-red-500/50"
+                                : "bg-green-600 shadow-lg shadow-green-500/50"
                               : opt === QUESTION_2.correctAnswer
                               ? "bg-gray-600 cursor-not-allowed opacity-50"
-                              : "bg-blue-700 hover:bg-blue-600 ring-2 ring-blue-400 shadow-lg hover:shadow-blue-500/50 animate-pulse"
+                              : "bg-purple-700 hover:bg-purple-600 ring-2 ring-purple-400 shadow-lg hover:shadow-purple-500/50"
                           }`}
                         disabled={lockOptions || opt === QUESTION_2.correctAnswer || timer === 0}
                         onClick={() => handleAnswer(opt)}
                       >
-                        <span className="flex items-center">
-                          <span className="bg-white/20 w-8 h-8 rounded-full flex items-center justify-center mr-3 font-bold">
-                            {String.fromCharCode(65 + idx)}
-                          </span>
-                          {opt}
+                        <span>
+                          {String.fromCharCode(65 + idx)}. {opt}
                         </span>
-                        {lockOptions && selected === opt && QUESTION_2.wrongAnswers.includes(opt) && 
-                          <XCircle className="ml-2 text-red-300" size={24} />}
-                        {lockOptions && opt === QUESTION_2.correctAnswer && 
-                          <CheckCircle className="ml-2 text-green-400" size={24} />}
+                        {lockOptions && selected === opt && QUESTION_2.wrongAnswers.includes(opt) && <XCircle className="ml-2" />}
+                        {lockOptions && opt === QUESTION_2.correctAnswer && <CheckCircle className="ml-2" />}
                       </Button>
                     ))}
                   </div>
-                  <div className="mt-6 text-center text-blue-300 text-lg font-medium">
-                    {!lockOptions && timer > 0 && "⚠️ Correct answer is disabled - you must choose wrong to continue"}
-                    {!lockOptions && timer === 0 && "⏰ Time's up! Moving to results..."}
-                    {lockOptions && QUESTION_2.wrongAnswers.includes(selected!) && 
-                      `❌ Wrong answer! ${playerName} is going to the Lucky Pool...`}
+                  <div className="mt-4 text-center text-purple-300 text-sm">
+                    {!lockOptions && timer > 0 && "Only wrong answers are clickable"}
+                    {!lockOptions && timer === 0 && "Time's up! Moving to results..."}
+                    {lockOptions && QUESTION_2.wrongAnswers.includes(selected!) && "Wrong answer! Moving to next stage..."}
                   </div>
                 </div>
               </div>
@@ -323,60 +488,185 @@ export default function Round2Page() {
           </div>
 
           {/* Right Column - Game Stats & Chat */}
-          {showQuestion && (
-            <div className="col-span-4 space-y-6">
-              
-              {/* Game Stats Panel */}
-              <div className="bg-gradient-to-br from-gray-900/80 to-black/80 rounded-2xl border border-blue-500/50 overflow-hidden shadow-2xl backdrop-blur-sm">
-                <div className="bg-gradient-to-r from-blue-600/40 to-cyan-600/40 px-4 py-3 border-b border-blue-500/30 backdrop-blur-sm">
-                  <h3 className="text-lg font-bold text-white">📊 GAME STATS</h3>
-                </div>
-                <div className="p-4">
-                  {(stage === "incorrectStats" || stage === "correctStats" || stage === "openSlotsStats") ? (
-                    <StatMap
-                      total={stage === "incorrectStats" ? 800 : stage === "correctStats" ? 100 : 100}
-                      safe={stage === "incorrectStats" ? 0 : stage === "correctStats" ? 80 : 100}
-                      progress={statProgress}
-                      label={
-                        stage === "incorrectStats" ? "Moving incorrect answers to LUCKY POOL" :
-                        stage === "correctStats" ? "Only 80/100 got it correct" :
-                        "20 open slots available"
-                      }
-                      showFinalSplit={stage === "correctStats" || stage === "openSlotsStats"}
-                      fullScreen={false}
-                      playerName={playerName}
-                      theme={stage === "incorrectStats" ? "elimination" : "advancement"}
-                    />
-                  ) : (
-                    <div className="text-center space-y-4">
-                      <div className="text-3xl font-bold text-blue-400">1,000</div>
-                      <div className="text-sm text-gray-300">Total Players</div>
-                      <div className="text-lg text-blue-200 font-medium">
-                        {stage === "question" ? `⏰ Timer: ${timer}s` : 
-                         stage === "answerReaction" ? `${playerName} got it wrong! → LUCKY POOL` :
-                         stage === "alexVideoPart4" ? "80 correct - 20 spots open" :
-                         stage === "alexVideoPart5" ? "Preparing Lucky Draw..." :
-                         "Round 2 in progress..."}
+          <div className="col-span-4 space-y-6">
+            
+            {/* Game Stats Panel */}
+            <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl">
+              <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 px-4 py-3 border-b border-purple-500/30">
+                <h3 className="text-lg font-bold text-white">📊 GAME STATS</h3>
+              </div>
+              <div className="p-4">
+                {/* Basic game info - before and during question */}
+                {(stage === "intro" || stage === "question" || stage === "answerReaction") && (
+                  <div className="text-center space-y-4">
+                    <div className="text-lg font-bold text-purple-400 mb-3">Round 2 Info</div>
+                    
+                    <div className="bg-blue-600/20 rounded-lg p-3 border border-blue-500/30">
+                      <div className="flex justify-between items-center">
+                        <span className="text-blue-300 text-sm">👥 Total Players</span>
+                        <span className="text-blue-400 font-bold">1,000</span>
+                      </div>
+                      <div className="text-xs text-blue-200 mt-1">competing this round</div>
+                    </div>
+                    
+                    <div className="bg-purple-600/20 rounded-lg p-3 border border-purple-500/30">
+                      <div className="flex justify-between items-center">
+                        <span className="text-purple-300 text-sm">🎯 Target for Round 3</span>
+                        <span className="text-purple-400 font-bold">100</span>
+                      </div>
+                      <div className="text-xs text-purple-200 mt-1">spots available</div>
+                    </div>
+                    
+                    <div className="text-center text-sm text-gray-400 mt-3">
+                      {stage === "question" ? `Timer: ${timer}s remaining` : 
+                       stage === "answerReaction" ? "Calculating results..." :
+                       "Round 2 in progress..."}
+                    </div>
+                  </div>
+                )}
+                
+                {/* During stats animations - only show StatMap during active animation */}
+                {(stage === "roundStats" || stage === "openSlotsStats") && (
+                  <StatMap
+                    total={stage === "openSlotsStats" ? 100 : 1000}
+                    safe={stage === "openSlotsStats" ? 80 : 80}
+                    progress={stage === "openSlotsStats" ? statProgress : 80}
+                    label={stage === "roundStats" ? "80 correct answers" : "20 open slots for lucky draw"}
+                    showFinalSplit={stage === "openSlotsStats"}
+                  />
+                )}
+                
+                {/* After first stats - show updated results */}
+                {(stage === "roundStatsCommentary" || stage === "alexVideoPart4") && (
+                  <div className="space-y-4">
+                    <div className="text-center mb-4">
+                      <div className="text-lg font-bold text-purple-400 mb-2">Round 2 Results</div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="bg-green-600/20 rounded-lg p-3 border border-green-500/30">
+                        <div className="flex justify-between items-center">
+                          <span className="text-green-300 text-sm">✅ Correct Answers</span>
+                          <span className="text-green-400 font-bold">80</span>
+                        </div>
+                        <div className="text-xs text-green-200 mt-1">out of 1,000 players</div>
+                      </div>
+                      
+                      <div className="bg-purple-600/20 rounded-lg p-3 border border-purple-500/30">
+                        <div className="flex justify-between items-center">
+                          <span className="text-purple-300 text-sm">🎯 Target for Round 3</span>
+                          <span className="text-purple-400 font-bold">100</span>
+                        </div>
+                        <div className="text-xs text-purple-200 mt-1">spots needed</div>
+                      </div>
+                      
+                      <div className="bg-red-600/20 rounded-lg p-3 border border-red-500/30">
+                        <div className="flex justify-between items-center">
+                          <span className="text-red-300 text-sm">❌ Your Status</span>
+                          <span className="text-red-400 font-bold">LUCKY POOL</span>
+                        </div>
+                        <div className="text-xs text-red-200 mt-1">awaiting lucky draw</div>
                       </div>
                     </div>
-                  )}
-                </div>
-              </div>
+                  </div>
+                )}
+                
+                {/* After open slots - show different states based on stage */}
+                {stage === "alexVideoPart5" && (
+                  <div className="space-y-4">
+                    <div className="text-center mb-4">
+                      <div className="text-lg font-bold text-purple-400 mb-2">Lucky Draw Status</div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="bg-orange-600/20 rounded-lg p-3 border border-orange-500/30">
+                        <div className="flex justify-between items-center">
+                          <span className="text-orange-300 text-sm">🎲 Open Slots</span>
+                          <span className="text-orange-400 font-bold">20</span>
+                        </div>
+                        <div className="text-xs text-orange-200 mt-1">available for draw</div>
+                      </div>
+                      
+                      <div className="bg-purple-600/20 rounded-lg p-3 border border-purple-500/30">
+                        <div className="flex justify-between items-center">
+                          <span className="text-purple-300 text-sm">🍀 Your Status</span>
+                          <span className="text-purple-400 font-bold">LUCKY POOL</span>
+                        </div>
+                        <div className="text-xs text-purple-200 mt-1">awaiting lucky draw</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
-              {/* Live Chat */}
-              <div className="bg-gradient-to-br from-gray-900/80 to-black/80 rounded-2xl border border-blue-500/50 overflow-hidden shadow-2xl backdrop-blur-sm flex-1">
-                <div className="bg-gradient-to-r from-blue-600/40 to-cyan-600/40 px-4 py-3 border-b border-blue-500/30 backdrop-blur-sm">
-                  <h3 className="text-lg font-bold text-white flex items-center">
-                    💬 LIVE CHAT 
-                    <span className="ml-2 w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                  </h3>
-                </div>
-                <div className="h-80">
-                  <ChatBox />
-                </div>
+                {/* During lucky draw - keep showing lucky pool status */}
+                {stage === "luckyDraw" && (
+                  <div className="space-y-4">
+                    <div className="text-center mb-4">
+                      <div className="text-lg font-bold text-purple-400 mb-2">Lucky Draw in Progress</div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="bg-yellow-600/20 rounded-lg p-3 border border-yellow-500/30">
+                        <div className="flex justify-between items-center">
+                          <span className="text-yellow-300 text-sm">🎲 Drawing Names</span>
+                          <span className="text-yellow-400 font-bold">{drawnNames.length}/20</span>
+                        </div>
+                        <div className="text-xs text-yellow-200 mt-1">names being selected</div>
+                      </div>
+                      
+                      <div className="bg-purple-600/20 rounded-lg p-3 border border-purple-500/30">
+                        <div className="flex justify-between items-center">
+                          <span className="text-purple-300 text-sm">🍀 Your Status</span>
+                          <span className="text-purple-400 font-bold">LUCKY POOL</span>
+                        </div>
+                        <div className="text-xs text-purple-200 mt-1">waiting for results...</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Only after lucky draw is complete - show final result */}
+                {stage === "alexVideoPart6" && (
+                  <div className="space-y-4">
+                    <div className="text-center mb-4">
+                      <div className="text-lg font-bold text-purple-400 mb-2">Lucky Draw Complete</div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="bg-orange-600/20 rounded-lg p-3 border border-orange-500/30">
+                        <div className="flex justify-between items-center">
+                          <span className="text-orange-300 text-sm">🎲 Draw Results</span>
+                          <span className="text-orange-400 font-bold">COMPLETE</span>
+                        </div>
+                        <div className="text-xs text-orange-200 mt-1">20 players selected</div>
+                      </div>
+                      
+                      <div className="bg-purple-600/20 rounded-lg p-3 border border-purple-500/30">
+                        <div className="flex justify-between items-center">
+                          <span className="text-purple-300 text-sm">🍀 Your Status</span>
+                          <span className="text-purple-400 font-bold">LUCKY POOL</span>
+                        </div>
+                        <div className="text-xs text-purple-200 mt-1">not selected this round</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+
+            {/* Live Chat */}
+            <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl flex-1">
+              <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 px-4 py-3 border-b border-purple-500/30">
+                <h3 className="text-lg font-bold text-white flex items-center">
+                  LIVE CHAT 
+                  <span className="ml-2 w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                </h3>
+              </div>
+              <div className="h-96">
+                <ChatBox />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </main>

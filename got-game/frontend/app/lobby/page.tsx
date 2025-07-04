@@ -26,7 +26,7 @@ export default function Lobby() {
     setError('');
  
     try {
-      const res = await fetch('http://localhost:5001/api/names', {
+      const res = await fetch('http://localhost:5000/api/names', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: playerName }),
@@ -59,7 +59,7 @@ export default function Lobby() {
       />
    
     {!videoEnded && (
-      <div className="absolute top-20 z-10 w-full flex justify-center">
+      <div className="absolute top-40 z-10 w-full flex justify-center">
         <video
           src="/video/alex(Welcome).mp4"
           autoPlay
@@ -76,13 +76,23 @@ export default function Lobby() {
  
  
  
-      {/* Top Logo */}
-      <div className="absolute top-10 z-10">
-      <Image src="/images/Gotgamelogo.png" alt="GG Logo" width={90} height={90} />
+      {/* Top Logo - Made Much Bigger */}
+      <div className="absolute top-8 z-10 flex justify-center w-full">
+        <div className="relative">
+          <Image 
+            src="/images/Gotgamelogo.png" 
+            alt="GG Logo" 
+            width={200} 
+            height={200}
+            className="drop-shadow-2xl"
+          />
+          {/* Optional: Add a subtle glow effect */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-blue-400/20 rounded-full blur-xl -z-10"></div>
+        </div>
       </div>
  
-      {/* Center Content */}
-      <div className="relative z-20 mt-[320px] flex flex-col items-center justify-center w-full max-w-md px-4">
+      {/* Center Content - Adjusted positioning */}
+      <div className="relative z-20 mt-[380px] flex flex-col items-center justify-center w-full max-w-md px-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-4">
           <span className="flex items-center gap-2">
             <Image src="/images/Chevron Down.png" alt="Arrow" width={18} height={18} />
@@ -140,5 +150,3 @@ export default function Lobby() {
     </main>
   );
 }
- 
- 
