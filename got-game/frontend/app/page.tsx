@@ -16,7 +16,7 @@ export default function Home() {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/public/images/Background1.jpg" 
+          src="/images/Background1.jpg" 
           alt="Background"
           fill
           className="object-cover opacity-80"
@@ -28,7 +28,7 @@ export default function Home() {
       <div className="relative z-10 flex flex-col items-center gap-6 px-4">
         {/* Smaller GOT GAME Logo */}
         <Image
-          src="/images/gotgamelogo.png"
+          src="/images/Gotgamelogo.png"
           alt="Got Game Logo"
           width={100}
           height={100}
