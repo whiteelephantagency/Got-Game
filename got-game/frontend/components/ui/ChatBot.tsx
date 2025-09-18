@@ -88,22 +88,22 @@ export default function ChatBox({
   const config = themeConfig[theme];
 
   return (
-    <div className={`flex flex-col text-sm w-full h-full text-white font-medium ${className}`}>
-      {/* Chat messages */}
+    <div className={`flex flex-col text-sm w-full h-full text-white font-medium p-4 ${className}`}>
+      {/* Chat messages with enhanced spacing */}
       <div
         ref={chatRef}
-        className="flex-1 overflow-y-auto pr-3 space-y-2 scrollbar-thin scrollbar-thumb-purple-500/50 scrollbar-track-transparent hover:scrollbar-thumb-purple-400/70 transition-colors"
+        className="flex-1 overflow-y-auto px-4 py-3 space-y-3 scrollbar-thin scrollbar-thumb-purple-500/50 scrollbar-track-transparent hover:scrollbar-thumb-purple-400/70 transition-colors rounded-lg bg-black/20"
       >
         {chat.map((msg, i) => {
           const [username, ...messageParts] = msg.split(': ');
           const message = messageParts.join(': ');
           
           return (
-            <div key={i} className="leading-snug group hover:bg-white/5 p-1 rounded transition-colors">
-              <span className={`font-bold ${config.accent}`}>
+            <div key={i} className="leading-relaxed group hover:bg-white/5 px-3 py-2 rounded-md transition-colors duration-200">
+              <span className={`font-bold ${config.accent} mr-2`}>
                 {username}:
               </span>
-              <span className="text-white/90 ml-1">
+              <span className="text-white/90 leading-relaxed">
                 {message}
               </span>
             </div>
@@ -111,42 +111,42 @@ export default function ChatBox({
         })}
       </div>
 
-      {/* Channel Management / Input */}
+      {/* Channel Management / Input with enhanced spacing */}
       {showStats && (
-        <div className="mt-4 text-xs space-y-3">
-          <div className="border-t border-white/10 pt-3">
-            <p className={`${config.accent} font-semibold mb-1 flex items-center`}>
-              <span className="text-lg mr-2">💬</span>
+        <div className="mt-6 text-xs space-y-4 px-2">
+          <div className="border-t border-white/10 pt-4">
+            <p className={`${config.accent} font-semibold mb-3 flex items-center`}>
+              <span className="text-lg mr-3">💬</span>
               LIVE CHAT
             </p>
-            <p className="text-white/80 font-medium">/gotgame</p>
-            <p className="text-gray-400 mb-3 text-xs leading-relaxed">
+            <p className="text-white/80 font-medium mb-2">/gotgame</p>
+            <p className="text-gray-400 mb-4 text-xs leading-relaxed px-2">
               Join the conversation with players from around the world
             </p>
           </div>
           
-          <div className={`flex items-center ${config.input} rounded-lg px-3 py-2 transition-colors hover:bg-opacity-70`}>
+          <div className={`flex items-center ${config.input} rounded-lg px-4 py-3 transition-colors hover:bg-opacity-70 shadow-sm`}>
             <input
               type="text"
               placeholder="Type your message..."
-              className="bg-transparent text-white text-sm flex-1 focus:outline-none placeholder-gray-400"
+              className="bg-transparent text-white text-sm flex-1 focus:outline-none placeholder-gray-400 px-2"
             />
-            <button className={`ml-2 ${config.button} transition-colors text-lg hover:scale-110 transform duration-200`}>
+            <button className={`ml-3 px-2 py-1 ${config.button} transition-colors text-lg hover:scale-110 transform duration-200 rounded`}>
               ➤
             </button>
           </div>
           
-          <div className="flex justify-between items-center pt-2 border-t border-white/10">
-            <div className="flex items-center space-x-3">
+          <div className="flex justify-between items-center pt-3 border-t border-white/10 px-2">
+            <div className="flex items-center space-x-4">
               <span className={`${config.accent} flex items-center`}>
-                <span className="animate-pulse mr-1">🔴</span>
+                <span className="animate-pulse mr-2">🔴</span>
                 {Math.floor(Math.random() * 50 + 150)}K
               </span>
               <span className="text-white/60 text-xs">viewers</span>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               <span className="text-white font-bold text-sm">Got Game</span>
-              <span className="text-xs bg-red-500 text-white px-2 py-1 rounded-full animate-pulse">
+              <span className="text-xs bg-red-500 text-white px-3 py-1 rounded-full animate-pulse shadow-sm">
                 LIVE
               </span>
             </div>
