@@ -8,10 +8,16 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, Trophy, Crown } from "lucide-react";
 import ChatBox from "@/components/ui/ChatBot";
 
+// const QUESTION_5 = {
+//   question: "Which element has the chemical symbol 'O'?",
+//   options: ["Gold", "Oxygen", "Osmium", "Oganesson"],
+//   correctAnswer: "Oxygen",
+// };
+
 const QUESTION_5 = {
-  question: "Which element has the chemical symbol 'O'?",
-  options: ["Gold", "Oxygen", "Osmium", "Oganesson"],
-  correctAnswer: "Oxygen",
+  question: "Which host of AGT was also the original host of “Who Wants to Be a Millionaire?",
+  options: ["Nick Cannon", "Jerry Springer", "Regis Philbin", "Terry Crews"],
+  correctAnswer: "Regis Philbin",
 };
 
 export default function Round5Page() {

@@ -35,11 +35,23 @@ export const questions = [
       sortingUrl: "/video/alex-sorting-3.mp4",
       congratsUrl: "/video/alex-congrats-3.mp4"
   },
+//   {
+//       id: 4,
+//       question: "What is the largest ocean on Earth?",
+//       options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+//       correctAnswer: "Pacific Ocean",
+//       videoUrl: "/video/question-4.mp4",
+//       introUrl: "/video/alex-intro-4.mp4",
+//       reactionUrl: "/video/alex-react-4.mp4",
+//       statsCommentUrl: "/video/alex-comment-4.mp4",
+//       sortingUrl: "/video/alex-sorting-4.mp4",
+//       congratsUrl: "/video/alex-congrats-4.mp4"
+//   },
   {
       id: 4,
-      question: "What is the largest ocean on Earth?",
-      options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
-      correctAnswer: "Pacific Ocean",
+      question: "How old is Baby Dev, the youngest contestant ever to appear on AGT?",
+      options: ["5 Years", "4 Years", "3 Years", "2 Years"],
+      correctAnswer: "2 Years",
       videoUrl: "/video/question-4.mp4",
       introUrl: "/video/alex-intro-4.mp4",
       reactionUrl: "/video/alex-react-4.mp4",
@@ -47,11 +59,23 @@ export const questions = [
       sortingUrl: "/video/alex-sorting-4.mp4",
       congratsUrl: "/video/alex-congrats-4.mp4"
   },
+//   {
+//       id: 5,
+//       question: "Which element has the chemical symbol 'O'?",
+//       options: ["Gold", "Oxygen", "Osmium", "Oganesson"],
+//       correctAnswer: "Oxygen",
+//       videoUrl: "/video/question-5.mp4",
+//       introUrl: "/video/alex-intro-5.mp4",
+//       reactionUrl: "/video/alex-react-5.mp4",
+//       statsCommentUrl: "/video/alex-comment-5.mp4",
+//       sortingUrl: "/video/alex-sorting-5.mp4",
+//       congratsUrl: "/video/alex-congrats-5.mp4"
+//   },
   {
       id: 5,
-      question: "Which element has the chemical symbol 'O'?",
-      options: ["Gold", "Oxygen", "Osmium", "Oganesson"],
-      correctAnswer: "Oxygen",
+      question: "Which host of AGT was also the original host of “Who Wants to Be a Millionaire?",
+      options: ["Nick Cannon", "Jerry Springer", "Regis Philbin", "Terry Crews"],
+      correctAnswer: "Regis Philbin",
       videoUrl: "/video/question-5.mp4",
       introUrl: "/video/alex-intro-5.mp4",
       reactionUrl: "/video/alex-react-5.mp4",
