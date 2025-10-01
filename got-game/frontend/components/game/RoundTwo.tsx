@@ -33,7 +33,7 @@ const RANDOM_NAMES = [
 /* -------------------------- Component -------------------------- */
 
 type Stage =
-  | "intro" | "question" | "answerReaction"
+  | "intro" | "questionRelatedVideo" | "question" | "answerReaction"
   | "roundStats" | "roundStatsCommentary"
   | "alexVideoPart4" | "openSlotsStats"
   | "alexVideoPart5" | "luckyDraw" | "alexVideoPart6";
@@ -57,9 +57,9 @@ export default function Round2Page() {
 
   /* -------------------------- SFX (same pattern as Round 1) -------------------------- */
   const whooshRef = useRef<HTMLAudioElement | null>(null);
-  const loopRef   = useRef<HTMLAudioElement | null>(null);
-  const chimeRef  = useRef<HTMLAudioElement | null>(null);
-  const crowdRef  = useRef<HTMLAudioElement | null>(null);
+  const loopRef = useRef<HTMLAudioElement | null>(null);
+  const chimeRef = useRef<HTMLAudioElement | null>(null);
+  const crowdRef = useRef<HTMLAudioElement | null>(null);
   const [audioPrimed, setAudioPrimed] = useState(false);
 
   // preload SFX
@@ -132,10 +132,10 @@ export default function Round2Page() {
       setShowFullScreenStats(true);
 
       // SFX: whoosh + start loop
-      whooshRef.current?.play().catch(() => {});
+      whooshRef.current?.play().catch(() => { });
       if (loopRef.current) {
         loopRef.current.currentTime = 0;
-        loopRef.current.play().catch(() => {});
+        loopRef.current.play().catch(() => { });
       }
 
       setStatProgress(0);
@@ -147,7 +147,7 @@ export default function Round2Page() {
           clearInterval(interval);
           // SFX: completion chime
           loopRef.current?.pause();
-          chimeRef.current?.play().catch(() => {});
+          chimeRef.current?.play().catch(() => { });
           setTimeout(() => {
             setShowFullScreenStats(false);
             setStage("roundStatsCommentary");
@@ -160,10 +160,10 @@ export default function Round2Page() {
       setShowFullScreenStats(true);
 
       // SFX: whoosh + start loop
-      whooshRef.current?.play().catch(() => {});
+      whooshRef.current?.play().catch(() => { });
       if (loopRef.current) {
         loopRef.current.currentTime = 0;
-        loopRef.current.play().catch(() => {});
+        loopRef.current.play().catch(() => { });
       }
 
       setStatProgress(0);
@@ -175,7 +175,7 @@ export default function Round2Page() {
           clearInterval(interval);
           // SFX: completion chime (you can add crowd if you want)
           loopRef.current?.pause();
-          chimeRef.current?.play().catch(() => {});
+          chimeRef.current?.play().catch(() => { });
           setTimeout(() => {
             setShowFullScreenStats(false);
             setStage("alexVideoPart5");
@@ -220,9 +220,14 @@ export default function Round2Page() {
   const handleVideoEnd = () => {
     if (stage === "intro") {
       setCurrentVideoKey((p) => p + 1);
+      setStage("questionRelatedVideo");
+      setTimerActive(true);
+    } else if (stage === "questionRelatedVideo") {
+      setCurrentVideoKey((p) => p + 1);
       setStage("question");
       setTimerActive(true);
-    } else if (stage === "answerReaction") {
+    }
+    else if (stage === "answerReaction") {
       setCurrentVideoKey((p) => p + 1);
       setStage("roundStats");
     } else if (stage === "roundStatsCommentary") {
@@ -425,12 +430,12 @@ export default function Round2Page() {
             <h1 className="text-3xl font-bold text-white">ROUND 2</h1>
             <div className="text-purple-100 text-lg">
               {stage === "question" ? `Answer the Question! (${timer}s)` :
-               stage === "answerReaction" ? "Calculating Results..." :
-               stage === "roundStats" ? "Showing Statistics" :
-               stage === "roundStatsCommentary" ? "Analyzing Results" :
-               stage === "openSlotsStats" ? "Open Slots Available" :
-               stage === "luckyDraw" ? "Lucky Draw in Progress" :
-               "The Knowledge Challenge"}
+                stage === "answerReaction" ? "Calculating Results..." :
+                  stage === "roundStats" ? "Showing Statistics" :
+                    stage === "roundStatsCommentary" ? "Analyzing Results" :
+                      stage === "openSlotsStats" ? "Open Slots Available" :
+                        stage === "luckyDraw" ? "Lucky Draw in Progress" :
+                          "The Knowledge Challenge"}
             </div>
           </div>
           <div className="flex items-center space-x-6 text-lg">
@@ -458,27 +463,30 @@ export default function Round2Page() {
                     stage === "roundStatsCommentary" ||
                     stage === "alexVideoPart4" ||
                     stage === "alexVideoPart5" ||
+                    stage === "questionRelatedVideo" ||
                     stage === "alexVideoPart6") && (
-                    <AlexVideoPlayer
-                      src={
-                        stage === "intro"
-                          ? "/video/round2-video1.mp4"
-                          : stage === "answerReaction"
-                          ? "/video/alex-question2-part2.mp3"
-                          : stage === "roundStatsCommentary"
-                          ? "/video/alex-question2-part3.mp3"
-                          : stage === "alexVideoPart4"
-                          ? "/video/round2-video4.mp4"
-                          : stage === "alexVideoPart5"
-                          ? "/video/round2-video5.mp4"
-                          : "/video/alex-question2-part6.mp3"
-                      }
-                      onEnded={handleVideoEnd}
-                      autoPlay
-                      key={`video-${stage}-${currentVideoKey}`}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
+                      <AlexVideoPlayer
+                        src={
+                          stage === "intro"
+                            ? "/video/round2-video1.mp4"
+                             : stage === "questionRelatedVideo"
+                              ? "/video/alex-question2-part2-2.mp4"
+                            : stage === "answerReaction"
+                              ? "/video/alex-question2-part2.mp3"
+                              : stage === "roundStatsCommentary"
+                                ? "/video/alex-question2-part3.mp3"
+                                : stage === "alexVideoPart4"
+                                  ? "/video/round2-video4.mp4"
+                                  : stage === "alexVideoPart5"
+                                    ? "/video/round2-video5.mp4"
+                                    : "/video/alex-question2-part6.mp3"
+                        }
+                        onEnded={handleVideoEnd}
+                        autoPlay
+                        key={`video-${stage}-${currentVideoKey}`}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
 
                   {/* Placeholders */}
                   {stage === "question" && (
@@ -503,8 +511,8 @@ export default function Round2Page() {
                         </div>
                         <div className="text-2xl font-semibold text-purple-300">
                           {stage === "roundStats" ? "Calculating Results..." :
-                           stage === "openSlotsStats" ? "Counting Open Slots..." :
-                           "Lucky Draw in Progress..."}
+                            stage === "openSlotsStats" ? "Counting Open Slots..." :
+                              "Lucky Draw in Progress..."}
                         </div>
                         <div className="text-lg text-gray-400">
                           Check the full screen for detailed results!
@@ -519,9 +527,8 @@ export default function Round2Page() {
             {/* Question */}
             {stage === "question" && (
               <div
-                className={`bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-2xl border border-purple-400/50 shadow-xl transition-all duration-200 ${
-                  questionFlash ? "bg-red-500/50 border-red-500" : ""
-                }`}
+                className={`bg-gradient-to-br from-purple-900/30 to-blue-900/30 rounded-2xl border border-purple-400/50 shadow-xl transition-all duration-200 ${questionFlash ? "bg-red-500/50 border-red-500" : ""
+                  }`}
               >
                 <div className="bg-gradient-to-r from-purple-500/30 to-blue-500/30 px-8 py-6 border-b border-purple-400/30 flex justify-between items-center">
                   <h2 className="text-3xl font-bold text-white">QUESTION 2</h2>
@@ -536,12 +543,11 @@ export default function Round2Page() {
                       <Button
                         key={opt}
                         className={`h-20 text-xl font-semibold transition-all duration-300 rounded-xl px-8 flex justify-between items-center
-                          ${
-                            selected === opt
-                              ? QUESTION_2.wrongAnswers.includes(opt)
-                                ? "bg-red-600 shadow-lg shadow-red-500/50"
-                                : "bg-green-600 shadow-lg shadow-green-500/50"
-                              : opt === QUESTION_2.correctAnswer
+                          ${selected === opt
+                            ? QUESTION_2.wrongAnswers.includes(opt)
+                              ? "bg-red-600 shadow-lg shadow-red-500/50"
+                              : "bg-green-600 shadow-lg shadow-green-500/50"
+                            : opt === QUESTION_2.correctAnswer
                               ? "bg-gray-600 cursor-not-allowed opacity-50"
                               : "bg-purple-700 hover:bg-purple-600 ring-2 ring-purple-400 shadow-lg hover:shadow-purple-500/50"
                           }`}
@@ -596,8 +602,8 @@ export default function Round2Page() {
 
                     <div className="text-center text-lg text-gray-400 mt-4">
                       {stage === "question" ? `Timer: ${timer}s remaining` :
-                       stage === "answerReaction" ? "Calculating results..." :
-                       "Round 2 in progress..."}
+                        stage === "answerReaction" ? "Calculating results..." :
+                          "Round 2 in progress..."}
                     </div>
                   </div>
                 )}

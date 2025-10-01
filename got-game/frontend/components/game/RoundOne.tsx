@@ -20,6 +20,7 @@ export default function RoundOnePage() {
   // ---------------- Game state ----------------
   const [stage, setStage] = useState< // stages drive the flow
     | "intro"
+    | "questionRelatedVideo"
     | "question"
     | "answerReaction"
     | "roundStats"
@@ -151,8 +152,12 @@ export default function RoundOnePage() {
   const handleVideoEnd = () => {
     if (stage === "intro") {
       setCurrentVideoKey((p) => p + 1);
+      setStage("questionRelatedVideo");
+    } else if(stage === "questionRelatedVideo"){
+       setCurrentVideoKey((p) => p + 1);
       setStage("question");
-    } else if (stage === "answerReaction") {
+    }
+    else if (stage === "answerReaction") {
       setCurrentVideoKey((p) => p + 1);
       setStage("roundStats");
     } else if (stage === "roundStatsEnd") {
@@ -344,11 +349,14 @@ export default function RoundOnePage() {
                     stage === "answerReaction" ||
                     stage === "roundStatsEnd" ||
                     stage === "alexVideoPart4" ||
+                    stage === "questionRelatedVideo" ||
                     stage === "alexVideoPart5") && (
                     <AlexVideoPlayer
                       src={
                         stage === "intro"
                           ? "/video/alex-intro-1.mp4"
+                           : stage === "questionRelatedVideo"
+                          ? "/video/alex-intro-1-1.mp4"
                           : stage === "answerReaction"
                           ? "/video/alex-question1-part2.mp3"
                           : stage === "roundStatsEnd"
