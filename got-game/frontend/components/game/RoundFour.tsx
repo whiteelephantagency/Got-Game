@@ -170,9 +170,14 @@ export default function Round4Page() {
   const handleVideoEnd = () => {
     if (stage === "intro") {
       setCurrentVideoKey((prev) => prev + 1);
-      setStage("question");
+      setStage("questionRelatedVideo");
       setTimerActive(true);
-    } else if (stage === "alexVideoPart2") {
+    } else if(stage === 'questionRelatedVideo'){
+      setCurrentVideoKey((prev) => prev + 1);
+      setStage("question");
+      setTimerActive(true); 
+    }
+    else if (stage === "alexVideoPart2") {
       router.push("/game/5");
     }
   };
@@ -294,9 +299,9 @@ export default function Round4Page() {
               </div>
               <div className="p-6 flex-1 flex flex-col">
                 <div className="w-full rounded-xl overflow-hidden bg-black flex-1 min-h-0">
-                  {(stage === "intro" || stage === "alexVideoPart2") && (
+                  {(stage === "intro" || stage === "alexVideoPart2" ||  stage ==='questionRelatedVideo') && (
                     <AlexVideoPlayer
-                      src={stage === "intro" ? "/video/round4-intro.mp4" : "/video/round4-video2.mp4"}
+                      src={stage === "intro" ? "/video/round4-intro.mp4" : stage ==='questionRelatedVideo' ? "/video/round4-video2-2.mp4" : "/video/round4-video2.mp4"}
                       onEnded={handleVideoEnd}
                       autoPlay
                       key={`video-${stage}-${currentVideoKey}`}
