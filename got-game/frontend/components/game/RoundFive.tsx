@@ -7,6 +7,7 @@ import StatMap from "@/components/ui/StatMap";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, Trophy, Crown } from "lucide-react";
 import ChatBox from "@/components/ui/ChatBot";
+import Image from "next/image";
 
 // const QUESTION_5 = {
 //   question: "Which element has the chemical symbol 'O'?",
@@ -199,7 +200,9 @@ export default function Round5Page() {
           <div className="relative z-10 text-center space-y-12 max-w-5xl mx-auto py-12">
             {/* GOT GAME Logo */}
             <div className="flex justify-center mb-8">
-              <img
+              <Image
+                width={300}
+                height={100}
                 src="/images/Gotgamelogo.png"
                 alt="Got Game Logo"
                 className="h-24 w-auto animate-pulse"
@@ -207,9 +210,9 @@ export default function Round5Page() {
             </div>
 
             {/* YOU WIN Text */}
-            <h1 className="text-8xl font-black text-white drop-shadow-2xl tracking-wider animate-pulse">
+            {/* <h1 className="text-8xl font-black text-white drop-shadow-2xl tracking-wider animate-pulse">
               YOU WIN
-            </h1>
+            </h1> */}
 
             {/* Prize Money Box */}
             <div className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 px-16 py-8 rounded-3xl border-4 border-white shadow-2xl mx-auto max-w-2xl">
@@ -228,15 +231,15 @@ export default function Round5Page() {
             </p>
 
             {/* Official Champion Badge */}
-            <div className="bg-gradient-to-r from-yellow-500/90 to-orange-500/90 p-8 rounded-2xl border-2 border-yellow-300 backdrop-blur-sm max-w-2xl mx-auto">
+            {/* <div className="bg-gradient-to-r from-yellow-500/90 to-orange-500/90 p-8 rounded-2xl border-2 border-yellow-300 backdrop-blur-sm max-w-2xl mx-auto">
               <div className="text-2xl font-bold text-white drop-shadow-lg">🏆 OFFICIAL CHAMPION 🏆</div>
               <div className="text-xl text-white mt-4 drop-shadow-lg">
                 {playerName} - Got Game Winner
               </div>
-            </div>
+            </div> */}
 
             {/* Play Again Button */}
-            <div className="pt-8">
+            <div className="">
               <Button
                 onClick={() => router.push("/")}
                 className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-16 py-6 text-2xl font-bold rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-white/30"
@@ -279,7 +282,7 @@ export default function Round5Page() {
         <div className="grid grid-cols-12 gap-8 min-h-[calc(100vh-140px)]">
 
           {/* Left Column - Main Content */}
-          <div className="col-span-8 flex flex-col space-y-8">
+          <div className="col-span-12 flex flex-col space-y-8">
 
             {/* Alex Video Section - Fixed height container */}
             <div className={`bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-yellow-500/50 overflow-hidden shadow-2xl flex-1 flex flex-col transition-all duration-500 ${championFlash ? 'ring-4 ring-yellow-400/50 shadow-yellow-400/50' : ''
@@ -390,14 +393,13 @@ export default function Round5Page() {
           <div className="col-span-4 space-y-8">
 
             {/* Game Stats Panel */}
-            <div className={`bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-yellow-500/50 overflow-hidden shadow-2xl transition-all duration-500 ${championFlash ? 'animate-pulse ring-4 ring-yellow-400/50 shadow-yellow-400/50' : ''
+            {/* <div className={`bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-yellow-500/50 overflow-hidden shadow-2xl transition-all duration-500 ${championFlash ? 'animate-pulse ring-4 ring-yellow-400/50 shadow-yellow-400/50' : ''
               }`}>
               <div className={`bg-gradient-to-r from-yellow-600/30 to-orange-600/30 px-6 py-4 border-b border-yellow-500/30 ${championFlash ? 'bg-gradient-to-r from-yellow-600/50 to-orange-600/50' : ''
                 }`}>
                 <h3 className="text-xl font-bold text-white">📊 FINAL STATS</h3>
               </div>
               <div className="p-6">
-                {/* Basic game info - before and during question */}
                 {(stage === "intro" || stage === "question") && (
                   <div className="text-center space-y-6">
                     <div className="text-xl font-bold text-yellow-400 mb-4 animate-pulse">Final Round</div>
@@ -433,7 +435,6 @@ export default function Round5Page() {
                   </div>
                 )}
 
-                {/* During stats animations */}
                 {stage === "roundStats" && (
                   <StatMap
                     total={1}
@@ -447,7 +448,6 @@ export default function Round5Page() {
                   />
                 )}
 
-                {/* After stats - show champion celebration */}
                 {(stage === "alexVideoPart2" || stage === "congratulations") && (
                   <div className="space-y-6">
                     <div className="text-center mb-6">
@@ -490,10 +490,10 @@ export default function Round5Page() {
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
 
             {/* Live Chat */}
-            <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-yellow-500/50 overflow-hidden shadow-2xl flex-1">
+            {/* <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-yellow-500/50 overflow-hidden shadow-2xl flex-1">
               <div className="bg-gradient-to-r from-yellow-600/30 to-orange-600/30 px-6 py-4 border-b border-yellow-500/30">
                 <h3 className="text-xl font-bold text-white flex items-center">
                   LIVE CHAT
@@ -503,7 +503,7 @@ export default function Round5Page() {
               <div className="h-96">
                 <ChatBox theme="gold" />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

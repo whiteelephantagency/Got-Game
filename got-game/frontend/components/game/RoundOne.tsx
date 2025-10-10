@@ -7,6 +7,7 @@ import StatMap from "@/components/ui/StatMap";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle } from "lucide-react";
 import ChatBox from "@/components/ui/ChatBot";
+import Image from "next/image";
 
 const QUESTION_1 = {
   question: "Which 70's rock band performed the original version of this song?",
@@ -202,7 +203,7 @@ export default function RoundOnePage() {
                   {/* Flow */}
                   <div className="grid grid-cols-3 gap-12 items-center">
                     <div className="text-center space-y-6">
-                      <div className="w-32 h-32 mx-auto bg-blue-500 rounded-full flex items-center justify-center">
+                      <div className="w-32 h-32 mx-auto bg-white rounded-full flex items-center justify-center">
                         <span className="text-4xl font-bold">👥</span>
                       </div>
                       <div className="text-3xl font-bold text-blue-400">2,000</div>
@@ -269,10 +270,10 @@ export default function RoundOnePage() {
                     <div className="text-center space-y-6">
                       <div className="grid grid-cols-1 gap-4">
                         <div className="bg-green-600/20 rounded-lg p-4 border border-green-500/50">
-                          <div className="text-2xl font-bold text-green-400">
+                          <div className="text-2xl font-bold text-white-400">
                             {Math.min(statProgress, 1000).toLocaleString()}
                           </div>
-                          <div className="text-sm text-green-300">Safe to Round 2</div>
+                          <div className="text-sm text-white-300">Safe to Round 2</div>
                         </div>
 
                         <div className="bg-yellow-600/20 rounded-lg p-4 border border-yellow-500/50">
@@ -296,11 +297,11 @@ export default function RoundOnePage() {
                     </div>
                   </div>
 
-                  {statProgress >= 1000 && (
+                  {/* {statProgress >= 1000 && (
                     <div className="text-2xl text-purple-400 font-bold animate-pulse">
                       Random Selection Complete!
                     </div>
-                  )}
+                  )} */}
                 </div>
               )}
             </div>
@@ -312,7 +313,13 @@ export default function RoundOnePage() {
       <div className="w-full bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 p-6 shadow-lg">
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
           <div className="flex items-center space-x-8">
-            <h1 className="text-3xl font-bold text-white">ROUND 1</h1>
+            {/* <h1 className="text-3xl font-bold text-white">ROUND 1</h1> */}
+            <Image
+            width={100}
+            height={50}
+            alt="logo"
+            src={'/images/Gotgamelogo.png'}
+            />
             <div className="text-purple-100 text-lg">
               {stage === "question"
                 ? "Answer the Question!"
@@ -325,11 +332,12 @@ export default function RoundOnePage() {
                 : "The Musical Challenge"}
             </div>
           </div>
-          <div className="flex items-center space-x-6 text-lg">
+          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 1: Info</h3>
+          {/* <div className="flex items-center space-x-6 text-lg">
             <div className="bg-black/30 px-4 py-2 rounded">PLAYERS: 2,000</div>
             <div className="bg-black/30 px-4 py-2 rounded">TARGET: 1,000</div>
             <div className="bg-purple-500/20 px-4 py-2 rounded text-purple-300">ROUND 1</div>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -377,7 +385,7 @@ export default function RoundOnePage() {
                       <div className="text-center space-y-6 p-8">
                         <div className="text-4xl">🎵</div>
                         <div className="text-2xl font-semibold text-purple-300">Answer the Question!</div>
-                        <div className="text-lg text-gray-400">Listen carefully to the music clip</div>
+                        <div className="text-lg text-gray-400">Did you listen carefully to the music clip?</div>
                       </div>
                     </div>
                   )}
@@ -455,7 +463,7 @@ export default function RoundOnePage() {
                         <span className="text-blue-300">👥 Total Players</span>
                         <span className="text-blue-400 font-bold">2,000</span>
                       </div>
-                      <div className="text-sm text-blue-200 mt-2">competing this round</div>
+                      <div className="text-sm text-blue-200 mt-2 text-left">competing this round</div>
                     </div>
 
                     <div className="bg-purple-600/20 rounded-lg p-4 border border-purple-500/30">
@@ -463,7 +471,7 @@ export default function RoundOnePage() {
                         <span className="text-purple-300">🎯 Target for Round 2</span>
                         <span className="text-purple-400 font-bold">1,000</span>
                       </div>
-                      <div className="text-sm text-purple-200 mt-2">spots available</div>
+                      <div className="text-sm text-purple-200 mt-2 text-left">spots available</div>
                     </div>
 
                     <div className="text-center text-lg text-gray-400 mt-4">
@@ -564,9 +572,9 @@ export default function RoundOnePage() {
             {/* Live Chat */}
             <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl flex-1">
               <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 px-6 py-4 border-b border-purple-500/30">
-                <h3 className="text-xl font-bold text-white flex items-center">
+                {/* <h3 className="text-xl font-bold text-white flex items-center">
                   LIVE CHAT <span className="ml-3 w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                </h3>
+                </h3> */}
               </div>
               <div className="h-96">
                 <ChatBox theme="default" />

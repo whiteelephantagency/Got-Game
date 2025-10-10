@@ -402,7 +402,7 @@ export default function Round4Page() {
                         <span className="text-blue-300">👥 Total Players</span>
                         <span className="text-blue-400 font-bold">10</span>
                       </div>
-                      <div className="text-sm text-blue-200 mt-2">final competitors</div>
+                      <div className="text-sm text-blue-200 mt-2 text-left">final competitors</div>
                     </div>
 
                     <div className="bg-purple-600/20 rounded-lg p-4 border border-purple-500/30">
@@ -410,7 +410,7 @@ export default function Round4Page() {
                         <span className="text-purple-300">🏆 Finalist Spots</span>
                         <span className="text-purple-400 font-bold">1</span>
                       </div>
-                      <div className="text-sm text-purple-200 mt-2">advance to final</div>
+                      <div className="text-sm text-purple-200 mt-2 text-left">advance to final</div>
                     </div>
 
                     <div className="bg-yellow-600/20 rounded-lg p-4 border border-yellow-500/30">
