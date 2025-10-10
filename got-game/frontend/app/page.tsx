@@ -55,8 +55,8 @@ export default function Home() {
         </div>
 
         {/* Additional Bottom Spacing */}
-        <div className="text-center text-gray-400 text-sm px-6 mt-8">
-          <p>Ready to test your knowledge? Click START to begin!</p>
+        <div className="text-center font-medium text-white text-sm px-6 mt-8">
+          <p>Ready to test your knowledge? Click START GAME to begin!</p>
         </div>
 
       </div>

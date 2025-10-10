@@ -290,7 +290,7 @@ export default function Round2Page() {
                 <div className="space-y-12">
                   <div className="grid grid-cols-3 gap-12 items-center">
                     <div className="text-center space-y-6">
-                      <div className="w-32 h-32 mx-auto bg-blue-500 rounded-full flex items-center justify-center">
+                      <div className="w-32 h-32 mx-auto bg-white rounded-full flex items-center justify-center">
                         <span className="text-4xl font-bold">👥</span>
                       </div>
                       <div className="text-3xl font-bold text-blue-400">1,000</div>
@@ -398,9 +398,9 @@ export default function Round2Page() {
               <h2 className="text-6xl font-bold text-white mb-12">LUCKY DRAW</h2>
 
               <div className="space-y-8">
-                <div className="text-4xl font-bold text-yellow-400">
+                {/* <div className="text-4xl font-bold text-yellow-400">
                   Drawing 20 Lucky Winners...
-                </div>
+                </div> */}
 
                 <div className="bg-black/30 rounded-2xl p-12 min-h-[250px] flex items-center justify-center">
                   <div className="text-5xl font-bold text-white animate-pulse">
@@ -413,7 +413,7 @@ export default function Round2Page() {
                 </div>
 
                 {drawnNames.length >= 20 && (
-                  <div className="text-3xl text-red-400 font-bold animate-pulse">
+                  <div className="text-3xl text-white-400 font-bold animate-pulse">
                     Sorry {playerName}, you weren't selected...
                   </div>
                 )}
@@ -497,7 +497,8 @@ export default function Round2Page() {
                           Answer the Question!
                         </div>
                         <div className="text-lg text-gray-400">
-                          Time is ticking: {timer}s
+                          {/* Time is ticking: {timer}s */}
+                          Time is ticking!
                         </div>
                       </div>
                     </div>
@@ -589,7 +590,7 @@ export default function Round2Page() {
                         <span className="text-blue-300">👥 Total Players</span>
                         <span className="text-blue-400 font-bold">1,000</span>
                       </div>
-                      <div className="text-sm text-blue-200 mt-2">competing this round</div>
+                      <div className="text-sm text-blue-200 mt-2 text-left">competing this round</div>
                     </div>
 
                     <div className="bg-purple-600/20 rounded-lg p-4 border border-purple-500/30">
@@ -597,7 +598,7 @@ export default function Round2Page() {
                         <span className="text-purple-300">🎯 Target for Round 3</span>
                         <span className="text-purple-400 font-bold">100</span>
                       </div>
-                      <div className="text-sm text-purple-200 mt-2">spots available</div>
+                      <div className="text-sm text-purple-200 mt-2 text-left">spots available</div>
                     </div>
 
                     <div className="text-center text-lg text-gray-400 mt-4">

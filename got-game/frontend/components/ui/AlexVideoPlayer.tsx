@@ -10,7 +10,7 @@ interface AlexVideoPlayerProps {
   className?: string;        // Allow custom styling from parent
   showControls?: boolean;    // Option to show video controls
   hideControls?: boolean;    // Option to hide controls completely
-  showAudioIndicator?: boolean; // Show/hide “Alex speaking” UI
+  showAudioIndicator?: boolean; // Show/hide "Alex speaking" UI
 }
 
 const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
@@ -24,6 +24,7 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
   showAudioIndicator = true,
 }) => {
   const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
   const isAudioFile =
     src.endsWith(".mp3") || src.endsWith(".wav") || src.endsWith(".ogg");
 
@@ -39,6 +40,14 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
   const handleCanPlay = () => setLoading(false);
   const handleWaiting = () => setLoading(true);
   const handlePlaying = () => setLoading(false);
+  
+  // Track video/audio progress
+  const handleTimeUpdate = (e: React.SyntheticEvent<HTMLVideoElement | HTMLAudioElement>) => {
+    const media = e.currentTarget;
+    if (media.duration) {
+      setProgress((media.currentTime / media.duration) * 100);
+    }
+  };
 
   return (
     <div
@@ -79,6 +88,7 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
             onCanPlay={handleCanPlay}
             onPlaying={handlePlaying}
             onWaiting={handleWaiting}
+            onTimeUpdate={handleTimeUpdate}
             controls={!hideControls && showControls}
             className={`absolute bottom-4 left-4 right-4 ${hideControls ? "hidden" : "opacity-60"}`}
           />
@@ -105,18 +115,30 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
         </div>
       ) : (
         // ===== VIDEO MODE =====
-        <video
-          src={src}
-          autoPlay={autoPlay}
-          playsInline
-          controls={!hideControls && showControls}
-          onEnded={() => delay === 0 && onEnded()}
-          onCanPlay={handleCanPlay}
-          onPlaying={handlePlaying}
-          onWaiting={handleWaiting}
-          className="w-full h-full object-cover bg-black"
-          poster="/images/alex-poster.jpg"
-        />
+        <>
+          <video
+            src={src}
+            autoPlay={autoPlay}
+            playsInline
+            controls={false}
+            onEnded={() => delay === 0 && onEnded()}
+            onCanPlay={handleCanPlay}
+            onPlaying={handlePlaying}
+            onWaiting={handleWaiting}
+            onTimeUpdate={handleTimeUpdate}
+            className="w-full h-full object-cover bg-black"
+            poster="/images/alex-poster.jpg"
+          />
+          
+          {/* Non-interactive progress bar */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/30 pointer-events-none">
+            <div 
+              className="h-full bg-[#A757E7] transition-all duration-200"
+              style={{ width: `${progress}%` }}
+              aria-label={`Video progress: ${Math.round(progress)}%`}
+            />
+          </div>
+        </>
       )}
 
       {/* Loading overlay (now wired up) */}

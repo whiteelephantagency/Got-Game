@@ -354,7 +354,7 @@ export default function Round3Page() {
                       <div className="text-center space-y-6 p-8">
                         <div className="text-4xl">🔒</div>
                         <div className="text-2xl font-semibold text-purple-300">Question Locked</div>
-                        <div className="text-lg text-gray-400">You're in the Lucky Pool</div>
+                        {/* <div className="text-lg text-gray-400">You're in the Lucky Pool</div> */}
                       </div>
                     </div>
                   )}
@@ -429,7 +429,7 @@ export default function Round3Page() {
                         <span className="text-blue-300">👥 Total Players</span>
                         <span className="text-blue-400 font-bold">100</span>
                       </div>
-                      <div className="text-sm text-blue-200 mt-2">competing this round</div>
+                      <div className="text-sm text-blue-200 mt-2 text-left">competing this round</div>
                     </div>
 
                     <div className="bg-purple-600/20 rounded-lg p-4 border border-purple-500/30">
@@ -437,7 +437,7 @@ export default function Round3Page() {
                         <span className="text-purple-300">🎯 Target for Next Round</span>
                         <span className="text-purple-400 font-bold">10</span>
                       </div>
-                      <div className="text-sm text-purple-200 mt-2">spots available</div>
+                      <div className="text-sm text-purple-200 mt-2 text-left">spots available</div>
                     </div>
 
                     <div className="bg-yellow-600/20 rounded-lg p-4 border border-yellow-500/30">
@@ -445,7 +445,7 @@ export default function Round3Page() {
                         <span className="text-yellow-300">🍀 Player Status</span>
                         <span className="text-yellow-400 font-bold">LUCKY POOL</span>
                       </div>
-                      <div className="text-sm text-yellow-200 mt-2">awaiting draw</div>
+                      <div className="text-sm text-yellow-200 mt-2 text-left">awaiting draw</div>
                     </div>
 
                     <div className="text-center text-lg text-gray-400 mt-4">

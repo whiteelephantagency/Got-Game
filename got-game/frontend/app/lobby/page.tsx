@@ -94,17 +94,17 @@ export default function Lobby() {
 
       {/* Center Content (never overlaps logo) */}
       <div className={`relative z-20 flex flex-col items-center justify-center w-full max-w-md px-4 ${contentOffset}`}>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-4">
+        {!inputEnabled && <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-4">
           <span className="flex items-center gap-2">
             <Image src="/images/Chevron Down.png" alt="Arrow" width={18} height={18} />
             ENTER NAME
           </span>
-        </h1>
+        </h1>}
 
         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center gap-4">
           <Input
             type="text"
-            placeholder="PLAYER 1"
+            placeholder="What's your name?"
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
             maxLength={20}
