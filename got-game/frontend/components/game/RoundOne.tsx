@@ -466,7 +466,7 @@ export default function RoundOnePage() {
               <div className="p-6">
                 {(stage === "intro" || stage === "question" || stage === "answerReaction") && (
                   <div className="text-center space-y-6">
-                    <div className="text-xl font-bold text-purple-400 mb-4">Round 1 Info</div>
+                    <div className="text-xl font-bold text-purple-400 mb-4 !text-left">Round 1 Info</div>
 
                     <div className="bg-blue-600/20 rounded-lg p-4 border border-blue-500/30">
                       <div className="flex justify-between items-center">
