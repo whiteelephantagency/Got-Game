@@ -320,7 +320,7 @@ export default function RoundOnePage() {
             alt="logo"
             src={'/images/Gotgamelogo.png'}
             />
-            <div className="text-purple-100 text-lg">
+            {/* <div className="text-purple-100 text-lg">
               {stage === "question"
                 ? "Answer the Question!"
                 : stage === "answerReaction"
@@ -330,9 +330,19 @@ export default function RoundOnePage() {
                 : stage === "finalStats"
                 ? "Final Results"
                 : "The Musical Challenge"}
-            </div>
+            </div> */}
           </div>
-          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 1: Info</h3>
+          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 1: 
+                {stage === "question"
+                ? "Answer the Question!"
+                : stage === "answerReaction"
+                ? "Calculating Results..."
+                : stage === "roundStats"
+                ? "Showing Statistics"
+                : stage === "finalStats"
+                ? "Final Results"
+                : "The Musical Challenge"}
+          </h3>
           {/* <div className="flex items-center space-x-6 text-lg">
             <div className="bg-black/30 px-4 py-2 rounded">PLAYERS: 2,000</div>
             <div className="bg-black/30 px-4 py-2 rounded">TARGET: 1,000</div>

@@ -7,6 +7,7 @@ import StatMap from "@/components/ui/StatMap";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle } from "lucide-react";
 import ChatBox from "@/components/ui/ChatBot";
+import Image from "next/image";
 
 /* -------------------------- Round 2 data -------------------------- */
 
@@ -427,8 +428,14 @@ export default function Round2Page() {
       <div className="w-full bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 p-6 shadow-lg">
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
           <div className="flex items-center space-x-8">
-            <h1 className="text-3xl font-bold text-white">ROUND 2</h1>
-            <div className="text-purple-100 text-lg">
+            {/* <h1 className="text-3xl font-bold text-white">ROUND 2</h1> */}
+            <Image
+              width={100}
+              height={50}
+              alt="logo"
+              src={'/images/Gotgamelogo.png'}
+            />
+            {/* <div className="text-purple-100 text-lg">
               {stage === "question" ? `Answer the Question! (${timer}s)` :
                 stage === "answerReaction" ? "Calculating Results..." :
                   stage === "roundStats" ? "Showing Statistics" :
@@ -436,9 +443,17 @@ export default function Round2Page() {
                       stage === "openSlotsStats" ? "Open Slots Available" :
                         stage === "luckyDraw" ? "Lucky Draw in Progress" :
                           "The Knowledge Challenge"}
-            </div>
+            </div> */}
           </div>
-           <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 2: Info</h3>
+          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 2: 
+            {stage === "question" ? `Answer the Question! (${timer}s)` :
+                stage === "answerReaction" ? "Calculating Results..." :
+                  stage === "roundStats" ? "Showing Statistics" :
+                    stage === "roundStatsCommentary" ? "Analyzing Results" :
+                      stage === "openSlotsStats" ? "Open Slots Available" :
+                        stage === "luckyDraw" ? "Lucky Draw in Progress" :
+                          "The Knowledge Challenge"}
+          </h3>
           {/* <div className="flex items-center space-x-6 text-lg">
             <div className="bg-black/30 px-4 py-2 rounded">PLAYERS: 1,000</div>
             <div className="bg-black/30 px-4 py-2 rounded">TARGET: 100</div>
@@ -470,17 +485,17 @@ export default function Round2Page() {
                         src={
                           stage === "intro"
                             ? "/video/round2-video1.mp4"
-                             : stage === "questionRelatedVideo"
+                            : stage === "questionRelatedVideo"
                               ? "/video/alex-question2-part2-2.mp4"
-                            : stage === "answerReaction"
-                              ? "/video/alex-question2-part2.mp3"
-                              : stage === "roundStatsCommentary"
-                                ? "/video/alex-question2-part3.mp3"
-                                : stage === "alexVideoPart4"
-                                  ? "/video/round2-video4.mp4"
-                                  : stage === "alexVideoPart5"
-                                    ? "/video/round2-video5.mp4"
-                                    : "/video/alex-question2-part6.mp3"
+                              : stage === "answerReaction"
+                                ? "/video/alex-question2-part2.mp3"
+                                : stage === "roundStatsCommentary"
+                                  ? "/video/alex-question2-part3.mp3"
+                                  : stage === "alexVideoPart4"
+                                    ? "/video/round2-video4.mp4"
+                                    : stage === "alexVideoPart5"
+                                      ? "/video/round2-video5.mp4"
+                                      : "/video/alex-question2-part6.mp3"
                         }
                         onEnded={handleVideoEnd}
                         autoPlay
