@@ -219,7 +219,7 @@ export default function Round4Page() {
               <div className="space-y-12">
                 <div className="grid grid-cols-3 gap-12 items-center">
                   <div className="text-center space-y-6">
-                    <div className="w-32 h-32 mx-auto bg-blue-500 rounded-full flex items-center justify-center">
+                    <div className="w-32 h-32 mx-auto bg-white rounded-full flex items-center justify-center">
                       <span className="text-4xl font-bold">👥</span>
                     </div>
                     <div className="text-3xl font-bold text-blue-400">10</div>
@@ -423,7 +423,7 @@ export default function Round4Page() {
                     </div>
 
                     <div className="text-center text-lg text-gray-400 mt-4">
-                      {stage === "question" ? `Timer: ${timer}s remaining` : "Round 4 - The Final Challenge"}
+                      {/* {stage === "question" ? `Timer: ${timer}s remaining` : "Round 4 - The Final Challenge"} */}
                     </div>
                   </div>
                 )}

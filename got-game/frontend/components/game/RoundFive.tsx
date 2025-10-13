@@ -197,16 +197,16 @@ export default function Round5Page() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[url('/images/Background_7.jpg')] bg-cover bg-center p-6">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-lg"></div>
 
-          <div className="relative z-10 text-center space-y-12 max-w-5xl mx-auto py-12">
+          <div className="relative z-10 text-center space-y-6 max-w-5xl mx-auto py-12">
             {/* GOT GAME Logo */}
-            <div className="flex justify-center mb-8">
-              <Image
-                width={300}
-                height={100}
+            <div className="flex justify-center">
+              <img
                 src="/images/Gotgamelogo.png"
                 alt="Got Game Logo"
-                className="h-24 w-auto animate-pulse"
+
+                className="animate-pulse max-w-[400px]"
               />
+
             </div>
 
             {/* YOU WIN Text */}
@@ -215,15 +215,16 @@ export default function Round5Page() {
             </h1> */}
 
             {/* Prize Money Box */}
-            <div className="bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 px-16 py-8 rounded-3xl border-4 border-white shadow-2xl mx-auto max-w-2xl">
-              <div className="text-7xl font-black text-transparent bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 bg-clip-text drop-shadow-lg">
-                100,000$
+            <div className=" px-16 md:py-8 rounded-3xl shadow-2xl mx-auto">
+              <div className="text-[110px] md:text-[144px] font-black text-transparent bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 bg-clip-text drop-shadow-lg">
+                $100,000
               </div>
             </div>
 
             {/* Congratulations Text */}
             <p className="text-3xl text-white font-bold drop-shadow-lg">
-              🎉 Congratulations {playerName}! 🎉
+              {/* 🎉 Congratulations {playerName}! 🎉 */}
+              🎉 Congratulations, {playerName} you've GOT GAME! 🎉
             </p>
 
             <p className="text-xl text-white/90 drop-shadow-lg max-w-3xl mx-auto px-6">
@@ -256,17 +257,23 @@ export default function Round5Page() {
         }`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
           <div className="flex items-center space-x-8">
-            <h1 className="text-3xl font-bold text-white flex items-center">
+            {/* <h1 className="text-3xl font-bold text-white flex items-center">
               <Crown className="mr-3 animate-pulse" />
               FINAL ROUND
-            </h1>
-            <div className="text-yellow-100 text-lg">
+            </h1> */}
+            <Image
+              width={100}
+              height={50}
+              alt="logo"
+              src={'/images/Gotgamelogo.png'}
+            />
+            {/* <div className="text-yellow-100 text-lg">
               {stage === "question" ? `Ultimate Question! (${timer}s)` :
                 stage === "roundStats" ? "Calculating Final Results..." :
                   stage === "alexVideoPart2" ? "Victory Celebration!" :
                     stage === "congratulations" ? "CHAMPION CROWNED!" :
                       "The Ultimate Challenge"}
-            </div>
+            </div> */}
           </div>
           <div className="flex items-center space-x-6 text-lg">
             <div className="bg-black/30 px-4 py-2 rounded">PLAYERS: 1</div>
@@ -298,9 +305,9 @@ export default function Round5Page() {
                       src={
                         stage === "intro"
                           ? "/video/round5-intro.mp4"
-                          : stage === "questionRelatedVideo" 
-                          ? "/video/round5-questionVideo.mp4"
-                          : "/video/round5-win.mp4"
+                          : stage === "questionRelatedVideo"
+                            ? "/video/round5-questionVideo.mp4"
+                            : "/video/round5-win.mp4"
                       }
                       onEnded={handleVideoEnd}
                       autoPlay
@@ -315,11 +322,12 @@ export default function Round5Page() {
                       <div className="text-center space-y-6 p-8">
                         <div className="text-4xl animate-bounce">🏆</div>
                         <div className="text-2xl font-semibold text-yellow-300 animate-pulse">
-                          Final Question!
+                          {/* Final Question! */}
+                          It's time to find out if you've GOT GAME!
                         </div>
-                        <div className="text-lg text-gray-400">
+                        {/* <div className="text-lg text-gray-400">
                           Win the championship: {timer}s
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   )}

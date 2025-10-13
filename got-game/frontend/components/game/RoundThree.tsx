@@ -7,6 +7,7 @@ import StatMap from "@/components/ui/StatMap";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, Lock } from "lucide-react";
 import ChatBox from "@/components/ui/ChatBot";
+import Image from "next/image";
 
 const QUESTION_3 = {
   question: "Who painted the Mona Lisa?",
@@ -40,9 +41,9 @@ export default function Round3Page() {
 
   /* ------------ SFX (identical pattern to Round 2) ------------ */
   const whooshRef = useRef<HTMLAudioElement | null>(null);
-  const loopRef   = useRef<HTMLAudioElement | null>(null);
-  const chimeRef  = useRef<HTMLAudioElement | null>(null);
-  const crowdRef  = useRef<HTMLAudioElement | null>(null);
+  const loopRef = useRef<HTMLAudioElement | null>(null);
+  const chimeRef = useRef<HTMLAudioElement | null>(null);
+  const crowdRef = useRef<HTMLAudioElement | null>(null);
   const [audioPrimed, setAudioPrimed] = useState(false);
 
   // preload like Round 2
@@ -116,10 +117,10 @@ export default function Round3Page() {
       setStatProgress(0);
 
       // SFX same as Round 2
-      whooshRef.current?.play().catch(() => {});
+      whooshRef.current?.play().catch(() => { });
       if (loopRef.current) {
         loopRef.current.currentTime = 0;
-        loopRef.current.play().catch(() => {});
+        loopRef.current.play().catch(() => { });
       }
 
       let filled = 0;
@@ -129,7 +130,7 @@ export default function Round3Page() {
         if (filled >= 3) {
           if (interval) clearInterval(interval);
           loopRef.current?.pause();
-          chimeRef.current?.play().catch(() => {});
+          chimeRef.current?.play().catch(() => { });
           setTimeout(() => {
             setShowFullScreenStats(false);
             setStage("alexVideoPart3");
@@ -152,7 +153,7 @@ export default function Round3Page() {
 
       if (loopRef.current) {
         loopRef.current.currentTime = 0;
-        loopRef.current.play().catch(() => {});
+        loopRef.current.play().catch(() => { });
       }
 
       let drawCount = 0;
@@ -162,15 +163,15 @@ export default function Round3Page() {
           setCurrentDrawnName(randomName);
           setDrawnNames((prev) => [...prev, randomName]);
           drawCount++;
-          whooshRef.current?.play().catch(() => {}); // tick per reveal
+          whooshRef.current?.play().catch(() => { }); // tick per reveal
         } else if (drawCount === 6) {
           setCurrentDrawnName(playerName);
           setDrawnNames((prev) => [...prev, playerName]);
           if (interval) clearInterval(interval);
 
           loopRef.current?.pause();
-          chimeRef.current?.play().catch(() => {});
-          crowdRef.current?.play().catch(() => {});
+          chimeRef.current?.play().catch(() => { });
+          crowdRef.current?.play().catch(() => { });
 
           setTimeout(() => {
             setShowLuckyDraw(false);
@@ -298,8 +299,14 @@ export default function Round3Page() {
       <div className="w-full bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 p-6 shadow-lg">
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
           <div className="flex items-center space-x-8">
-            <h1 className="text-3xl font-bold text-white">ROUND 3</h1>
-            <div className="text-purple-100 text-lg">
+            {/* <h1 className="text-3xl font-bold text-white">ROUND 3</h1> */}
+            <Image
+              width={100}
+              height={50}
+              alt="logo"
+              src={'/images/Gotgamelogo.png'}
+            />
+            {/* <div className="text-purple-100 text-lg">
               {stage === "question"
                 ? "Question Locked - Lucky Pool Player"
                 : stage === "answerReaction"
@@ -309,9 +316,19 @@ export default function Round3Page() {
                 : stage === "luckyDraw"
                 ? "Lucky Draw in Progress"
                 : "The Final Challenge"}
-            </div>
+            </div> */}
           </div>
-           <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 3: Info</h3>
+          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 3:
+            {stage === "question"
+              ? "Question Locked - Lucky Pool Player"
+              : stage === "answerReaction"
+                ? "Waiting in Lucky Pool..."
+                : stage === "roundStats"
+                  ? "Showing Statistics"
+                  : stage === "luckyDraw"
+                    ? "Lucky Draw in Progress"
+                    : "The Final Challenge"}
+          </h3>
           {/* <div className="flex items-center space-x-6 text-lg">
             <div className="bg-black/30 px-4 py-2 rounded">PLAYERS: 100</div>
             <div className="bg-black/30 px-4 py-2 rounded">TARGET: 10</div>
@@ -338,10 +355,10 @@ export default function Round3Page() {
                         stage === "intro"
                           ? "/video/round3-video1.mp4"
                           : stage === "answerReaction"
-                          ? "/video/alex-question3-part2.mp3"
-                          : stage === "alexVideoPart3"
-                          ? "/video/round3-video3.mp4"
-                          : "/video/round3-video5.mp4"
+                            ? "/video/alex-question3-part2.mp3"
+                            : stage === "alexVideoPart3"
+                              ? "/video/round3-video3.mp4"
+                              : "/video/round3-video5.mp4"
                       }
                       onEnded={handleVideoEnd}
                       autoPlay
