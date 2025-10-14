@@ -318,7 +318,7 @@ export default function Round3Page() {
                 : "The Final Challenge"}
             </div> */}
           </div>
-          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 3: The Final Challenge</h3>
+          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 3</h3>
           {/* <div className="flex items-center space-x-6 text-lg">
             <div className="bg-black/30 px-4 py-2 rounded">PLAYERS: 100</div>
             <div className="bg-black/30 px-4 py-2 rounded">TARGET: 10</div>

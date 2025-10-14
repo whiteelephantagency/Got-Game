@@ -332,7 +332,7 @@ export default function RoundOnePage() {
                 : "The Musical Challenge"}
             </div> */}
           </div>
-          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 1: The Musical Challenge</h3>
+          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 1</h3>
           {/* <div className="flex items-center space-x-6 text-lg">
             <div className="bg-black/30 px-4 py-2 rounded">PLAYERS: 2,000</div>
             <div className="bg-black/30 px-4 py-2 rounded">TARGET: 1,000</div>
