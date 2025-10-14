@@ -241,12 +241,20 @@ export default function Round5Page() {
 
             {/* Play Again Button */}
             <div className="">
-              <Button
+              {/* <Button
                 onClick={() => router.push("/")}
                 className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-16 py-6 text-2xl font-bold rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-white/30"
               >
                 🎮 Start Game
+              </Button> */}
+              <Button
+                onClick={() => router.push("/lobby")}
+                className="px-12 py-4 text-2xl font-bold bg-[#A757E7] hover:bg-[#8E47D1] rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-transparent hover:border-purple-300"
+              >
+                START GAME
               </Button>
+
+
             </div>
           </div>
         </div>

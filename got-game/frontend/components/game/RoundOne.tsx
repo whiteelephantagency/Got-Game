@@ -332,17 +332,7 @@ export default function RoundOnePage() {
                 : "The Musical Challenge"}
             </div> */}
           </div>
-          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 1: 
-                {stage === "question"
-                ? "Answer the Question!"
-                : stage === "answerReaction"
-                ? "Calculating Results..."
-                : stage === "roundStats"
-                ? "Showing Statistics"
-                : stage === "finalStats"
-                ? "Final Results"
-                : "The Musical Challenge"}
-          </h3>
+          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 1: The Musical Challenge</h3>
           {/* <div className="flex items-center space-x-6 text-lg">
             <div className="bg-black/30 px-4 py-2 rounded">PLAYERS: 2,000</div>
             <div className="bg-black/30 px-4 py-2 rounded">TARGET: 1,000</div>
@@ -567,11 +557,11 @@ export default function RoundOnePage() {
 
                     <div className="mt-6 pt-4 border-t border-purple-500/30">
                       <div className="bg-green-500/20 rounded-lg p-4 border border-green-400/50">
-                        <div className="flex items-center justify-center space-x-3">
+                        <div className="flex items-center space-x-3 !text-left">
                           <span className="text-green-400">🎉</span>
-                          <span className="text-green-300 font-semibold">YOU ARE SAFE!</span>
+                          <span className="text-green-300 font-semibold text-left">YOU ARE SAFE!</span>
                         </div>
-                        <div className="text-sm text-green-200 text-center mt-2">Advanced to Round 2</div>
+                        <div className="text-sm text-green-200 mt-2 text-left">Advanced to Round 2</div>
                       </div>
                     </div>
                   </div>

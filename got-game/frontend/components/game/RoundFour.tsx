@@ -7,6 +7,7 @@ import StatMap from "@/components/ui/StatMap";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock } from "lucide-react";
 import ChatBox from "@/components/ui/ChatBot";
+import Image from "next/image";
 
 // const QUESTION_4 = {
 //   question: "What is the largest ocean on Earth?",
@@ -34,8 +35,8 @@ export default function Round4Page() {
 
   /* ------------ SFX (same behavior as R2/R3) ------------ */
   const whooshRef = useRef<HTMLAudioElement | null>(null);
-  const loopRef   = useRef<HTMLAudioElement | null>(null);
-  const chimeRef  = useRef<HTMLAudioElement | null>(null);
+  const loopRef = useRef<HTMLAudioElement | null>(null);
+  const chimeRef = useRef<HTMLAudioElement | null>(null);
   const [audioPrimed, setAudioPrimed] = useState(false);
 
   // Ensure the <audio> elements are loaded and ready
@@ -87,7 +88,7 @@ export default function Round4Page() {
       el.currentTime = 0;
       el.volume = 1;
       setAudioPrimed(true);
-    }).catch(() => {});
+    }).catch(() => { });
   };
   /* ------------------------------------------------------ */
 
@@ -124,13 +125,13 @@ export default function Round4Page() {
       setStatProgress(0);
 
       // play whoosh
-      whooshRef.current?.play().catch(() => {});
+      whooshRef.current?.play().catch(() => { });
       // start loop
       if (loopRef.current) {
         loopRef.current.currentTime = 0;
         loopRef.current.loop = true;
         loopRef.current.volume = 0.25;
-        loopRef.current.play().catch(() => {});
+        loopRef.current.play().catch(() => { });
       }
 
       let filled = 0;
@@ -142,7 +143,7 @@ export default function Round4Page() {
           // stop loop, play chime
           loopRef.current?.pause();
           loopRef.current && (loopRef.current.currentTime = 0);
-          chimeRef.current?.play().catch(() => {});
+          chimeRef.current?.play().catch(() => { });
           setFinalistFlash(true);
           setTimeout(() => {
             setShowFullScreenStats(false);
@@ -162,7 +163,7 @@ export default function Round4Page() {
   useEffect(() => {
     let flashInterval: ReturnType<typeof setInterval> | null = null;
     if (finalistFlash) {
-      flashInterval = setInterval(() => {}, 500);
+      flashInterval = setInterval(() => { }, 500);
     }
     return () => { if (flashInterval) clearInterval(flashInterval); };
   }, [finalistFlash]);
@@ -172,10 +173,10 @@ export default function Round4Page() {
       setCurrentVideoKey((prev) => prev + 1);
       setStage("questionRelatedVideo");
       setTimerActive(true);
-    } else if(stage === 'questionRelatedVideo'){
+    } else if (stage === 'questionRelatedVideo') {
       setCurrentVideoKey((prev) => prev + 1);
       setStage("question");
-      setTimerActive(true); 
+      setTimerActive(true);
     }
     else if (stage === "alexVideoPart2") {
       router.push("/game/5");
@@ -203,8 +204,8 @@ export default function Round4Page() {
       {/* Hidden audio elements */}
       <div className="absolute -left-[9999px] -top-[9999px] w-0 h-0 overflow-hidden" aria-hidden>
         <audio ref={whooshRef} src="/sfx/whoosh.mp3" preload="auto" />
-        <audio ref={loopRef}   src="/sfx/fill-loop.mp3" preload="auto" />
-        <audio ref={chimeRef}  src="/sfx/chime.mp3" preload="auto" />
+        <audio ref={loopRef} src="/sfx/fill-loop.mp3" preload="auto" />
+        <audio ref={chimeRef} src="/sfx/chime.mp3" preload="auto" />
       </div>
 
       {/* Full Screen Stats Overlay */}
@@ -271,15 +272,20 @@ export default function Round4Page() {
       <div className="w-full bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 p-6 shadow-lg">
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4">
           <div className="flex items-center space-x-8">
-            <h1 className="text-3xl font-bold text-white">ROUND 4</h1>
-            <div className="text-purple-100 text-lg">
+            <Image
+              width={100}
+              height={50}
+              alt="logo"
+              src={'/images/Gotgamelogo.png'}
+            />
+            {/* <div className="text-purple-100 text-lg">
               {stage === "question" ? `Answer the Question! (${timer}s)` :
                stage === "roundStats" ? "Showing Statistics" :
                stage === "alexVideoPart2" ? "Congratulations!" :
                "The Final Challenge"}
-            </div>
+            </div> */}
           </div>
-           <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 4: Info</h3>
+          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 4: The Final Challenge</h3>
           {/* <div className="flex items-center space-x-6 text-lg">
             <div className="bg-black/30 px-4 py-2 rounded">PLAYERS: 10</div>
             <div className="bg-black/30 px-4 py-2 rounded">TARGET: 1</div>
@@ -300,9 +306,9 @@ export default function Round4Page() {
               </div>
               <div className="p-6 flex-1 flex flex-col">
                 <div className="w-full rounded-xl overflow-hidden bg-black flex-1 min-h-0">
-                  {(stage === "intro" || stage === "alexVideoPart2" ||  stage ==='questionRelatedVideo') && (
+                  {(stage === "intro" || stage === "alexVideoPart2" || stage === 'questionRelatedVideo') && (
                     <AlexVideoPlayer
-                      src={stage === "intro" ? "/video/round4-intro.mp4" : stage ==='questionRelatedVideo' ? "/video/round4-video2-2.mp4" : "/video/round4-video2.mp4"}
+                      src={stage === "intro" ? "/video/round4-intro.mp4" : stage === 'questionRelatedVideo' ? "/video/round4-video2-2.mp4" : "/video/round4-video2.mp4"}
                       onEnded={handleVideoEnd}
                       autoPlay
                       key={`video-${stage}-${currentVideoKey}`}
@@ -349,12 +355,11 @@ export default function Round4Page() {
                       <Button
                         key={opt}
                         className={`h-20 text-xl font-semibold transition-all duration-300 rounded-xl px-8 flex justify-between items-center
-                          ${
-                            selected === opt
-                              ? opt === QUESTION_4.correctAnswer
-                                ? "bg-green-600 shadow-lg shadow-green-500/50"
-                                : "bg-red-600 shadow-lg shadow-red-500/50"
-                              : opt === QUESTION_4.correctAnswer
+                          ${selected === opt
+                            ? opt === QUESTION_4.correctAnswer
+                              ? "bg-green-600 shadow-lg shadow-green-500/50"
+                              : "bg-red-600 shadow-lg shadow-red-500/50"
+                            : opt === QUESTION_4.correctAnswer
                               ? "bg-purple-700 hover:bg-purple-600 ring-2 ring-purple-400 shadow-lg hover:shadow-purple-500/50"
                               : "bg-gray-600/50 cursor-not-allowed opacity-60"
                           }`}
@@ -382,14 +387,12 @@ export default function Round4Page() {
           <div className="col-span-4 space-y-8">
             {/* Game Stats Panel */}
             <div
-              className={`bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl transition-all duration-500 ${
-                finalistFlash ? "animate-pulse ring-4 ring-yellow-400/50 shadow-yellow-400/50" : ""
-              }`}
+              className={`bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl transition-all duration-500 ${finalistFlash ? "animate-pulse ring-4 ring-yellow-400/50 shadow-yellow-400/50" : ""
+                }`}
             >
               <div
-                className={`bg-gradient-to-r from-purple-600/30 to-blue-600/30 px-6 py-4 border-b border-purple-500/30 ${
-                  finalistFlash ? "bg-gradient-to-r from-yellow-600/50 to-orange-600/50" : ""
-                }`}
+                className={`bg-gradient-to-r from-purple-600/30 to-blue-600/30 px-6 py-4 border-b border-purple-500/30 ${finalistFlash ? "bg-gradient-to-r from-yellow-600/50 to-orange-600/50" : ""
+                  }`}
               >
                 <h3 className="text-xl font-bold text-white">GAME STATS</h3>
               </div>
@@ -449,9 +452,8 @@ export default function Round4Page() {
 
                     <div className="space-y-4">
                       <div
-                        className={`bg-green-600/20 rounded-lg p-4 border border-green-500/30 ${
-                          finalistFlash ? "animate-pulse bg-yellow-600/30 border-yellow-500/50" : ""
-                        }`}
+                        className={`bg-green-600/20 rounded-lg p-4 border border-green-500/30 ${finalistFlash ? "animate-pulse bg-yellow-600/30 border-yellow-500/50" : ""
+                          }`}
                       >
                         <div className="flex justify-between items-center">
                           <span className="text-green-300">🎉 Final Result</span>
