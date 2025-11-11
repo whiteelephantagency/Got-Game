@@ -97,10 +97,10 @@ export default function RoundOnePage() {
       setShowFullScreenStats(true);
 
       // SFX: whoosh in + loop start
-      whooshRef.current?.play().catch(() => {});
+      whooshRef.current?.play().catch(() => { });
       if (loopRef.current) {
         loopRef.current.currentTime = 0;
-        loopRef.current.play().catch(() => {});
+        loopRef.current.play().catch(() => { });
       }
 
       let filled = 0;
@@ -111,7 +111,7 @@ export default function RoundOnePage() {
           clearInterval(interval);
           // SFX: completion chime
           loopRef.current?.pause();
-          chimeRef.current?.play().catch(() => {});
+          chimeRef.current?.play().catch(() => { });
           setTimeout(() => {
             setShowFullScreenStats(false);
             setStage("roundStatsEnd");
@@ -122,10 +122,10 @@ export default function RoundOnePage() {
       setShowFullScreenStats(true);
 
       // SFX: whoosh in + loop start
-      whooshRef.current?.play().catch(() => {});
+      whooshRef.current?.play().catch(() => { });
       if (loopRef.current) {
         loopRef.current.currentTime = 0;
-        loopRef.current.play().catch(() => {});
+        loopRef.current.play().catch(() => { });
       }
 
       let filled = 0;
@@ -136,8 +136,8 @@ export default function RoundOnePage() {
           clearInterval(interval);
           // SFX: final chime + crowd cheer
           loopRef.current?.pause();
-          chimeRef.current?.play().catch(() => {});
-          crowdRef.current?.play().catch(() => {});
+          chimeRef.current?.play().catch(() => { });
+          crowdRef.current?.play().catch(() => { });
           setTimeout(() => {
             setShowFullScreenStats(false);
             setStage("alexVideoPart5");
@@ -154,8 +154,8 @@ export default function RoundOnePage() {
     if (stage === "intro") {
       setCurrentVideoKey((p) => p + 1);
       setStage("questionRelatedVideo");
-    } else if(stage === "questionRelatedVideo"){
-       setCurrentVideoKey((p) => p + 1);
+    } else if (stage === "questionRelatedVideo") {
+      setCurrentVideoKey((p) => p + 1);
       setStage("question");
     }
     else if (stage === "answerReaction") {
@@ -188,11 +188,8 @@ export default function RoundOnePage() {
       {/* Full Screen Stats Overlay */}
       {showFullScreenStats && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
-          {/* Backdrop blur */}
           <div className="absolute inset-0 bg-black/60 backdrop-blur-lg" />
-
-          {/* Stats content */}
-          <div className="relative z-10 bg-gradient-to-br from-purple-900/95 to-blue-900/95 rounded-3xl border border-purple-400/50 shadow-2xl p-16 max-w-6xl mx-auto animate-in zoom-in-95 duration-500">
+          {/* <div className="relative z-10 bg-gradient-to-br from-purple-900/95 to-blue-900/95 rounded-3xl border border-purple-400/50 shadow-2xl p-16 max-w-6xl mx-auto animate-in zoom-in-95 duration-500">
             <div className="text-center space-y-12">
               <h2 className="text-6xl font-bold text-white mb-12">
                 {stage === "roundStats" ? "ROUND 1 RESULTS" : "PLAYER SPLIT"}
@@ -200,7 +197,6 @@ export default function RoundOnePage() {
 
               {stage === "roundStats" && (
                 <div className="space-y-12">
-                  {/* Flow */}
                   <div className="grid grid-cols-3 gap-12 items-center">
                     <div className="text-center space-y-6">
                       <div className="w-32 h-32 mx-auto bg-white rounded-full flex items-center justify-center">
@@ -216,7 +212,7 @@ export default function RoundOnePage() {
                     </div>
 
                     <div className="text-center space-y-6">
-                      <div className="w-32 h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center">
+                      <div className="w-20 h-20 md:w-32 md:h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center">
                         <span className="text-4xl font-bold">✅</span>
                       </div>
                       <div className="text-4xl font-bold text-green-400">
@@ -226,7 +222,6 @@ export default function RoundOnePage() {
                     </div>
                   </div>
 
-                  {/* Progress Bar */}
                   <div className="bg-gray-800 rounded-full h-12 overflow-hidden mx-8">
                     <div
                       className="bg-gradient-to-r from-green-500 to-emerald-400 h-full transition-all duration-300 rounded-full flex items-center justify-end pr-6"
@@ -255,7 +250,7 @@ export default function RoundOnePage() {
                 <div className="space-y-12">
                   <div className="grid grid-cols-3 gap-12 items-center">
                     <div className="text-center space-y-6">
-                      <div className="w-32 h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center">
+                      <div className="w-20 h-20 md:w-32 md:h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center">
                         <span className="text-4xl font-bold">✅</span>
                       </div>
                       <div className="text-3xl font-bold text-green-400">1,470</div>
@@ -263,7 +258,7 @@ export default function RoundOnePage() {
                     </div>
 
                     <div className="text-center space-y-4">
-                      <div className="text-6xl text-purple-400">⚡</div>
+                      <div className="text-lg md:text-6xl text-purple-400">⚡</div>
                       <div className="text-lg text-purple-300 mt-4">Random Split</div>
                     </div>
 
@@ -296,16 +291,121 @@ export default function RoundOnePage() {
                       </span>
                     </div>
                   </div>
+                </div>
+              )}
+            </div>
+          </div> */}
+          <div className="relative z-10 bg-gradient-to-br from-purple-900/95 to-blue-900/95 rounded-2xl sm:rounded-3xl border border-purple-400/40 shadow-xl sm:shadow-2xl p-6 sm:p-10 md:p-16 max-w-6xl mx-auto animate-in zoom-in-95 duration-500">
+            <div className="text-center space-y-8 sm:space-y-12">
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-6 sm:mb-12">
+                {stage === "roundStats" ? "ROUND 1 RESULTS" : "PLAYER SPLIT"}
+              </h2>
 
-                  {/* {statProgress >= 1000 && (
-                    <div className="text-2xl text-purple-400 font-bold animate-pulse">
-                      Random Selection Complete!
+              {stage === "roundStats" && (
+                <div className="space-y-8 sm:space-y-12">
+                  {/* Flow */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 items-center">
+                    <div className="text-center space-y-4 sm:space-y-6">
+                      <div className="w-20 h-20 sm:w-32 sm:h-32 mx-auto bg-white rounded-full flex items-center justify-center">
+                        <span className="text-2xl sm:text-4xl font-bold">👥</span>
+                      </div>
+                      <div className="text-2xl sm:text-3xl font-bold text-blue-400">2,000</div>
+                      <div className="text-sm sm:text-lg text-gray-300">Total Players</div>
                     </div>
-                  )} */}
+
+                    <div className="text-center space-y-2 sm:space-y-4">
+                      <div className="text-4xl sm:text-6xl text-purple-400">→</div>
+                      <div className="text-sm sm:text-lg text-purple-300 mt-2 sm:mt-4">
+                        Answered Correctly
+                      </div>
+                    </div>
+
+                    <div className="text-center space-y-4 sm:space-y-6">
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-32 md:h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center">
+                        <span className="text-2xl sm:text-4xl font-bold">✅</span>
+                      </div>
+                      <div className="text-2xl sm:text-4xl font-bold text-green-400">
+                        {statProgress.toLocaleString()}
+                      </div>
+                      <div className="text-sm sm:text-lg text-gray-300">Correct Answers</div>
+                    </div>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="bg-gray-800 rounded-full h-8 sm:h-12 overflow-hidden mx-4 sm:mx-8">
+                    <div
+                      className="bg-gradient-to-r from-green-500 to-emerald-400 h-full transition-all duration-300 rounded-full flex items-center justify-end pr-4 sm:pr-6"
+                      style={{ width: `${(statProgress / 1470) * 100}%` }}
+                    >
+                      <span className="text-xs sm:text-lg text-white font-bold">
+                        {statProgress >= 1470 ? "Complete!" : `${Math.round((statProgress / 1470) * 100)}%`}
+                      </span>
+                    </div>
+                  </div>
+
+                  {statProgress >= 1470 && (
+                    <div className="space-y-4 sm:space-y-8 animate-in fade-in duration-1000">
+                      <div className="text-xl sm:text-3xl text-green-400 font-bold">
+                        1,470 Players Got It Right!
+                      </div>
+                      <div className="text-sm sm:text-xl text-yellow-300">
+                        But only 1,000 spots available... 470 will enter the Lucky Pool!
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {stage === "finalStats" && (
+                <div className="space-y-8 sm:space-y-12">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 items-center">
+                    <div className="text-center space-y-4 sm:space-y-6">
+                      <div className="w-16 h-16 sm:w-32 sm:h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center">
+                        <span className="text-2xl sm:text-4xl font-bold">✅</span>
+                      </div>
+                      <div className="text-2xl sm:text-3xl font-bold text-green-400">1,470</div>
+                      <div className="text-sm sm:text-lg text-gray-300">Correct Players</div>
+                    </div>
+
+                    <div className="text-center space-y-2 sm:space-y-4">
+                      <div className="text-3xl sm:text-6xl text-purple-400">⚡</div>
+                      <div className="text-sm sm:text-lg text-purple-300 mt-2 sm:mt-4">Random Split</div>
+                    </div>
+
+                    <div className="text-center space-y-4 sm:space-y-6">
+                      <div className="grid grid-cols-1 gap-3 sm:gap-4">
+                        <div className="bg-green-600/20 rounded-lg p-3 sm:p-4 border border-green-500/40 sm:border-green-500/50">
+                          <div className="text-xl sm:text-2xl font-bold text-white">
+                            {Math.min(statProgress, 1000).toLocaleString()}
+                          </div>
+                          <div className="text-xs sm:text-sm text-gray-300">Safe to Round 2</div>
+                        </div>
+
+                        <div className="bg-yellow-600/20 rounded-lg p-3 sm:p-4 border border-yellow-500/40 sm:border-yellow-500/50">
+                          <div className="text-xl sm:text-2xl font-bold text-yellow-400">
+                            {Math.max(0, Math.min(statProgress, 470)).toLocaleString()}
+                          </div>
+                          <div className="text-xs sm:text-sm text-yellow-300">Lucky Pool</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gray-800 rounded-full h-8 sm:h-12 overflow-hidden mx-4 sm:mx-8">
+                    <div
+                      className="bg-gradient-to-r from-blue-500 to-purple-500 h-full transition-all duration-300 rounded-full flex items-center justify-end pr-4 sm:pr-6"
+                      style={{ width: `${(statProgress / 1000) * 100}%` }}
+                    >
+                      <span className="text-xs sm:text-lg text-white font-bold">
+                        {statProgress >= 1000 ? "Split Complete!" : `${Math.round((statProgress / 1000) * 100)}%`}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
           </div>
+
         </div>
       )}
 
@@ -315,10 +415,10 @@ export default function RoundOnePage() {
           <div className="flex items-center space-x-8">
             {/* <h1 className="text-3xl font-bold text-white">ROUND 1</h1> */}
             <Image
-            width={100}
-            height={50}
-            alt="logo"
-            src={'/images/Gotgamelogo.png'}
+              width={100}
+              height={50}
+              alt="logo"
+              src={'/images/Gotgamelogo.png'}
             />
             {/* <div className="text-purple-100 text-lg">
               {stage === "question"
@@ -345,13 +445,13 @@ export default function RoundOnePage() {
       <div className="max-w-7xl mx-auto p-8">
         <div className="grid grid-cols-12 gap-8 min-h-[calc(100vh-140px)]">
           {/* Left Column - Main Content */}
-          <div className="col-span-8 flex flex-col space-y-8">
+          <div className="col-span-12 md:col-span-8 flex flex-col space-y-8">
             {/* Alex Video Section */}
             <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl flex-1 flex flex-col">
               <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 px-6 py-4 border-b border-purple-500/30">
                 <h2 className="text-xl font-semibold text-white">Alex - Your Host</h2>
               </div>
-              <div className="p-6 flex-1 flex flex-col">
+              <div className="p-2 md:p-6 flex-1 flex flex-col">
                 <div className="w-full rounded-xl overflow-hidden bg-black flex-1 min-h-0">
                   {(stage === "intro" ||
                     stage === "answerReaction" ||
@@ -359,26 +459,26 @@ export default function RoundOnePage() {
                     stage === "alexVideoPart4" ||
                     stage === "questionRelatedVideo" ||
                     stage === "alexVideoPart5") && (
-                    <AlexVideoPlayer
-                      src={
-                        stage === "intro"
-                          ? "/video/alex-intro-1.mp4"
-                           : stage === "questionRelatedVideo"
-                          ? "/video/alex-intro-1-1.mp4"
-                          : stage === "answerReaction"
-                          ? "/video/alex-question1-part2.mp3"
-                          : stage === "roundStatsEnd"
-                          ? "/video/alex-question1-part3.mp3"
-                          : stage === "alexVideoPart4"
-                          ? "/video/alex-video-part4.mp4"
-                          : "/video/alex-video-part5.mp4"
-                      }
-                      onEnded={handleVideoEnd}
-                      autoPlay
-                      key={`video-${stage}-${currentVideoKey}`}
-                      className="w-full h-full object-cover"
-                    />
-                  )}
+                      <AlexVideoPlayer
+                        src={
+                          stage === "intro"
+                            ? "/video/alex-intro-1.mp4"
+                            : stage === "questionRelatedVideo"
+                              ? "/video/alex-intro-1-1.mp4"
+                              : stage === "answerReaction"
+                                ? "/video/alex-question1-part2.mp3"
+                                : stage === "roundStatsEnd"
+                                  ? "/video/alex-question1-part3.mp3"
+                                  : stage === "alexVideoPart4"
+                                    ? "/video/alex-video-part4.mp4"
+                                    : "/video/alex-video-part5.mp4"
+                        }
+                        onEnded={handleVideoEnd}
+                        autoPlay
+                        key={`video-${stage}-${currentVideoKey}`}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
 
                   {(stage === "question") && (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-900/20 to-blue-900/20">
@@ -411,9 +511,9 @@ export default function RoundOnePage() {
                 <div className="bg-gradient-to-r from-purple-500/30 to-blue-500/30 px-8 py-6 border-b border-purple-400/30">
                   <h2 className="text-3xl font-bold text-white">QUESTION 1</h2>
                 </div>
-                <div className="p-8">
+                <div className="p-2 md:p-8">
                   <p className="text-2xl text-white mb-8 leading-relaxed">{QUESTION_1.question}</p>
-                  <div className="grid grid-cols-2 gap-6">
+                  {/* <div className="grid grid-cols-2 gap-6">
                     {QUESTION_1.options.map((opt, idx) => (
                       <Button
                         key={opt}
@@ -437,7 +537,32 @@ export default function RoundOnePage() {
                         {lockOptions && selected === opt && opt !== QUESTION_1.correctAnswer && <XCircle className="ml-3" />}
                       </Button>
                     ))}
+                  </div> */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {QUESTION_1.options.map((opt, idx) => (
+                      <Button
+                        key={opt}
+                        className={`h-20 text-xl font-semibold transition-all duration-300 rounded-xl px-8 flex justify-between items-center
+        ${selected === opt
+                            ? opt === QUESTION_1.correctAnswer
+                              ? "bg-green-600 shadow-lg shadow-green-500/50"
+                              : "bg-red-600 shadow-lg shadow-red-500/50"
+                            : opt === QUESTION_1.correctAnswer
+                              ? "bg-purple-700 hover:bg-purple-600 ring-2 ring-purple-400 shadow-lg hover:shadow-purple-500/50"
+                              : "bg-gray-600 cursor-not-allowed opacity-50"
+                          }`}
+                        disabled={lockOptions || opt !== QUESTION_1.correctAnswer}
+                        onClick={() => handleAnswer(opt)}
+                      >
+                        <span className="text-lg">
+                          {String.fromCharCode(65 + idx)}. {opt}
+                        </span>
+                        {lockOptions && opt === QUESTION_1.correctAnswer && <CheckCircle className="ml-3" />}
+                        {lockOptions && selected === opt && opt !== QUESTION_1.correctAnswer && <XCircle className="ml-3" />}
+                      </Button>
+                    ))}
                   </div>
+
                   <div className="mt-6 text-center text-purple-300 text-lg">
                     {!lockOptions && "Only the correct answer is clickable"}
                     {lockOptions && selected === QUESTION_1.correctAnswer && "Correct! Moving to next stage..."}
@@ -448,12 +573,12 @@ export default function RoundOnePage() {
           </div>
 
           {/* Right Column - Game Stats & Chat */}
-          <div className="col-span-4 space-y-8">
+          <div className="col-span-12 md:col-span-4 space-y-8">
             <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl">
               <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 px-6 py-4 border-b border-purple-500/30">
                 <h3 className="text-xl font-bold text-white">📊 GAME STATS</h3>
               </div>
-              <div className="p-6">
+              <div className="p-2 md:p-6">
                 {(stage === "intro" || stage === "question" || stage === "answerReaction") && (
                   <div className="text-center space-y-6">
                     <div className="text-xl font-bold text-purple-400 mb-4 !text-left">Round 1 Info</div>
@@ -478,8 +603,8 @@ export default function RoundOnePage() {
                       {stage === "question"
                         ? "Waiting for answers..."
                         : stage === "answerReaction"
-                        ? "Calculating results..."
-                        : "Round 1 in progress..."}
+                          ? "Calculating results..."
+                          : "Round 1 in progress..."}
                     </div>
                   </div>
                 )}

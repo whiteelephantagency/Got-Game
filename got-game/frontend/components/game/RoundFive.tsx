@@ -142,7 +142,7 @@ export default function Round5Page() {
               <div className="space-y-12">
                 <div className="grid grid-cols-3 gap-12 items-center">
                   <div className="text-center space-y-6">
-                    <div className="w-32 h-32 mx-auto bg-yellow-500 rounded-full flex items-center justify-center animate-pulse">
+                    <div className="w-20 h-20 md:w-32 mx-auto bg-yellow-500 rounded-full flex items-center justify-center animate-pulse">
                       <span className="text-4xl font-bold">👤</span>
                     </div>
                     <div className="text-3xl font-bold text-yellow-400">1</div>
@@ -155,7 +155,7 @@ export default function Round5Page() {
                   </div>
 
                   <div className="text-center space-y-6">
-                    <div className="w-32 h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center animate-spin">
+                    <div className="w-20 h-20 md:w-32 mx-auto bg-green-500 rounded-full flex items-center justify-center animate-spin">
                       <span className="text-4xl font-bold">✅</span>
                     </div>
                     <div className="text-4xl font-bold text-green-400 animate-pulse">
@@ -216,7 +216,7 @@ export default function Round5Page() {
 
             {/* Prize Money Box */}
             <div className=" px-16 md:py-8 rounded-3xl shadow-2xl mx-auto">
-              <div className="text-[110px] md:text-[144px] font-black text-transparent bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 bg-clip-text drop-shadow-lg">
+              <div className="text-[65px] md:text-[144px] font-black text-transparent bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 bg-clip-text drop-shadow-lg">
                 $100,000
               </div>
             </div>
@@ -306,7 +306,7 @@ export default function Round5Page() {
                 }`}>
                 <h2 className="text-xl font-semibold text-white">Alex - Your Host</h2>
               </div>
-              <div className="p-6 flex-1 flex flex-col">
+              <div className="p-2 md:p-6 flex-1 flex flex-col">
                 <div className="w-full rounded-xl overflow-hidden bg-black flex-1 min-h-0">
                   {(stage === "intro" || stage === "alexVideoPart2" || stage === "questionRelatedVideo") && (
                     <AlexVideoPlayer
@@ -372,7 +372,7 @@ export default function Round5Page() {
                 </div>
                 <div className="p-8">
                   <p className="text-2xl text-white mb-8 leading-relaxed animate-pulse">{QUESTION_5.question}</p>
-                  <div className="grid grid-cols-2 gap-6">
+                  {/* <div className="grid grid-cols-2 gap-6">
                     {QUESTION_5.options.map((opt, idx) => (
                       <Button
                         key={opt}
@@ -394,7 +394,35 @@ export default function Round5Page() {
                         {lockOptions && opt === QUESTION_5.correctAnswer && <CheckCircle className="ml-3 text-green-300 animate-bounce" />}
                       </Button>
                     ))}
+                  </div> */}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    {QUESTION_5.options.map((opt, idx) => (
+                      <Button
+                        key={opt}
+                        className={`h-16 sm:h-20 text-base sm:text-xl font-semibold transition-all duration-500 rounded-lg sm:rounded-xl px-4 sm:px-8 flex justify-between items-center transform hover:scale-105
+        ${selected === opt
+                            ? opt === QUESTION_5.correctAnswer
+                              ? "bg-green-600 shadow-xl shadow-green-500/50 ring-4 ring-green-400 scale-105 animate-pulse"
+                              : "bg-red-600 shadow-xl shadow-red-500/50 ring-4 ring-red-400 scale-105"
+                            : opt === QUESTION_5.correctAnswer
+                              ? "bg-yellow-700 hover:bg-yellow-600 ring-2 ring-yellow-400 shadow-lg hover:shadow-yellow-500/50 animate-pulse"
+                              : "bg-gray-600/50 cursor-not-allowed opacity-60"
+                          }`}
+                        disabled={lockOptions || opt !== QUESTION_5.correctAnswer || timer === 0}
+                        onClick={() => handleAnswer(opt)}
+                      >
+                        <span className="text-sm sm:text-lg">
+                          {String.fromCharCode(65 + idx)}. {opt}
+                        </span>
+                        {lockOptions && opt === QUESTION_5.correctAnswer && (
+                          <CheckCircle className="ml-2 sm:ml-3 w-5 h-5 sm:w-6 sm:h-6 text-green-300 animate-bounce" />
+                        )}
+                      </Button>
+                    ))}
                   </div>
+
+
                   <div className="mt-6 text-center text-yellow-300 text-lg animate-pulse">
                     {!lockOptions && timer > 0 && "🏆 Only the correct answer is clickable - Win the championship!"}
                     {!lockOptions && timer === 0 && "🎉 Time's up! You're the champion!"}
