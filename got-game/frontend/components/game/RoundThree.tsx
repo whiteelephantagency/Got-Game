@@ -329,7 +329,7 @@ export default function Round3Page() {
 
       {/* Main Game Area */}
       <div className="max-w-7xl mx-auto p-8">
-        <div className="grid grid-cols-12 gap-8 min-h-[calc(100vh-140px)]">
+        <div className="grid grid-cols-12 md:gap-8 min-h-[calc(100vh-140px)]">
           {/* Left Column - Main Content */}
           <div className="col-span-12 md:col-span-8 flex flex-col space-y-8">
             {/* Alex Video Section */}
