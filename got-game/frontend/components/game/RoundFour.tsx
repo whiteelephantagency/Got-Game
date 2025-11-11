@@ -220,7 +220,7 @@ export default function Round4Page() {
               <div className="space-y-12">
                 <div className="grid grid-cols-3 gap-12 items-center">
                   <div className="text-center space-y-6">
-                    <div className="w-32 h-32 mx-auto bg-white rounded-full flex items-center justify-center">
+                    <div className="w-20 h-20 md:w-32 md:h-32 mx-auto bg-white rounded-full flex items-center justify-center">
                       <span className="text-4xl font-bold">👥</span>
                     </div>
                     <div className="text-3xl font-bold text-blue-400">10</div>
@@ -233,7 +233,7 @@ export default function Round4Page() {
                   </div>
 
                   <div className="text-center space-y-6">
-                    <div className="w-32 h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center">
+                    <div className="w-20 h-20 md:w-32 md:h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center">
                       <span className="text-4xl font-bold">✅</span>
                     </div>
                     <div className="text-4xl font-bold text-green-400">
@@ -298,13 +298,13 @@ export default function Round4Page() {
       <div className="max-w-7xl mx-auto p-8">
         <div className="grid grid-cols-12 gap-8 min-h-[calc(100vh-140px)]">
           {/* Left Column - Main Content */}
-          <div className="col-span-8 flex flex-col space-y-8">
+          <div className="col-span-12 md:col-span-8 flex flex-col space-y-8">
             {/* Alex Video */}
             <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl flex-1 flex flex-col">
               <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 px-6 py-4 border-b border-purple-500/30">
                 <h2 className="text-xl font-semibold text-white">Alex - Your Host</h2>
               </div>
-              <div className="p-6 flex-1 flex flex-col">
+              <div className="p-2 md:p-6 flex-1 flex flex-col">
                 <div className="w-full rounded-xl overflow-hidden bg-black flex-1 min-h-0">
                   {(stage === "intro" || stage === "alexVideoPart2" || stage === 'questionRelatedVideo') && (
                     <AlexVideoPlayer
@@ -348,9 +348,9 @@ export default function Round4Page() {
                     <Clock className="mr-2" /> {timer}s
                   </div>
                 </div>
-                <div className="p-8">
+                <div className="p-2 md:p-8">
                   <p className="text-2xl text-white mb-8 leading-relaxed">{QUESTION_4.question}</p>
-                  <div className="grid grid-cols-2 gap-6">
+                  {/* <div className="grid grid-cols-2 gap-6">
                     {QUESTION_4.options.map((opt, idx) => (
                       <Button
                         key={opt}
@@ -372,7 +372,37 @@ export default function Round4Page() {
                         {lockOptions && opt === QUESTION_4.correctAnswer && <CheckCircle className="ml-3 text-green-300" />}
                       </Button>
                     ))}
+                  </div> */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    {QUESTION_4.options.map((opt, idx) => (
+                      <Button
+                        key={opt}
+                        className={`h-16 sm:h-20 text-base sm:text-xl font-semibold transition-all duration-300 rounded-lg sm:rounded-xl px-4 sm:px-8 flex justify-between items-center
+        ${selected === opt
+                            ? opt === QUESTION_4.correctAnswer
+                              ? "bg-green-600 shadow-lg shadow-green-500/50"
+                              : "bg-red-600 shadow-lg shadow-red-500/50"
+                            : opt === QUESTION_4.correctAnswer
+                              ? "bg-purple-700 hover:bg-purple-600 ring-2 ring-purple-400 shadow-lg hover:shadow-purple-500/50"
+                              : "bg-gray-600/50 cursor-not-allowed opacity-60"
+                          }`}
+                        disabled={lockOptions || opt !== QUESTION_4.correctAnswer || timer === 0}
+                        onClick={() => {
+                          primeAudio();
+                          handleAnswer(opt);
+                        }}
+                      >
+                        <span className="text-sm sm:text-lg">
+                          {String.fromCharCode(65 + idx)}. {opt}
+                        </span>
+                        {lockOptions && opt === QUESTION_4.correctAnswer && (
+                          <CheckCircle className="ml-2 sm:ml-3 w-5 h-5 sm:w-6 sm:h-6 text-green-300" />
+                        )}
+                      </Button>
+                    ))}
                   </div>
+
+
                   <div className="mt-6 text-center text-purple-300 text-lg">
                     {!lockOptions && timer > 0 && "Only the correct answer is clickable - find it!"}
                     {!lockOptions && timer === 0 && "Time's up! Auto-advancing..."}
@@ -384,7 +414,7 @@ export default function Round4Page() {
           </div>
 
           {/* Right Column - Game Stats & Chat */}
-          <div className="col-span-4 space-y-8">
+          <div className="col-span-12 md:col-span-4 space-y-8">
             {/* Game Stats Panel */}
             <div
               className={`bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl transition-all duration-500 ${finalistFlash ? "animate-pulse ring-4 ring-yellow-400/50 shadow-yellow-400/50" : ""
@@ -396,7 +426,7 @@ export default function Round4Page() {
               >
                 <h3 className="text-xl font-bold text-white">GAME STATS</h3>
               </div>
-              <div className="p-6">
+              <div className="p-2 md:p-6">
                 {(stage === "intro" || stage === "question") && (
                   <div className="text-center space-y-6">
                     <div className="text-xl font-bold text-purple-400 mb-4">Round 4 Info</div>

@@ -88,7 +88,7 @@ export default function ChatBox({
   const config = themeConfig[theme];
 
   return (
-    <div className={`flex flex-col text-sm w-full h-full text-white font-medium p-4 ${className}`}>
+    <div className={`flex flex-col text-sm w-full h-full text-white font-medium p-2 md:p-4 ${className}`}>
       {/* Chat messages with enhanced spacing */}
       <div
         ref={chatRef}

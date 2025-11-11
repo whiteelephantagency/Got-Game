@@ -291,7 +291,7 @@ export default function Round2Page() {
                 <div className="space-y-12">
                   <div className="grid grid-cols-3 gap-12 items-center">
                     <div className="text-center space-y-6">
-                      <div className="w-32 h-32 mx-auto bg-white rounded-full flex items-center justify-center">
+                      <div className="w-20 h-20 md:w-32 md:h-32 mx-auto bg-white rounded-full flex items-center justify-center">
                         <span className="text-4xl font-bold">👥</span>
                       </div>
                       <div className="text-3xl font-bold text-blue-400">1,000</div>
@@ -304,7 +304,7 @@ export default function Round2Page() {
                     </div>
 
                     <div className="text-center space-y-6">
-                      <div className="w-32 h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center">
+                      <div className="w-20 h-20 md:w-32 md:h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center">
                         <span className="text-4xl font-bold">✅</span>
                       </div>
                       <div className="text-4xl font-bold text-green-400">
@@ -342,7 +342,7 @@ export default function Round2Page() {
                 <div className="space-y-12">
                   <div className="grid grid-cols-3 gap-12 items-center">
                     <div className="text-center space-y-6">
-                      <div className="w-32 h-32 mx-auto bg-orange-500 rounded-full flex items-center justify-center">
+                      <div className="w-20 h-20 md:w-32 md:h-32 mx-auto bg-orange-500 rounded-full flex items-center justify-center">
                         <span className="text-4xl font-bold">🎯</span>
                       </div>
                       <div className="text-3xl font-bold text-orange-400">100</div>
@@ -355,7 +355,7 @@ export default function Round2Page() {
                     </div>
 
                     <div className="text-center space-y-6">
-                      <div className="w-32 h-32 mx-auto bg-yellow-500 rounded-full flex items-center justify-center">
+                      <div className="w-20 h-20 md:w-32 md:h-32 mx-auto bg-yellow-500 rounded-full flex items-center justify-center">
                         <span className="text-4xl font-bold">🎲</span>
                       </div>
                       <div className="text-4xl font-bold text-yellow-400">
@@ -458,13 +458,13 @@ export default function Round2Page() {
       <div className="max-w-7xl mx-auto p-8">
         <div className="grid grid-cols-12 gap-8 min-h-[calc(100vh-140px)]">
           {/* Left Column */}
-          <div className="col-span-8 flex flex-col space-y-8">
+          <div className="col-span-12 md:col-span-8 flex flex-col space-y-8">
             {/* Alex Video */}
             <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl flex-1 flex flex-col">
               <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 px-6 py-4 border-b border-purple-500/30">
                 <h2 className="text-xl font-semibold text-white">Alex - Your Host</h2>
               </div>
-              <div className="p-6 flex-1 flex flex-col">
+              <div className="p-2 md:p-6 flex-1 flex flex-col">
                 <div className="w-full rounded-xl overflow-hidden bg-black flex-1 min-h-0">
                   {(stage === "intro" ||
                     stage === "answerReaction" ||
@@ -545,9 +545,9 @@ export default function Round2Page() {
                     ⏰ {timer}s
                   </div>
                 </div>
-                <div className="p-8">
+                <div className="p-2 md:p-8">
                   <p className="text-2xl text-white mb-8 leading-relaxed">{QUESTION_2.question}</p>
-                  <div className="grid grid-cols-2 gap-6">
+                  {/* <div className="grid grid-cols-2 gap-6">
                     {QUESTION_2.options.map((opt, idx) => (
                       <Button
                         key={opt}
@@ -570,7 +570,37 @@ export default function Round2Page() {
                         {lockOptions && opt === QUESTION_2.correctAnswer && <CheckCircle className="ml-3" />}
                       </Button>
                     ))}
+                  </div> */}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    {QUESTION_2.options.map((opt, idx) => (
+                      <Button
+                        key={opt}
+                        className={`h-16 sm:h-20 text-base sm:text-xl font-semibold transition-all duration-300 rounded-lg sm:rounded-xl px-4 sm:px-8 flex justify-between items-center
+        ${selected === opt
+                            ? QUESTION_2.wrongAnswers.includes(opt)
+                              ? "bg-red-600 shadow-lg shadow-red-500/50"
+                              : "bg-green-600 shadow-lg shadow-green-500/50"
+                            : opt === QUESTION_2.correctAnswer
+                              ? "bg-gray-600 cursor-not-allowed opacity-50"
+                              : "bg-purple-700 hover:bg-purple-600 ring-2 ring-purple-400 shadow-lg hover:shadow-purple-500/50"
+                          }`}
+                        disabled={lockOptions || opt === QUESTION_2.correctAnswer || timer === 0}
+                        onClick={() => handleAnswer(opt)}
+                      >
+                        <span className="text-sm sm:text-lg">
+                          {String.fromCharCode(65 + idx)}. {opt}
+                        </span>
+                        {lockOptions && selected === opt && QUESTION_2.wrongAnswers.includes(opt) && (
+                          <XCircle className="ml-2 sm:ml-3 w-5 h-5 sm:w-6 sm:h-6" />
+                        )}
+                        {lockOptions && opt === QUESTION_2.correctAnswer && (
+                          <CheckCircle className="ml-2 sm:ml-3 w-5 h-5 sm:w-6 sm:h-6" />
+                        )}
+                      </Button>
+                    ))}
                   </div>
+
                   <div className="mt-6 text-center text-purple-300 text-lg">
                     {!lockOptions && timer > 0 && "Only wrong answers are clickable"}
                     {!lockOptions && timer === 0 && "Time's up! Moving to results..."}
@@ -582,13 +612,13 @@ export default function Round2Page() {
           </div>
 
           {/* Right Column */}
-          <div className="col-span-4 space-y-8">
+          <div className="col-span-12 md:col-span-4 space-y-8">
             {/* Game Stats Panel */}
             <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl">
               <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 px-6 py-4 border-b border-purple-500/30">
                 <h3 className="text-xl font-bold text-white">📊 GAME STATS</h3>
               </div>
-              <div className="p-6">
+              <div className="p-2 md:p-6">
                 {(stage === "intro" || stage === "question" || stage === "answerReaction") && (
                   <div className="text-center space-y-6">
                     <div className="text-xl font-bold text-purple-400 mb-4">Round 2 Info</div>
@@ -630,7 +660,7 @@ export default function Round2Page() {
                   />
                 )}
 
-                {(stage === "roundStatsCommentary" || stage === "alexVideoPart4") && (
+                {/* {(stage === "roundStatsCommentary" || stage === "alexVideoPart4") && (
                   <div className="space-y-6">
                     <div className="text-center mb-6">
                       <div className="text-xl font-bold text-purple-400 mb-3">Round 2 Results</div>
@@ -662,7 +692,59 @@ export default function Round2Page() {
                       </div>
                     </div>
                   </div>
+                )} */}
+
+                {(stage === "roundStatsCommentary" || stage === "alexVideoPart4") && (
+                  <div className="space-y-4 sm:space-y-6">
+                    <div className="text-center mb-4 sm:mb-6">
+                      <div className="text-lg sm:text-xl font-bold text-purple-400 mb-2 sm:mb-3">
+                        Round 2 Results
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 sm:space-y-4">
+                      {/* ✅ Correct Answers */}
+                      <div className="bg-green-600/20 rounded-md sm:rounded-lg p-3 sm:p-4 border border-green-500/30">
+                        <div className="flex flex-col xs:flex-row sm:flex-row justify-between items-start xs:items-center sm:items-center">
+                          <span className="text-sm sm:text-base text-green-300">✅ Correct Answers</span>
+                          <span className="text-base sm:text-lg text-green-400 font-bold mt-1 xs:mt-0 sm:mt-0">
+                            80
+                          </span>
+                        </div>
+                        <div className="text-xs sm:text-sm text-green-200 mt-1 sm:mt-2">
+                          out of 1,000 players
+                        </div>
+                      </div>
+
+                      {/* 🎯 Target for Round 3 */}
+                      <div className="bg-purple-600/20 rounded-md sm:rounded-lg p-3 sm:p-4 border border-purple-500/30">
+                        <div className="flex flex-col xs:flex-row sm:flex-row justify-between items-start xs:items-center sm:items-center">
+                          <span className="text-sm sm:text-base text-purple-300">🎯 Target for Round 3</span>
+                          <span className="text-base sm:text-lg text-purple-400 font-bold mt-1 xs:mt-0 sm:mt-0">
+                            100
+                          </span>
+                        </div>
+                        <div className="text-xs sm:text-sm text-purple-200 mt-1 sm:mt-2">
+                          spots needed
+                        </div>
+                      </div>
+
+                      {/* ❌ Your Status */}
+                      <div className="bg-red-600/20 rounded-md sm:rounded-lg p-3 sm:p-4 border border-red-500/30">
+                        <div className="flex flex-col xs:flex-row sm:flex-row justify-between items-start xs:items-center sm:items-center">
+                          <span className="text-sm sm:text-base text-red-300">❌ Your Status</span>
+                          <span className="text-base sm:text-lg text-red-400 font-bold mt-1 xs:mt-0 sm:mt-0">
+                            LUCKY POOL
+                          </span>
+                        </div>
+                        <div className="text-xs sm:text-sm text-red-200 mt-1 sm:mt-2">
+                          awaiting lucky draw
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 )}
+
 
                 {stage === "alexVideoPart5" && (
                   <div className="space-y-6">
