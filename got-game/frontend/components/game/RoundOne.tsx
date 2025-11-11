@@ -295,7 +295,15 @@ export default function RoundOnePage() {
               )}
             </div>
           </div> */}
-          <div className="relative z-10 bg-gradient-to-br from-purple-900/95 to-blue-900/95 rounded-2xl sm:rounded-3xl border border-purple-400/40 shadow-xl sm:shadow-2xl p-6 sm:p-10 md:p-16 max-w-6xl mx-auto animate-in zoom-in-95 duration-500">
+          <div className="relative z-10 
+              bg-gradient-to-br from-purple-900/95 to-blue-900/95 
+              rounded-2xl sm:rounded-3xl 
+              border border-purple-400/40 
+              shadow-xl sm:shadow-2xl 
+              p-6 sm:p-10 md:p-16 
+              mx-[20px] sm:mx-auto 
+              w-[calc(100%-40px)] sm:max-w-6xl 
+              animate-in zoom-in-95 duration-500">
             <div className="text-center space-y-8 sm:space-y-12">
               <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-6 sm:mb-12">
                 {stage === "roundStats" ? "ROUND 1 RESULTS" : "PLAYER SPLIT"}
@@ -443,7 +451,7 @@ export default function RoundOnePage() {
 
       {/* Main Game Area */}
       <div className="max-w-7xl mx-auto p-8">
-        <div className="grid grid-cols-12 gap-8 min-h-[calc(100vh-140px)]">
+        <div className="grid grid-cols-12 md:gap-8 min-h-[calc(100vh-140px)]">
           {/* Left Column - Main Content */}
           <div className="col-span-12 md:col-span-8 flex flex-col space-y-8">
             {/* Alex Video Section */}

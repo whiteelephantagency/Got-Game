@@ -279,9 +279,9 @@ export default function Round2Page() {
 
       {/* Full Screen Stats Overlay */}
       {showFullScreenStats && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+        <div className="sm:mx-2 fixed inset-0 z-50 flex items-center justify-center p-6">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-lg" />
-          <div className="relative z-10 bg-gradient-to-br from-purple-900/95 to-blue-900/95 rounded-3xl border border-purple-400/50 shadow-2xl p-16 max-w-6xl mx-auto animate-in zoom-in-95 duration-500">
+          <div className=" relative z-10 bg-gradient-to-br from-purple-900/95 to-blue-900/95 rounded-3xl border border-purple-400/50 shadow-2xl p-16 max-w-6xl mx-auto animate-in zoom-in-95 duration-500">
             <div className="text-center space-y-12">
               <h2 className="text-6xl font-bold text-white mb-12">
                 {stage === "roundStats" ? "ROUND 2 RESULTS" : "OPEN SLOTS"}
@@ -456,7 +456,7 @@ export default function Round2Page() {
 
       {/* Main Game Area */}
       <div className="max-w-7xl mx-auto p-8">
-        <div className="grid grid-cols-12 gap-8 min-h-[calc(100vh-140px)]">
+        <div className="grid grid-cols-12 md:gap-8 min-h-[calc(100vh-140px)]">
           {/* Left Column */}
           <div className="col-span-12 md:col-span-8 flex flex-col space-y-8">
             {/* Alex Video */}
