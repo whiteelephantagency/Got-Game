@@ -458,7 +458,7 @@ export default function Round2Page() {
       <div className="max-w-7xl mx-auto p-8">
         <div className="grid grid-cols-12 md:gap-8 min-h-[calc(100vh-140px)]">
           {/* Left Column */}
-          <div className="col-span-12 md:col-span-8 flex flex-col space-y-8">
+          <div className="col-span-12 md:col-span-8 flex flex-col space-y-8 mb-8 md:mb-0">
             {/* Alex Video */}
             <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl flex-1 flex flex-col">
               <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 px-6 py-4 border-b border-purple-500/30">

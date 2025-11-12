@@ -135,7 +135,7 @@ export default function Round5Page() {
 
           <div className="relative z-10 bg-gradient-to-br from-yellow-900/95 to-orange-900/95 rounded-3xl border border-yellow-400/50 shadow-2xl p-16 max-w-6xl mx-auto animate-in zoom-in-95 duration-500">
             <div className="text-center space-y-12">
-              <h2 className="text-6xl font-bold text-white mb-12 animate-pulse">
+              <h2 className="md:text-6xl text-4xl font-bold text-white mb-12 animate-pulse">
                 🏆 FINAL ROUND RESULTS 🏆
               </h2>
 
@@ -150,15 +150,15 @@ export default function Round5Page() {
                   </div>
 
                   <div className="text-center space-y-4">
-                    <div className="text-6xl text-orange-400 animate-bounce">🏆</div>
+                    <div className="md:text-6xl text-4xl text-orange-400 animate-bounce">🏆</div>
                     <div className="text-lg text-orange-300 mt-4">CHAMPION!</div>
                   </div>
 
                   <div className="text-center space-y-6">
-                    <div className="w-20 h-20 md:w-32 mx-auto bg-green-500 rounded-full flex items-center justify-center animate-spin">
+                    <div className="w-20 h-20 md:w-32 md:h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center animate-spin">
                       <span className="text-4xl font-bold">✅</span>
                     </div>
-                    <div className="text-4xl font-bold text-green-400 animate-pulse">
+                    <div className="md:text-4xl text-2xl font-bold text-green-400 animate-pulse">
                       {statProgress.toLocaleString()}
                     </div>
                     <div className="text-lg text-gray-300">Correct Answer</div>
@@ -178,7 +178,7 @@ export default function Round5Page() {
 
                 {statProgress >= 1 && (
                   <div className="space-y-8 animate-in fade-in duration-1000">
-                    <div className="text-4xl text-yellow-400 font-bold animate-bounce">
+                    <div className="md:text-4xl text-2xl text-yellow-400 font-bold animate-bounce">
                       🎉 {playerName} IS THE CHAMPION! 🎉
                     </div>
                     <div className="text-3xl text-green-300 animate-pulse">
