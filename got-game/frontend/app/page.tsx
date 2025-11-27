@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import AppleAutoplayHelper from "@/components/pop-ups/AppleAutoplayHelper"
 
 export default function Home() {
   const router = useRouter()
@@ -13,6 +14,7 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center bg-black overflow-hidden">
+      <AppleAutoplayHelper />
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image

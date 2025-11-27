@@ -224,7 +224,7 @@ export default function Round3Page() {
               <div className="space-y-12">
                 <div className="grid grid-cols-3 gap-12 items-center">
                   <div className="text-center space-y-6">
-                    <div className="w-20 h-20 md:w-32 md:h-32 mx-auto bg-blue-500 rounded-full flex items-center justify-center">
+                    <div className="w-32 h-32 mx-auto bg-blue-500 rounded-full flex items-center justify-center">
                       <span className="text-4xl font-bold">👥</span>
                     </div>
                     <div className="text-3xl font-bold text-blue-400">100</div>
@@ -237,7 +237,7 @@ export default function Round3Page() {
                   </div>
 
                   <div className="text-center space-y-6">
-                    <div className="w-20 h-20 md:w-32 md:h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center">
+                    <div className="w-32 h-32 mx-auto bg-green-500 rounded-full flex items-center justify-center">
                       <span className="text-4xl font-bold">✅</span>
                     </div>
                     <div className="text-4xl font-bold text-green-400">{statProgress.toLocaleString()}</div>
@@ -310,7 +310,7 @@ export default function Round3Page() {
               {stage === "question"
                 ? "Question Locked - Lucky Pool Player"
                 : stage === "answerReaction"
-                ? "Waiting in Lucky Pool..."
+              ? "Waiting in Lucky Pool... "
                 : stage === "roundStats"
                 ? "Showing Statistics"
                 : stage === "luckyDraw"
@@ -318,7 +318,17 @@ export default function Round3Page() {
                 : "The Final Challenge"}
             </div> */}
           </div>
-          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 3</h3>
+          <h3 className="flex items-center space-x-6 text-3xl font-bold text-white">ROUND 3:
+            {stage === "question"
+              ? "Question Locked - Lucky Pool Player"
+              : stage === "answerReaction"
+                ? "Waiting in Lucky Pool..."
+                : stage === "roundStats"
+                  ? "Showing Statistics"
+                  : stage === "luckyDraw"
+                    ? "Lucky Draw in Progress"
+                    : "The Final Challenge"}
+          </h3>
           {/* <div className="flex items-center space-x-6 text-lg">
             <div className="bg-black/30 px-4 py-2 rounded">PLAYERS: 100</div>
             <div className="bg-black/30 px-4 py-2 rounded">TARGET: 10</div>
@@ -329,15 +339,15 @@ export default function Round3Page() {
 
       {/* Main Game Area */}
       <div className="max-w-7xl mx-auto p-8">
-        <div className="grid grid-cols-12 md:gap-8 min-h-[calc(100vh-140px)]">
+        <div className="grid grid-cols-12 gap-8 min-h-[calc(100vh-140px)]">
           {/* Left Column - Main Content */}
-          <div className="col-span-12 md:col-span-8 flex flex-col space-y-8 mb-8 md:mb-0">
+          <div className="col-span-8 flex flex-col space-y-8">
             {/* Alex Video Section */}
             <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl flex-1 flex flex-col">
               <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 px-6 py-4 border-b border-purple-500/30">
                 <h2 className="text-xl font-semibold text-white">Alex - Your Host</h2>
               </div>
-              <div className="p-2 md:p-6 flex-1 flex flex-col">
+              <div className="p-6 flex-1 flex flex-col">
                 <div className="w-full rounded-xl overflow-hidden bg-black flex-1 min-h-0">
                   {(stage === "intro" || stage === "answerReaction" || stage === "alexVideoPart3" || stage === "alexVideoPart5") && (
                     <AlexVideoPlayer
@@ -422,12 +432,12 @@ export default function Round3Page() {
           </div>
 
           {/* Right Column - Stats & Chat */}
-          <div className="col-span-12 md:col-span-4 space-y-8">
+          <div className="col-span-4 space-y-8">
             <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-purple-500/50 overflow-hidden shadow-2xl">
               <div className="bg-gradient-to-r from-purple-600/30 to-blue-600/30 px-6 py-4 border-b border-purple-500/30">
                 <h3 className="text-xl font-bold text-white">📊 GAME STATS</h3>
               </div>
-              <div className="p-2 md:p-6">
+              <div className="p-6">
                 {(stage === "intro" || stage === "question" || stage === "answerReaction") && (
                   <div className="text-center space-y-6">
                     <div className="text-xl font-bold text-purple-400 mb-4">Round 3 Info</div>
