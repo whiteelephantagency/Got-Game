@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle } from "lucide-react";
 import ChatBox from "@/components/ui/ChatBot";
 import Image from "next/image";
-// import AlexVideoPlayer from "@/contexts/AudioContext";
 
 /* -------------------------- Round 2 data -------------------------- */
 

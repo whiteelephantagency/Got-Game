@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer";
+// import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer";
 import StatMapTransition from "@/components/ui/StatMapTransition"; // ← Add this import
 import { questions } from "@/lib/questions";
-// import AlexVideoPlayer from "@/contexts/AudioContext";
+import AlexVideoPlayer from "./AlexVideoPlayer";
 
 interface AlexQuestionsProps {
   round: number;
