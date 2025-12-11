@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Star, Users, Trophy, Crown } from "lucide-react";
-import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer";
+import AlexVideoPlayer from "@/contexts/AudioContext";
+// import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer";
 
 export default function LuckyDraw() {
   const router = useRouter();

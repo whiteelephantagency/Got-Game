@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer"
+// import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer"
 import Image from "next/image"
+import AlexVideoPlayer from "@/contexts/AudioContext"
 
 export function LuckySelectedContent() {
   const router = useRouter()
