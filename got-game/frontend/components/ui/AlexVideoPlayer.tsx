@@ -165,10 +165,9 @@
 
 // components/AlexVideoPlayer.tsx
 "use client";
-
-// AlexVideoPlayer.tsx
+// AlexVideoPlayer.tsx (Your component with fixes)
 import React, { FC, useRef, useState, useEffect } from "react";
-import { useAudio } from "@/hooks/useAudio";  // Import your new hook
+import { useAudio } from "@/hooks/useAudio";  // Import the global state
 
 // Mock types (assuming you have these defined elsewhere)
 type AlexVideoPlayerProps = {
@@ -188,57 +187,65 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
   className = "",
   showAudioIndicator = true,
 }) => {
-  // useAudio now gives us the global state
-  const { audioEnabled } = useAudio(); 
-  
+  const { audioEnabled, setAudioEnabled } = useAudio(); // Get both state and setter (for local unmuting)
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const playAttemptedRef = useRef(false);
+  const [isLocallyMuted, setIsLocallyMuted] = useState(true); // Track actual muted state
 
   const isAudioFile = src.endsWith(".mp3") || src.endsWith(".wav") || src.endsWith(".ogg");
 
-  // Key Logic for Autoplay and Unmuting
+  // --- KEY FIX: Play Logic ---
   useEffect(() => {
-    // 1. Check if autoplay is desired AND we haven't tried yet
     if (autoPlay && !playAttemptedRef.current) {
       const media = isAudioFile ? audioRef.current : videoRef.current;
-      
-      // 2. We only proceed if the media element exists
-      if (media) { 
-        playAttemptedRef.current = true; // Mark as attempted
+      if (media) {
+        playAttemptedRef.current = true;
         
-        // Use a small delay to ensure rendering is complete
         setTimeout(() => {
-          // *** THE CORE FIX ***
-          // We set the muted property based on the GLOBAL state.
-          // If the user has already clicked the global button, audioEnabled is true, 
-          // and we attempt to play UNMUTED. This will succeed across all routes.
-          media.muted = !audioEnabled; 
-          
-          media.play().catch(err => {
-            console.log(`Play attempt failed (Muted: ${!audioEnabled}):`, err);
+          // 1. Determine Muted State: Use global state, but default to muted if global is false
+          const shouldBeMuted = !audioEnabled;
+          media.muted = shouldBeMuted;
+          setIsLocallyMuted(shouldBeMuted); // Update local state for UI
+
+          // 2. Attempt Play
+          media.play().then(() => {
+            // Success! The video is playing, either muted or unmuted.
+            setLoading(false);
+          }).catch(err => {
+            // 3. Play Failed: This usually happens if attempting unmuted play before a gesture
+            console.log(`Play attempt failed (Muted: ${shouldBeMuted}):`, err);
             
-            // If the initial unmuted play fails, we fall back to muted, 
-            // as a final safeguard (e.g., if the user never clicked the global button)
-            if (audioEnabled) {
-                // If it fails even after audioEnabled is true, it's a critical issue, 
-                // but we still try muted fallback.
-                media.muted = true; 
-                media.play().catch(e => console.log("Muted play also failed:", e));
-            }
-            
-            // If audioEnabled is false, the muted play will naturally happen here.
-            
+            // Fallback: If the initial attempt (especially unmuted) fails, 
+            // force a muted play, and ensure the local muted state is true.
+            media.muted = true;
+            setIsLocallyMuted(true);
+            media.play().catch(e => console.log("Final muted play also failed:", e));
           });
         }, 100);
       }
     }
-  }, [autoPlay, audioEnabled, isAudioFile]); // audioEnabled is the crucial dependency!
+  }, [autoPlay, audioEnabled, isAudioFile]); // Re-run when global audioEnabled changes
 
-  // --- (Rest of your original code remains the same) ---
-  
+  // --- NEW: Local Unmute Handler (Fallback) ---
+  const handleLocalUnmuteClick = () => {
+    const media = isAudioFile ? audioRef.current : videoRef.current;
+    if (media) {
+        media.muted = false; // Unmute the element
+        media.play().then(() => {
+            setIsLocallyMuted(false);
+            // Crucial: If the user successfully unmuted here, update the global state too.
+            if (!audioEnabled) {
+                setAudioEnabled(true);
+            }
+        }).catch(e => console.error("User-initiated unmuted play failed:", e));
+    }
+  };
+
+
+  // --- (Rest of your original handlers) ---
   useEffect(() => {
     if (delay > 0) {
       const timeout = setTimeout(onEnded, delay);
@@ -260,26 +267,13 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
   return (
     <div className={`relative w-full aspect-video z-10 rounded-xl overflow-hidden shadow-2xl ${className}`}>
       {isAudioFile ? (
-        // ... (Audio Player UI) ...
         <div className="w-full h-full bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex flex-col items-center justify-center relative overflow-hidden">
-             {/* ... (UI elements) ... */}
-            {showAudioIndicator && (
-                <div className="relative z-10 flex flex-col items-center">
-                    <div className="mb-4 text-white/90 text-sm px-3 py-1 bg-black/40 rounded-md">
-                        Alex is speaking…
-                    </div>
-                    <div className="flex items-end justify-center gap-2 h-16">
-                        {[0, 1, 2, 3, 4].map(i => (
-                            <span key={i} className="eqbar" style={{ animationDelay: `${i * 0.05}s` }} />
-                        ))}
-                    </div>
-                </div>
-            )}
+            {/* ... Audio UI ... */}
             <audio
               ref={audioRef}
               src={src}
               data-autoplay={autoPlay ? "true" : "false"}
-              muted={!audioEnabled} // Control muted state with global state
+              muted={isLocallyMuted} // Use local state for rendering the audio element's state
               preload="auto"
               onEnded={() => delay === 0 && onEnded()}
               onCanPlay={handleCanPlay}
@@ -288,20 +282,7 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
               onTimeUpdate={handleTimeUpdate}
               className="hidden"
             />
-            <style jsx>{`
-              .eqbar {
-                display: inline-block;
-                width: 8px;
-                height: 8px;
-                background: #fff;
-                border-radius: 2px;
-                animation: eqBounce 500ms ease-in-out infinite;
-              }
-              @keyframes eqBounce {
-                0%, 100% { transform: scaleY(0.4); }
-                50% { transform: scaleY(2.1); }
-              }
-            `}</style>
+            {/* ... Styled components ... */}
         </div>
       ) : (
         <>
@@ -309,7 +290,7 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
             ref={videoRef}
             src={src}
             data-autoplay={autoPlay ? "true" : "false"}
-            muted={!audioEnabled} // Control muted state with global state
+            muted={isLocallyMuted} // Use local state for rendering the video element's state
             playsInline
             preload="auto"
             controls={false}
@@ -320,16 +301,20 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
             onTimeUpdate={handleTimeUpdate}
             className="w-full h-full object-cover bg-black"
           />
-
-          {/* This Muted Indicator is now only a visual reminder */}
-          {!audioEnabled && (
-            <div className="absolute top-4 right-4 bg-red-500/90 text-white px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+          
+          {/* --- FIX: Clickable Unmute Overlay/Button --- */}
+          {isLocallyMuted && (
+            <button
+                onClick={handleLocalUnmuteClick}
+                className="absolute top-4 right-4 bg-red-500/90 hover:bg-red-600/90 text-white px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2 cursor-pointer transition-colors z-20"
+            >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {/* Mute/X icon */}
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
               </svg>
-              Muted (Enable Sound to Hear)
-            </div>
+              Click to Unmute
+            </button>
           )}
 
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/30 pointer-events-none">
@@ -342,7 +327,7 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
       )}
 
       {loading && (
-        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-30">
           <div className="text-white text-lg">Loading…</div>
         </div>
       )}
