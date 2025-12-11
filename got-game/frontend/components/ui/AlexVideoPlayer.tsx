@@ -252,11 +252,12 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
   };
 
   return (
-    <div
-      className={`relative w-full aspect-video z-10 rounded-xl overflow-hidden shadow-2xl ${className}`}
-      role="region"
-      aria-label={isAudioFile ? "Alex audio player" : "Alex video player"}
-    >
+    <>
+      <div
+        className={`relative w-full aspect-video z-10 rounded-xl overflow-hidden shadow-2xl ${className}`}
+        role="region"
+        aria-label={isAudioFile ? "Alex audio player" : "Alex video player"}
+      >
       {isAudioFile ? (
         // ===== AUDIO-ONLY MODE (animated) =====
         <div className="w-full h-full bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 flex flex-col items-center justify-center relative overflow-hidden">
@@ -358,9 +359,11 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
         <div className="text-white text-lg">Loading…</div>
       </div>
 
-      {/* User Interaction Prompt for Safari */}
+    </div>
+
+      {/* User Interaction Prompt for Safari - Outside video container */}
       {showInteractionPrompt && (
-        <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50 backdrop-blur-sm">
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[9999] backdrop-blur-sm">
           <div className="bg-gradient-to-br from-purple-900 to-indigo-900 p-8 rounded-2xl shadow-2xl max-w-sm mx-4 text-center border border-purple-500/30">
             <div className="mb-6">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#A757E7] flex items-center justify-center">
@@ -385,7 +388,7 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
