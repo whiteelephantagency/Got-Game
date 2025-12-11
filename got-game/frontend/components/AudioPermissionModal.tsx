@@ -21,6 +21,26 @@ export default function AudioPermissionModal() {
 
   const handleEnableAudio = async () => {
     await requestAudioPermission();
+    
+    // CRITICAL FOR SAFARI: Find all video/audio elements on page and try to play them
+    // This must happen in the same click handler to work on Safari
+    const videos = document.querySelectorAll('video');
+    const audios = document.querySelectorAll('audio');
+    
+    videos.forEach(video => {
+      if (video) {
+        video.muted = false;
+        video.play().catch(e => console.log('Video play error:', e));
+      }
+    });
+    
+    audios.forEach(audio => {
+      if (audio) {
+        audio.muted = false;
+        audio.play().catch(e => console.log('Audio play error:', e));
+      }
+    });
+    
     setShowModal(false);
   };
 
@@ -99,7 +119,7 @@ export default function AudioPermissionModal() {
             onClick={handleEnableAudio}
             className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-4 rounded-xl font-bold text-lg shadow-lg transition-all transform hover:scale-105 active:scale-95"
           >
-            🔊 Enable Audio
+            🔊 Enable Audio & Start
           </button>
           
           <button

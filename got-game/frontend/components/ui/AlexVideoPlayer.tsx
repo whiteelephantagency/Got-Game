@@ -167,7 +167,7 @@
 "use client";
 
 import { FC, useEffect, useState } from "react";
-import { useAudio } from "@/contexts/AudioContext"; 
+import { useAudio } from "@/contexts/AudioContext";
 
 interface AlexVideoPlayerProps {
   src: string;
@@ -204,9 +204,19 @@ const AlexVideoPlayer: FC<AlexVideoPlayerProps> = ({
     if (audioEnabled && autoPlay) {
       const media = isAudioFile ? audioRef : videoRef;
       if (media) {
-        media.play().catch(err => {
-          console.error("Autoplay failed:", err);
-        });
+        // Small delay to ensure Safari is ready
+        const timer = setTimeout(() => {
+          // Try to play with sound
+          media.muted = false;
+          media.play().catch(err => {
+            console.error("Autoplay with sound failed, trying muted:", err);
+            // Fallback: try muted if unmuted fails
+            media.muted = true;
+            media.play().catch(e => console.error("All autoplay attempts failed:", e));
+          });
+        }, 100);
+        
+        return () => clearTimeout(timer);
       }
     }
   }, [audioEnabled, autoPlay, src, isAudioFile, videoRef, audioRef]);
