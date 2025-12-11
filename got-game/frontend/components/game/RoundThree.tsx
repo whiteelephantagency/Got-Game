@@ -2,12 +2,13 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer";
+// import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer";
 import StatMap from "@/components/ui/StatMap";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, Lock } from "lucide-react";
 import ChatBox from "@/components/ui/ChatBot";
 import Image from "next/image";
+import AlexVideoPlayer from "@/contexts/AudioContext";
 
 const QUESTION_3 = {
   question: "Who painted the Mona Lisa?",
