@@ -5,8 +5,8 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "../components/theme-provider"
-import { AudioProvider } from "@/contexts/AudioContext"
-import AudioPermissionModal from "@/components/AudioPermissionModal"
+import { AudioProvider } from "@/hooks/useAudio" 
+import { GlobalAudioPrompt } from "@/components/AudioPermissionModal" 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <AudioProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <AudioPermissionModal />
+          <GlobalAudioPrompt />
             {children}
           </ThemeProvider>
         </AudioProvider>

@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-// import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer";
+import AlexVideoPlayer from "@/components/ui/AlexVideoPlayer";
 import StatMap from "@/components/ui/StatMap";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle } from "lucide-react";
 import ChatBox from "@/components/ui/ChatBot";
 import Image from "next/image";
-import AlexVideoPlayer from "@/contexts/AudioContext";
+// import AlexVideoPlayer from "@/contexts/AudioContext";
 
 /* -------------------------- Round 2 data -------------------------- */
 
