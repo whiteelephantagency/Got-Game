@@ -1,45 +1,58 @@
-// GlobalAudioPrompt.tsx (Example Component)
-"use client"
-import React, { FC } from 'react';
-import { useAudio } from '@/hooks/useAudio'; 
+// components/AudioPermissionModal.tsx
+// This component now takes children and conditionally renders them.
 
-export const GlobalAudioPrompt: FC = () => {
+"use client"
+import React, { FC, ReactNode } from 'react';
+import { useAudio } from '@/hooks/useAudio'; // Import the useAudio hook
+
+interface GlobalAudioPromptProps {
+    children: ReactNode;
+}
+
+export const GlobalAudioPrompt: FC<GlobalAudioPromptProps> = ({ children }) => {
   const { audioEnabled, setAudioEnabled } = useAudio();
 
-  // Function called by the single user click
+  // This function is called by the single user click
   const handleEnableAudio = () => {
-    // This state change is the core of the fix!
-    setAudioEnabled(true);
-    
-    // OPTIONAL: Immediately play a tiny, silent audio file
-    // to "register" the gesture with the browser API.
-    try {
-        const dummyAudio = new Audio();
-        // A minimal data URI for a silent sound wave
-        dummyAudio.src = 'data:audio/mpeg;base64,TVRhdgIAAAAAAAGVAAAAAAAAAAACAwAAAwAAAAABAAAA'; 
-        dummyAudio.play().catch(e => console.log('Dummy audio play failed:', e));
-    } catch (e) {
-        // ...
+    if (!audioEnabled) {
+      // 1. Set the global state to true (Authorization granted!)
+      setAudioEnabled(true);
+      
+      // 2. OPTIONAL: Play a silent audio file to confirm the gesture is registered
+      // This is a browser trick to lock in the permission.
+      try {
+          const dummyAudio = new Audio();
+          dummyAudio.muted = false; // Ensure it's not muted for the test
+          // Minimal silent data URI
+          dummyAudio.src = 'data:audio/mpeg;base64,TVRhdgIAAAAAAAGVAAAAAAAAAAACAwAAAwAAAAABAAAA'; 
+          dummyAudio.play().catch(e => console.log('Dummy audio play failed:', e));
+      } catch (e) {
+          // Ignore errors
+      }
     }
   };
 
   if (audioEnabled) {
-    return null; // Audio is enabled, hide the prompt
+    // If permission is granted, render the rest of the application
+    return <>{children}</>;
   }
 
+  // If permission is NOT granted, render the blocking prompt/overlay
   return (
-    <div className="fixed inset-0 bg-black/80 z-[9999] flex flex-col items-center justify-center p-4">
-      <h2 className="text-white text-2xl mb-4">Welcome to the Game!</h2>
-      <p className="text-gray-300 mb-8 text-center">Click below to enter the site and enable game sound.</p>
+    <div className="fixed inset-0 z-[9999] bg-black/95 flex flex-col items-center justify-center p-4">
+      <h2 className="text-white text-3xl font-bold mb-4">GOT GAME: Audio Required</h2>
+      <p className="text-gray-300 text-center mb-8 max-w-md">
+        Please click "Enable Sound" to ensure all game videos and audio play correctly on Safari and other browsers.
+      </p>
       
       <button 
         onClick={handleEnableAudio}
-        className="px-8 py-4 bg-[#A757E7] text-white text-lg font-bold rounded-lg shadow-lg hover:bg-purple-600 transition-colors"
+        className="px-8 py-4 bg-[#A757E7] text-white text-xl font-bold rounded-lg shadow-2xl hover:bg-purple-600 transition-colors focus:outline-none focus:ring-4 focus:ring-[#A757E7]/50"
       >
-        Click to Start (Enable Sound)
+        Click to Enable Sound
       </button>
       
-      <p className="text-gray-500 mt-4 text-sm">You only have to do this once per visit.</p>
+      <p className="text-gray-500 mt-4 text-sm">This is only required once per session.</p>
     </div>
   );
 };
